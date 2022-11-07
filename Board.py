@@ -4,7 +4,7 @@ from Player import Player
 class Board:
 
     def __init__(self : Board, size : int) -> None:
-        self.__size : int = size | 14
+        self.__size : int = size | 20
         self.__board = np.empty( (self.__size,self.__size), dtype=Player)
         self.__board.fill(np.nan)
 
