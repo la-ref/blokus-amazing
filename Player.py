@@ -1,9 +1,9 @@
 class Player:
         
     def __init__(self, nb : int):
-        self.__name = "Joueur "+str(nb)
-        self.__ = nb
-        
+        self.__name : str = "Joueur "+str(nb)
+        self.__nb : int = nb
+                 
     @classmethod
     def Player(cls, nb: int, name : str):
         res = cls(nb)
