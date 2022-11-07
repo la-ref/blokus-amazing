@@ -1,11 +1,11 @@
-class Joueur:
+class Player:
         
     def __init__(self, nb : int):
         self.__name = "Joueur "+str(nb)
         self.__ = nb
         
     @classmethod
-    def Joueur(cls, nb: int, name : str):
+    def Player(cls, nb: int, name : str):
         res = cls(nb)
         res.__name = name
         return res
