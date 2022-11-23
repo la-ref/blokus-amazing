@@ -3,7 +3,9 @@ import pyglet as pg
 
 
 class RoundedButton(tk.Canvas):
-
+    """
+    Cette classe initialise le boucle, c'est elle qui va l'affiche.
+    """
     def __init__(self, master=None, text:str="", hauteur=20, largueur=20, fontsize=20, radius=25, btnforeground="#000000", btnbackground="#ffffff", clicked=None, *args, **kwargs):
         super(RoundedButton, self).__init__(master, *args, **kwargs)
         self.config(bg=self.master["bg"])
@@ -11,7 +13,7 @@ class RoundedButton(tk.Canvas):
         self.clicked = clicked
         self.largueur = largueur
         self.radius = radius
-        self.hauteur = hauteur   
+        self.hauteur = hauteur
         self.fontsize = fontsize
         
         self.rect = self.round_rectangle(0, 0, 0, 0, tags="button", radius=radius, fill=btnbackground)
@@ -92,6 +94,11 @@ class RoundedButton(tk.Canvas):
 
         self.moveto(self.text, x, y)
 
+    """
+        Cette fonction permet de créer des bordures de couleur à notre bouton
+        params : 
+            - event : Si évènement de clique alors on ajoute l'évènement
+    """
     def border(self, event):
         if event.type == "4":
             self.itemconfig(self.rect, fill="#d2d6d3")
@@ -104,7 +111,11 @@ class RoundedButton(tk.Canvas):
 def func():
     print("Bouton cliqué")
 
-root = tk.Tk()
-btn = RoundedButton(text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
-btn.pack(expand=True, fill="both")
-root.mainloop()
+
+#---------------#
+#    Exemple    #
+#---------------#
+# root = tk.Tk()
+# btn = RoundedButton(text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
+# btn.pack(expand=True, fill="both")
+# root.mainloop()

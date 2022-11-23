@@ -37,13 +37,7 @@ image_1 = canvas.create_image(
 
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
-    relief="flat"
-)
+button_1 = 
 button_1.place(
     x=470.0,
     y=324.0,
