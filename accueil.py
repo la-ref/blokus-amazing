@@ -1,9 +1,11 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+import sys
+from Elements.bouton.button import *
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"Accueil/assets/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -35,9 +37,8 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = 
+
+button_1 = RoundedButton(text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
 button_1.place(
     x=470.0,
     y=324.0,

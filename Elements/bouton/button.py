@@ -64,7 +64,6 @@ class RoundedButton(tk.Canvas):
 
         if not update:
             return self.create_polygon(points, **kwargs, smooth=True)
-        
         else:
             self.coords(self.rect, points)
 
