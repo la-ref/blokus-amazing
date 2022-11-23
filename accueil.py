@@ -2,8 +2,6 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import sys
 from Elements.bouton.button import *
-from PIL import Image, ImageTk
-
 
 class Accueil(Frame):
     def __init__(self,image_list):
@@ -26,12 +24,10 @@ class Accueil(Frame):
         )
 
         canvas.place(x = 0, y = 0)
-        image_image_1 = PhotoImage(
-            file=image_list[0])
         image_1 = canvas.create_image(
             720.0,
             512.0,
-            image=image_image_1
+            image=image_list[0]
         )
         def quitGame(event):
             window.destroy()
@@ -39,20 +35,23 @@ class Accueil(Frame):
         # button_load = RoundedButton(window, text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
 
 
-        quitImage = ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/button_1.png"))
-        quitButton = canvas.create_image(470, 324, image=quitImage, anchor=tk.NW)
+        quitButton = canvas.create_image(
+            470, 
+            324, 
+            image=image_list[5],
+            anchor=tk.NW
+        )
         canvas.tag_bind(quitButton, "<Button-1>", quitGame)
 
 
-        button_image_2 = PhotoImage(
-            file=image_list[1])
         button_2 = Button(
-            image=button_image_2,
+            image=image_list[1],
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_2 clicked"),
             relief="flat"
         )
+
         button_2.place(
             x=470.0,
             y=488.0,
@@ -60,10 +59,8 @@ class Accueil(Frame):
             height=128.0
         )
 
-        button_image_3 = PhotoImage(
-            file=image_list[3])
         button_3 = Button(
-            image=button_image_3,
+            image=image_list[2],
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_3 clicked"),
@@ -76,10 +73,8 @@ class Accueil(Frame):
             height=128.0
         )
 
-        button_image_4 = PhotoImage(
-            file=image_list[4])
         button_4 = Button(
-            image=button_image_4,
+            image=image_list[3],
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_4 clicked"),
@@ -92,10 +87,8 @@ class Accueil(Frame):
             height=80.0
         )
 
-        button_image_5 = PhotoImage(
-            file=image_list[5])
         button_5 = Button(
-            image=button_image_5,
+            image=image_list[4],
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("button_5 clicked"),
@@ -118,13 +111,14 @@ if __name__ == "__main__":
 
 
     image = []
-    image.append(ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/image_1.png")))
-    image.append(ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/button_2.png")))
-    image.append(ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/button_3.png")))
-    image.append(ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/button_4.png")))
-    image.append(ImageTk.PhotoImage(Image.open("Accueil/assets/frame0/button_5.png")))
+    image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png"))
+    image.append(PhotoImage(file="Accueil/assets/frame0/button_2.png"))
+    image.append(PhotoImage(file="Accueil/assets/frame0/button_3.png"))
+    image.append(PhotoImage(file="Accueil/assets/frame0/button_4.png"))
+    image.append(PhotoImage(file="Accueil/assets/frame0/button_5.png"))
+    image.append(PhotoImage(file="Accueil/assets/frame0/button_1.png"))
 
     MonAccueil = Accueil(image)
-    MonAccueil.pack()
+    # MonAccueil.pack()
 
     window.mainloop()
