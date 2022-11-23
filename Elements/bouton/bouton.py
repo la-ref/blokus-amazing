@@ -1,4 +1,5 @@
 import tkinter as tk
+import pyglet as pg
 
 
 class RoundedButton(tk.Canvas):
@@ -11,9 +12,14 @@ class RoundedButton(tk.Canvas):
         self.largueur = largueur
         self.radius = radius
         self.hauteur = hauteur   
+        self.fontsize = fontsize
         
         self.rect = self.round_rectangle(0, 0, 0, 0, tags="button", radius=radius, fill=btnbackground)
-        self.text = self.create_text(0, 0, text=text, tags="button", fill=btnforeground, font=("Times", 30), justify="center")
+        pg.font.add_file('Elements/bouton/police.ttf')
+        set_font=pg.font.load('Lilita One')
+ 
+        print(set_font)
+        self.text = self.create_text(0, 0, text=text, tags="button", fill=btnforeground, font=("Lilita One", self.fontsize), justify="center")
 
         self.tag_bind("button", "<ButtonPress>", self.border)
         self.tag_bind("button", "<ButtonRelease>", self.border)
@@ -23,9 +29,16 @@ class RoundedButton(tk.Canvas):
         self["width"] = self.largueur
         
         self["height"] = self.hauteur
-          
-    def round_rectangle(self, x1, y1, x2, y2, radius=25, update=False, **kwargs): # if update is False a new rounded rectangle's id will be returned else updates existing rounded rect.
-        # source: https://stackoverflow.com/a/44100075/15993687
+    
+    """
+    Cette fonction permet de créer un rectangle avec des bords arrondis
+    params :
+        - X1, coordonnée haut gauche
+        - Y1, coordonnée bas gauche
+        - X2, coordonnée haut droit
+        - Y2, coordonnée bas droit
+    """
+    def round_rectangle(self, x1, y1, x2, y2, radius=25, update=False, **kwargs):
         points = [x1+radius, y1,
                 x1+radius, y1,
                 x2-radius, y1,
@@ -91,7 +104,7 @@ class RoundedButton(tk.Canvas):
 def func():
     print("Bouton cliqué")
 
-# root = tk.Tk()
-# btn = RoundedButton(text="", radius=100, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
-# btn.pack(expand=True, fill="both")
-# root.mainloop()
+root = tk.Tk()
+btn = RoundedButton(text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
+btn.pack(expand=True, fill="both")
+root.mainloop()
