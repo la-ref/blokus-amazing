@@ -104,14 +104,6 @@ if __name__ == "__main__":
     window.configure(bg = "#FFFFFF")
 
 
-    image = []
-    image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png"))
-    image.append(PhotoImage(file="Accueil/assets/frame0/button_2.png"))
-    image.append(PhotoImage(file="Accueil/assets/frame0/button_3.png"))
-    image.append(PhotoImage(file="Accueil/assets/frame0/button_4.png"))
-    image.append(PhotoImage(file="Accueil/assets/frame0/button_5.png"))
-    image.append(PhotoImage(file="Accueil/assets/frame0/button_1.png"))
-
 
 
     MonAccueil = Accueil(window,image)

@@ -1,17 +1,7 @@
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
-import pyglet as pg
+from tkinter import PhotoImage
 
 
 class button():
-
-    """
-    Cette fonction permet de créer un rectangle avec des bords arrondis
-    params :
-        - X1, coordonnée haut gauche
-        - Y1, coordonnée bas gauche
-        - X2, coordonnée haut droit
-        - Y2, coordonnée bas droit
-    """
     def load(self):
         self.image = []
         self.image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png")) #0
@@ -20,16 +10,14 @@ class button():
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_4.png")) #3
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_5.png")) #4
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_1.png")) #5
-
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/button_give_up.png")) #6
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/button_quit.png")) #7
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/game_board.png")) #8
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/empty_list.png")) #9
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_blue.png")) #10
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_green.png")) #11
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_red.png")) #12
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_yellow.png")) #13
 
     def getImage(self, index: int):
         return self.image[index]
-
-
-#---------------#
-#    Exemple    #
-#---------------#
-# root = tk.Tk()
-# btn = RoundedButton(text="Hors ligne", radius=100, hauteur=128, largueur=500, fontsize=32, btnbackground="#0078ff", btnforeground="#ffffff", clicked=func)
-# btn.pack(expand=True, fill="both")
-# root.mainloop()
