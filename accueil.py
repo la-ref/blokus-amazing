@@ -106,8 +106,6 @@ if __name__ == "__main__":
 
     image = config.tableauImage()
 
-
-
     MonAccueil = Accueil(window,image)
     # MonAccueil.pack()
 
