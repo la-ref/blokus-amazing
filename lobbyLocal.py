@@ -151,7 +151,7 @@ class lobbyLocal(Frame):
 
         image_12 = canvas.create_image(
             1295.0,
-            256.0,
+            256.0, 
             image=image_list[20]
         )
 
