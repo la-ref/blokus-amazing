@@ -3,6 +3,7 @@ from tkinter import PhotoImage
 
 
 
+
 class PiecesListGUI(tk.Canvas):
     
     
