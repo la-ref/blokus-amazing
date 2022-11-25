@@ -20,7 +20,7 @@ if __name__=="__main__":
     window = tk.Tk()
     window.geometry("1440x1024")
     
-    accueil=PiecesListGUI(window)
+    accueil=PiecesListGUI(window) 
     accueil.pack(expand=True)
 
 
