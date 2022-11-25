@@ -1,8 +1,12 @@
 from tkinter import PhotoImage
 
 
-class image():
-    def load():
+class config():
+    def __init__(self):
+        self.largueur = 1440
+        self.hauteur = 1024
+        self.image = []
+    def tableauImage():
         image = []
         image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png")) #0
         image.append(PhotoImage(file="Accueil/assets/frame0/button_2.png")) #1
@@ -19,6 +23,10 @@ class image():
         image.append(PhotoImage(file="Plateau/assets/frame0/player_red.png")) #12
         image.append(PhotoImage(file="Plateau/assets/frame0/player_yellow.png")) #13
         return image
+    def hauteurFenetre():
+        return 1024
+    def largueurFenetre():
+        return 1440
 
     # def getImage(self, index: int):
     #     return image[index]
