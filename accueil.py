@@ -108,5 +108,5 @@ if __name__ == "__main__":
 
     MonAccueil = Accueil(window,image)
     # MonAccueil.pack()
-
+    window.resizable(False, False)
     window.mainloop()
