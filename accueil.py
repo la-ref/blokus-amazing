@@ -104,7 +104,7 @@ if __name__ == "__main__":
     window.geometry("1440x1024")
     window.configure(bg = "#FFFFFF")
 
-    image = button.load()
+    image = config.tableauImage()
 
 
 
