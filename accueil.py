@@ -1,5 +1,6 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+import tkinter
 import sys
 from Elements.bouton.button import *
 
@@ -37,7 +38,7 @@ class Accueil(Frame):
             470, 
             324, 
             image=image_list[5],
-            anchor=tk.NW
+            anchor=tkinter.NW
         )
         # canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
 
@@ -46,7 +47,7 @@ class Accueil(Frame):
             470, 
             488, 
             image=image_list[1],
-            anchor=tk.NW
+            anchor=tkinter.NW
         )
         # canvas.tag_bind(EnLigneBouton, "<Button-1>", self.EnLigneBouton)
 
@@ -56,7 +57,7 @@ class Accueil(Frame):
             470, 
             652, 
             image=image_list[2],
-            anchor=tk.NW
+            anchor=tkinter.NW
         )
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
 
@@ -67,7 +68,7 @@ class Accueil(Frame):
             1032, 
             821, 
             image=image_list[3],
-            anchor=tk.NW
+            anchor=tkinter.NW
         )
         # canvas.tag_bind(BoutonScore, "<Button-1>", self.BoutonScore)
 
@@ -76,7 +77,7 @@ class Accueil(Frame):
             334, 
             821, 
             image=image_list[4],
-            anchor=tk.NW
+            anchor=tkinter.NW
         )
         # canvas.tag_bind(BoutonInfo, "<Button-1>", self.BoutonInfo)
 
@@ -98,11 +99,12 @@ class Accueil(Frame):
 
 if __name__ == "__main__":
 
-    window = Tk()
+    window = Tk(className='Accueil')
 
     window.geometry("1440x1024")
     window.configure(bg = "#FFFFFF")
 
+    image = button.load()
 
 
 
