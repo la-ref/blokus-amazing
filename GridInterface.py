@@ -1,4 +1,5 @@
 import tkinter as tk
+import Elements.PiecesListGUI as PG
 
 
 class GridInterface(tk.Frame):
@@ -19,7 +20,7 @@ if __name__=="__main__":
     window = tk.Tk()
     window.geometry("1440x1024")
     
-    List1 = tk.Frame(window)
+    # List1 = tk.Frame(window)
     
     # window.columnconfigure(0, weight=1)
     # window.columnconfigure(1, weight=1)
@@ -40,9 +41,10 @@ if __name__=="__main__":
     # List4.config(width=250,height=450 , bg="red")
     # List4.grid(row = 1, column = 0, pady = 2, padx=2)
     
+    List4 = PG.PiecesListGUI(window,)
 
 
     board = GridInterface(window,7)
-    board.place("1440x1024")
+    board.place(x=720,y=512,anchor=tk.CENTER)
 
     window.mainloop()
