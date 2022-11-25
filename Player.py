@@ -1,15 +1,10 @@
 class Player:
-        
-    def __init__(self, nb : int):
-        self.__name : str = "Joueur "+str(nb)
-        self.__nb : int = nb
-                 
-    @classmethod
-    def Player(cls, nb: int, name : str):
-        res = cls(nb)
-        res.__name = name
-        return res
-
+    nbJoueur = 1
+    def __init__(self, id : int,nom):
+        self.__name : str =  nom
+        self.__id : int =  id
+        self.__nbTour : int = 0 
+        Player.nbJoueur +=1
 
     @property
     def name(self): return self.__name
@@ -17,3 +12,9 @@ class Player:
     @name.setter
     def name(self, n:str) -> None:
         self.__name = n
+
+    def getColor(self):
+        return self.__id
+
+    def getNbTour(self):
+        return self.__nbTour
