@@ -1,7 +1,7 @@
 from tkinter import PhotoImage
 
 
-class button():
+class image():
     def load():
         image = []
         image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png")) #0

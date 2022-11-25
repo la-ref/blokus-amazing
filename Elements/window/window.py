@@ -1,0 +1,3 @@
+class window():
+    def load():
+        
