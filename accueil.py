@@ -2,7 +2,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
-from Elements.bouton.button import *
+from config import *
 
 class Accueil(Frame):
     def __init__(self,window,image_list):
