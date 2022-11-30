@@ -155,52 +155,41 @@ class lobbyLocal(Frame):
             image=image_list[20]
         )
 
-        image_image_13 = PhotoImage(
-            file=relative_to_assets("image_13.png"))
         image_13 = canvas.create_image(
             1185.0,
             775.0,
-            image=image_image_13
+            image=image_list[23]
         )
 
-        image_image_14 = PhotoImage(
-            file=relative_to_assets("image_14.png"))
+
         image_14 = canvas.create_image(
             1185.0,
             256.0,
-            image=image_image_14
+            image=image_list[23]
         )
 
-        image_image_15 = PhotoImage(
-            file=relative_to_assets("image_15.png"))
         image_15 = canvas.create_image(
             249.0,
             256.0,
-            image=image_image_15
+            image=image_list[24]
         )
 
-        image_image_16 = PhotoImage(
-            file=relative_to_assets("image_16.png"))
         image_16 = canvas.create_image(
             249.0,
             775.0,
-            image=image_image_16
+            image=image_list[24]
         )
 
-        image_image_17 = PhotoImage(
-            file=relative_to_assets("image_17.png"))
         image_17 = canvas.create_image(
             139.0,
             775.0,
-            image=image_image_17
+            image=image_list[20]
         )
 
-        image_image_18 = PhotoImage(
-            file=relative_to_assets("image_18.png"))
         image_18 = canvas.create_image(
             1295.0,
             775.0,
-            image=image_image_18
+            image=image_list[21]
         )
 
 
