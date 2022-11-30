@@ -3,6 +3,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
 from config import *
+from accueil import *
 
 class lobbyLocal(Frame):
     def __init__(self,window,image_list):
@@ -191,7 +192,9 @@ class lobbyLocal(Frame):
             775.0,
             image=image_list[21]
         )
-
+        
+    def Bouton_quitter(self,event):
+        self.window = Accueil(self.window, image)
 
 
 
