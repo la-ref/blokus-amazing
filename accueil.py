@@ -3,6 +3,8 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
 from config import *
+from lobbyLocal import *
+
 
 class Accueil(Frame):
     def __init__(self,window,image_list):
@@ -40,7 +42,7 @@ class Accueil(Frame):
             image=image_list[5],
             anchor=tkinter.NW
         )
-        # canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
+        canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
 
 
         EnLigneBouton = canvas.create_image(
@@ -62,7 +64,6 @@ class Accueil(Frame):
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
 
         
-
 
         BoutonScore = canvas.create_image(
             1032, 
@@ -94,8 +95,11 @@ class Accueil(Frame):
         self.window.destroy()
     
     def HorsLigneBouton(self,event):
-        self.window.destroy()
-
+        self.window = lobbyLocal(self.window, image)
+        
+        
+        
+        
 
 if __name__ == "__main__":
 
