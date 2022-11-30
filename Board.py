@@ -4,8 +4,8 @@ from Player import Player
 from Pieces import Pieces
 class Board:
 
-    def __init__(self : Board, size : int) -> None:
-        self.__size : int = size
+    def __init__(self : Board, size : int|None = None) -> None:
+        self.__size : int = size or 20
         self.__board = np.empty( (self.__size,self.__size), dtype=Player)
         self.__board.fill(0)
 

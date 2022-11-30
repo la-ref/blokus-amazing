@@ -1,8 +1,8 @@
 class Player:
     nbJoueur = 1
-    def __init__(self, id : int,nom):
-        self.__name : str =  nom
-        self.__id : int =  id
+    def __init__(self, idCouleur : int|None,nom: str|None):
+        self.__name : str =  nom or ("Joueur"+str(Player.nbJoueur))
+        self.__idCouleur : int = idCouleur or 1
         self.__nbTour : int = 0 
         Player.nbJoueur +=1
 
@@ -14,7 +14,7 @@ class Player:
         self.__name = n
 
     def getColor(self):
-        return self.__id
+        return self.__idCouleur
 
     def getNbTour(self):
         return self.__nbTour
