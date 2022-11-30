@@ -6,8 +6,10 @@ from config import *
 
 class lobbyLocal(Frame):
     def __init__(self,window,image_list):
+        self.boutonUser = []
         self.window = window
-        canvas = Canvas(
+        self.image_list = image_list
+        self.canvas = Canvas(
             window,
             bg = "#FFFFFF",
             height = 1024,
@@ -17,20 +19,12 @@ class lobbyLocal(Frame):
             relief = "ridge"
         )
 
-        canvas.place(x = 0, y = 0)
-        Arriere_plan = canvas.create_image(
-            720.0,
-            512.0,
-            image=image_list[14]
-        )
+        self.canvas.place(x = 0, y = 0)
+        self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= self.image_list[14])
 
-        Bouton_Rouge = canvas.create_image(
-            279.0,
-            883.0,
-            image=image_list[22]
-        )
+        self.Bouton_Rouge = self.canvas.create_image(279.0,883.0,image= self.image_list[22])
 
-        text_rouge = canvas.create_text(
+        self.text_rouge = self.canvas.create_text(
             157.639892578125,
             840.0,
             anchor="nw",
@@ -39,26 +33,17 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 48 * -1)
         )
 
-        Bouton_Jouer = canvas.create_image(
-            719.0,
-            464.0,
-            image=image_list[17]
-        )
-
-        Bouton_Quitter = canvas.create_image(
+        self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= self.image_list[17])
+        self.Bouton_Quitter = self.canvas.create_image(
             717.0,
             577.0,
-            image=image_list[19]
+            image= self.image_list[19]
         )
+        self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
 
 
-        Bouton_Bleu = canvas.create_image(
-            1156.0,
-            883.0,
-            image=image_list[15]
-        )
-
-        text_bleu = canvas.create_text(
+        self.Bouton_Bleu = self.canvas.create_image(1156.0,883.0,image= self.image_list[15])
+        self.text_bleu = self.canvas.create_text(
             1034.639892578125,
             840.0,
             anchor="nw",
@@ -68,13 +53,8 @@ class lobbyLocal(Frame):
         )
 
 
-        Noir_IA_Bleu_1 = canvas.create_image(
-            1266.0,
-            683.04345703125,
-            image=image_list[18]
-        )
-
-        text_facile = canvas.create_text(
+        self.Noir_IA_Bleu_1 = self.canvas.create_image(1266.0,683.04345703125,image= self.image_list[18])
+        self.text_facile = self.canvas.create_text(
             1194.0,
             657.04345703125,
             anchor="nw",
@@ -83,13 +63,9 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 32 * -1)
         )
 
-        Noir_IA_Bleu_2 = canvas.create_image(
-            1266.91796875,
-            622.521728515625,
-            image=image_list[18]
-        )
+        self.Noir_IA_Bleu_2 = self.canvas.create_image(1266.91796875,622.521728515625,image= self.image_list[18])
 
-        text_moyen = canvas.create_text(
+        self.text_moyen = self.canvas.create_text(
             1194.91796875,
             596.521728515625,
             anchor="nw",
@@ -98,13 +74,9 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 32 * -1)
         )
 
-        Noir_IA_Bleu_3 = canvas.create_image(
-            1266.0,
-            562.0,
-            image=image_list[18]
-        )
+        self.Noir_IA_Bleu_3 = self.canvas.create_image(1266.0,562.0,image= self.image_list[18])
 
-        text_expert = canvas.create_text(
+        self.text_expert = self.canvas.create_text(
             1194.0,
             536.0,
             anchor="nw",
@@ -113,13 +85,9 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 32 * -1)
         )
 
-        Bouton_Vert = canvas.create_image(
-            1156.0,
-            147.0,
-            image=image_list[25]
-        )
+        self.Bouton_Vert = self.canvas.create_image(1156.0,147.0,image= self.image_list[25])
 
-        text_vert = canvas.create_text(
+        self.text_vert = self.canvas.create_text(
             1034.639892578125,
             104.0,
             anchor="nw",
@@ -128,13 +96,13 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 48 * -1)
         )
 
-        Bouton_Jaune = canvas.create_image(
+        self.Bouton_Jaune = self.canvas.create_image(
             279.0,
             147.0,
-            image=image_list[16]
+            image= self.image_list[16]
         )
 
-        canvas.create_text(
+        self.text_jaune = self.canvas.create_text(
             157.639892578125,
             104.0,
             anchor="nw",
@@ -143,58 +111,117 @@ class lobbyLocal(Frame):
             font=("LilitaOne", 48 * -1)
         )
 
-        Bouton_Robot_gris_X = canvas.create_image(
+        self.Bouton_Robot_gris_X = self.canvas.create_image(
             139.0,
             256.0,
-            image=image_list[20]
+            image= self.image_list[20]
         )
 
-        Bouton_Robot_gris_X = canvas.create_image(
+        self.Bouton_Robot_noir_X = self.canvas.create_image(
             1295.0,
             256.0, 
-            image=image_list[20]
+            image= self.image_list[21]
         )
-
-        Bouton_User_gris_X = canvas.create_image(
-            1185.0,
-            775.0,
-            image=image_list[23]
-        )
-
-
-        Bouton_User_gris_X = canvas.create_image(
-            1185.0,
-            256.0,
-            image=image_list[23]
-        )
-
-        Bouton_User_noir_X = canvas.create_image(
+        self.Bouton_User_noir_Jaune = self.canvas.create_image(
             249.0,
             256.0,
-            image=image_list[24]
+            image= self.image_list[24]
         )
+        self.canvas.tag_bind(self.Bouton_User_noir_Jaune, "<Button-1>", self.BoutonIAJaune)
+        self.boutonUser.append("noir")
 
-        Bouton_User_noir_X = canvas.create_image(
+        self.Bouton_User_gris_Vert = self.canvas.create_image(
+            1185.0,
+            256.0,
+            image= self.image_list[23]
+        )
+        self.canvas.tag_bind(self.Bouton_User_noir_Vert, "<Button-1>", self.BoutonIAVert)
+        self.boutonUser.append("gris")
+
+        self.Bouton_User_noir_Rouge = self.canvas.create_image(
             249.0,
             775.0,
-            image=image_list[24]
+            image= self.image_list[24]
         )
+        self.canvas.tag_bind(self.Bouton_User_noir_Rouge, "<Button-1>", self.BoutonIARouge)
+        self.boutonUser.append("noir")
 
-        Bouton_Robot_gris_X = canvas.create_image(
+        self.Bouton_User_gris_Bleu = self.canvas.create_image(
+            1185.0,
+            775.0,
+            image= self.image_list[23]
+        )
+        self.canvas.tag_bind(self.Bouton_User_gris_Bleu, "<Button-1>", self.BoutonIABleu)
+        self.boutonUser.append("gris")
+
+        self.Bouton_Robot_gris_X = self.canvas.create_image(
             139.0,
             775.0,
-            image=image_list[20]
+            image= self.image_list[20]
         )
 
-        Bouton_IA_noir_x = canvas.create_image(
+        self.Bouton_IA_noir_x = self.canvas.create_image(
             1295.0,
             775.0,
-            image=image_list[21]
+            image= self.image_list[21]
         )
 
-
-
-
+    def QuitterBouton(self):
+        pass
+        #retour accueil   
+    def BoutonIAJaune(self,event):
+        print("jaune")
+        if self.boutonUser[4] == "gris":
+            Bouton_User_gris_X = self.canvas.create_image(
+                1185.0,
+                775.0,
+                image=self.image_list[23]
+            )
+            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        else:
+            pass 
+    def BoutonIARouge(self,event):
+        print("rouge")
+        if self.boutonUser[4] == "gris":
+            Bouton_User_gris_X = self.canvas.create_image(
+                1185.0,
+                775.0,
+                image=self.image_list[23]
+            )
+            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        else:
+            pass
+    def BoutonIAVert(self,event):
+        print("vert")
+        if self.boutonUser[4] == "gris":
+            Bouton_User_gris_X = self.canvas.create_image(
+                1185.0,
+                775.0,
+                image=self.image_list[23]
+            )
+            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        else:
+            pass
+    def BoutonIABleu(self,event):
+        print("bleu")
+        if self.boutonUser[4] == "gris":
+            Bouton_User_gris_X = self.canvas.create_image(
+                1185.0,
+                775.0,
+                image=self.image_list[23]
+            )
+            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        else:
+            pass
+        # if personne == "bleu":
+        #     Noir_IA_Bleu_1 = self.canvas.create_image(1266.0,683.04345703125,image=self.image_list[18])
+        # elif personne == "Jaune":
+        #     pass
+        # elif personne == "Vert":
+        #     pass
+        # elif personne == "Rouge":
+        #     pass  
+            
 
 
 if __name__ == "__main__":
