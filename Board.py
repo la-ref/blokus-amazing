@@ -12,7 +12,7 @@ class Board:
     def __checkBoardLimit(self : Board, row : int, column : int) -> bool:
         return ((row < self.__size and row >= 0) and (column < self.__size and column >= 0))
 
-    def getPlayerAt(self : Board, row : int, column : int) -> Player|None:
+    def getColorAt(self : Board, row : int, column : int) -> int|None:
         if (self.__checkBoardLimit(row, column)):
             return self.__board[row][column] 
     
@@ -20,10 +20,6 @@ class Board:
         if (self.__checkBoardLimit(row, column)):
             return self.__board[row][column] == 0
         return False
-    
-    def addPlayerAt(self : Board, player : Player, row : int, column : int) -> None:
-        if (self.__checkBoardLimit(row, column) and not self.isEmptyAt(row, column)):
-            self.__board[row][column] = player
 
     def isInCorner(self : Board, row : int, column : int) -> bool:
         if (self.__checkBoardLimit(row, column)):
@@ -36,9 +32,10 @@ class Board:
     def __verifyApplicationStart(self: Board,x,y,player : Player) -> bool:
         return player.getNbTour() == 0 and self.isInCorner(y,x)
 
-    def verifyApplication(self: Board,piece : Pieces,column:int,row:int,player : Player,declage : int) -> bool:
-        x : int = column-declage
-        y : int = row-declage
+    def verifyApplication(self: Board,piece : Pieces,column:int,row:int,player : Player,declageX : int,declageY : int) -> bool:
+        if not (self.__checkBoardLimit(row, column)): return False
+        x : int = column-declageX
+        y : int = row-declageY
         delimitation : np.ndarray = piece.getDelimitation()
         nbCorners : int = piece.getNbCorners()
         countCorners : int = 0
@@ -59,7 +56,7 @@ class Board:
                     if (delimitation[i][v] == 2):
                         cornerReduction+=1
 
-        if delimitation[declage][declage] == 3 and self.__verifyApplicationStart(x+declage,y+declage,player):
+        if delimitation[declageY][declageX] == 3 and self.__verifyApplicationStart(x+declageX,y+declageY,player):
             return True
         return (not ((nbCorners-cornerReduction) == countCorners))
     

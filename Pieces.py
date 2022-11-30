@@ -1,5 +1,5 @@
-import numpy as np
 from __future__ import annotations
+import numpy as np
 class Pieces:
     def __init__(self: Pieces, forme : np.ndarray, identifiant: int) -> None:
         self.__id : int = identifiant

@@ -1,6 +1,7 @@
 import numpy as np
 from Pieces import Pieces
 from Board import Board
+from Player import Player
 # def findCorners(test):
 #     liste = []
 #     for i in range(len(test)):
@@ -155,7 +156,6 @@ def appliquePiece(plateau,piece,x,y,couleur):
 #                             [1,1,1],
 #                             [0,1,0]])))
 
-from Player import Player
 
 b = Board(10)
 p = Pieces(np.array([       [1,1,1],
@@ -175,7 +175,7 @@ print(p.getDelimitation())
 
 # print(b.getBoard())
 
-# print(b.verifyApplication(p,1,1,pl,1))
+print(b.verifyApplication(p,-5,1,pl,1,1))
 
 # kk = np.array([
 #     [0,0,0,0,0,0,0,0],
