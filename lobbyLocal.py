@@ -30,7 +30,7 @@ class lobbyLocal(Frame):
             image=image_list[22]
         )
 
-        canvas.create_text(
+        text_rouge = canvas.create_text(
             157.639892578125,
             840.0,
             anchor="nw",
@@ -58,7 +58,7 @@ class lobbyLocal(Frame):
             image=image_list[15]
         )
 
-        canvas.create_text(
+        text_bleu = canvas.create_text(
             1034.639892578125,
             840.0,
             anchor="nw",
@@ -74,7 +74,7 @@ class lobbyLocal(Frame):
             image=image_list[18]
         )
 
-        canvas.create_text(
+        text_facile = canvas.create_text(
             1194.0,
             657.04345703125,
             anchor="nw",
@@ -89,7 +89,7 @@ class lobbyLocal(Frame):
             image=image_list[18]
         )
 
-        canvas.create_text(
+        text_moyen = canvas.create_text(
             1194.91796875,
             596.521728515625,
             anchor="nw",
@@ -104,7 +104,7 @@ class lobbyLocal(Frame):
             image=image_list[18]
         )
 
-        canvas.create_text(
+        text_expert = canvas.create_text(
             1194.0,
             536.0,
             anchor="nw",
@@ -119,7 +119,7 @@ class lobbyLocal(Frame):
             image=image_list[25]
         )
 
-        canvas.create_text(
+        text_vert = canvas.create_text(
             1034.639892578125,
             104.0,
             anchor="nw",
@@ -149,44 +149,44 @@ class lobbyLocal(Frame):
             image=image_list[20]
         )
 
-        image_12 = canvas.create_image(
+        Bouton_Robot_gris_X = canvas.create_image(
             1295.0,
             256.0, 
             image=image_list[20]
         )
 
-        image_13 = canvas.create_image(
+        Bouton_User_gris_X = canvas.create_image(
             1185.0,
             775.0,
             image=image_list[23]
         )
 
 
-        image_14 = canvas.create_image(
+        Bouton_User_gris_X = canvas.create_image(
             1185.0,
             256.0,
             image=image_list[23]
         )
 
-        image_15 = canvas.create_image(
+        Bouton_User_noir_X = canvas.create_image(
             249.0,
             256.0,
             image=image_list[24]
         )
 
-        image_16 = canvas.create_image(
+        Bouton_User_noir_X = canvas.create_image(
             249.0,
             775.0,
             image=image_list[24]
         )
 
-        image_17 = canvas.create_image(
+        Bouton_Robot_gris_X = canvas.create_image(
             139.0,
             775.0,
             image=image_list[20]
         )
 
-        image_18 = canvas.create_image(
+        Bouton_IA_noir_x = canvas.create_image(
             1295.0,
             775.0,
             image=image_list[21]
