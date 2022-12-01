@@ -1,7 +1,7 @@
 from Pieces import Pieces
 import numpy as np
 
-ListePieces : dict[str,Pieces] = {
+LISTEPIECES : dict[str,Pieces] = {
     "PIECE_1" : Pieces(np.array([[1]]),1),
     "PIECE_2" : Pieces(np.array([[1,1]]),2),
     "PIECE_3" : Pieces(np.array([[1,1,1]]),3),

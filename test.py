@@ -158,20 +158,18 @@ def appliquePiece(plateau,piece,x,y,couleur):
 
 
 b = Board(10)
-p = Pieces(np.array([       [1,1,1],
-                            [1,1,1],
-                            [0,1,1]]),1)
+p = Pieces(np.array([[1]]),1)
 pl = Player(5,"yes")
 
 a = p.getDelimitation()
 print(a)
 
-print(p.rotate90())
-print(p.getDelimitation())
-print(p.rotate90())
-print(p.getDelimitation())
-print(p.flip())
-print(p.getDelimitation())
+# print(p.rotate90())
+# print(p.getDelimitation())
+# print(p.rotate90())
+# print(p.getDelimitation())
+# print(p.flip())
+# print(p.getDelimitation())
 
 # print(b.getBoard())
 

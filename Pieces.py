@@ -19,7 +19,7 @@ class Pieces:
                 for v in [-1,1]:
                     for k in [-1,1]:
                         if ((i+v >= 0 and i+v <= len(delim)-1) and (y+k >= 0 and y+k <= len(delim[0])-1)):
-                            if delim[i+v][y+k] == 3:
+                            if delim[i+v][y+k] == 3 and delim[i][y] != 3:
                                 countCorners+=1
                 borderCounter : int = 0
                 noneCounter : int = 0
@@ -36,8 +36,9 @@ class Pieces:
                                 noneCounter+=1
                 if borderCounter == 0 and countCorners > 0:
                     delim[i][y] = 2
-                elif noneCounter == 0 and countCorners == 0:
-                    delim[i][y] = 0      
+                elif noneCounter == 0 and countCorners == 0 and delim[i][y] != 3:
+                    delim[i][y] = 0 
+                         
         return delim
 
     def getDelimitation(self: Pieces) -> np.ndarray:
