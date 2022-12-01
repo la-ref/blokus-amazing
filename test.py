@@ -162,7 +162,7 @@ p = Pieces(np.array([[1]]),1)
 pl = Player(5,"yes")
 
 a = p.getDelimitation()
-print(a)
+print(pl.getPieces())
 
 # print(p.rotate90())
 # print(p.getDelimitation())
