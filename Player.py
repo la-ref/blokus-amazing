@@ -21,3 +21,9 @@ class Player:
 
     def getNbTour(self):
         return self.__nbTour
+
+    def getPieces(self):
+        return self.__pieces
+
+    def getPiece(self,id):
+        return self.__pieces[id]
