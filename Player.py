@@ -27,3 +27,12 @@ class Player:
 
     def getPiece(self,id):
         return self.__pieces[id]
+
+    def getNom(self):
+        return self.__name
+
+    def removePiece(self,id):
+        del self.__pieces[id]
+
+    def ajoutTour(self):
+        self.__nbTour+=1

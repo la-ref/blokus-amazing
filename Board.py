@@ -41,13 +41,14 @@ class Board:
         countCorners : int = 0
         cornerReduction : int = 0
         for i in range(len(delimitation)):
-            for v in range(len(delimitation)):
+            for v in range(len(delimitation[0])):
                 if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
                     if (delimitation[i][v] == 3 and self.__board[y+i][x+v] > 0):
                         return False
                     if (delimitation[i][v] == 1 and self.__board[y+i][x+v] > 0 and self.__board[y+i][x+v] == player.getColor()): 
                         return False
                     if (delimitation[i][v] == 2):
+                        print(self.__board[y+i][x+v])
                         if (self.__board[y+i][x+v] != player.getColor()):
                             countCorners+= 1
                 else:
@@ -57,8 +58,25 @@ class Board:
                         cornerReduction+=1
 
         if delimitation[declageY][declageX] == 3 and self.__verifyApplicationStart(x+declageX,y+declageY,player):
+            print("ahah")
             return True
-        return (not ((nbCorners-cornerReduction) == countCorners))
+        if ((nbCorners-cornerReduction) == countCorners):
+            return False
+        print((nbCorners,cornerReduction,countCorners))
+        return True
+    
+    def ajouterPiece(self: Board,piece : Pieces,column:int,row:int,player : Player,declageX : int,declageY : int) -> bool:
+        if (self.verifyApplication(piece,column,row,player,declageX,declageY)):
+            x : int = column-declageX
+            y : int = row-declageY
+            delimitation : np.ndarray = piece.getDelimitation()
+            for i in range(len(delimitation)):
+                for v in range(len(delimitation)):
+                    if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
+                        if (delimitation[i][v] == 3):
+                            self.__board[y+i][x+v] = player.getColor()
+            return True
+        return False
     
     def getBoard(self) -> np.ndarray:
         return self.__board
