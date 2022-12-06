@@ -3,6 +3,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
 from config import *
+import tkinter as tk
 
 class lobbyLocal(Frame):
     def __init__(self,window,image_list):
@@ -117,11 +118,8 @@ class lobbyLocal(Frame):
             image= self.image_list[20]
         )
 
-        self.Bouton_Robot_noir_X = self.canvas.create_image(
-            1295.0,
-            256.0, 
-            image= self.image_list[21]
-        )
+        self.Bouton_Robot_noir_Vert = self.canvas.create_image(1295.0,256.0, image= self.image_list[21])
+        self.canvas.tag_bind(self.Bouton_Robot_noir_Vert, "<Button-1>", self.boutonSwitchIAVert)
         self.Bouton_User_noir_Jaune = self.canvas.create_image(
             249.0,
             256.0,
@@ -135,7 +133,7 @@ class lobbyLocal(Frame):
             256.0,
             image= self.image_list[23]
         )
-        self.canvas.tag_bind(self.Bouton_User_noir_Vert, "<Button-1>", self.BoutonIAVert)
+        self.canvas.tag_bind(self.Bouton_User_gris_Vert, "<Button-1>", self.BoutonIAVert)
         self.boutonUser.append("gris")
 
         self.Bouton_User_noir_Rouge = self.canvas.create_image(
@@ -154,74 +152,88 @@ class lobbyLocal(Frame):
         self.canvas.tag_bind(self.Bouton_User_gris_Bleu, "<Button-1>", self.BoutonIABleu)
         self.boutonUser.append("gris")
 
-        self.Bouton_Robot_gris_X = self.canvas.create_image(
-            139.0,
-            775.0,
-            image= self.image_list[20]
-        )
+        self.Bouton_Robot_gris_X = self.canvas.create_image(139.0,775.0,image= self.image_list[20])
+        self.Bouton_IA_noir_Bleu = self.canvas.create_image(1295.0,775.0,image= self.image_list[21])
+        self.canvas.tag_bind(self.Bouton_IA_noir_Bleu, "<Button-1>", self.boutonSwitchIABleu)
 
-        self.Bouton_IA_noir_x = self.canvas.create_image(
-            1295.0,
-            775.0,
-            image= self.image_list[21]
-        )
 
     def QuitterBouton(self):
         pass
-        #retour accueil   
+        #retour accueil
+
+    def boutonSwitchIAJaune(self,event):
+        if self.boutonUser[0] == "gris":
+            pass
+        else:
+            self.BoutonIAJaune(self,event)
+    def boutonSwitchIARouge(self,event):
+        if self.boutonUser[2] == "gris":
+            pass
+        else:
+            self.BoutonIARouge(self,event)
+    def boutonSwitchIAVert(self,event):
+        print("vert")
+        if self.boutonUser[1] == "gris":
+            pass
+        else:
+            self.BoutonIAVert(self,event)
+    def boutonSwitchIABleu(self,event):
+        print("bleu")
+        if self.boutonUser[3] == "gris":
+            pass
+        else:
+            self.BoutonIABleu(self,event)
+
     def BoutonIAJaune(self,event):
         print("jaune")
-        if self.boutonUser[4] == "gris":
-            Bouton_User_gris_X = self.canvas.create_image(
-                1185.0,
-                775.0,
-                image=self.image_list[23]
-            )
-            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        self.canvas.itemconfigure(self.Bouton_User_noir_Jaune, state=tk.HIDDEN)
+        if self.boutonUser[0] == "gris":
+            self.Bouton_User_noir_Jaune = self.canvas.create_image(249.0,256.0,image=self.image_list[24])
+            self.boutonUser[0] = "noir"
         else:
-            pass 
+            self.Bouton_User_noir_Jaune = self.canvas.create_image(249.0,256.0,image=self.image_list[23])
+            self.boutonUser[0] = "gris"
+        self.canvas.tag_bind(self.Bouton_User_noir_Jaune, "<Button-1>", self.BoutonIAJaune)
     def BoutonIARouge(self,event):
         print("rouge")
-        if self.boutonUser[4] == "gris":
-            Bouton_User_gris_X = self.canvas.create_image(
-                1185.0,
-                775.0,
-                image=self.image_list[23]
-            )
-            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        self.canvas.itemconfigure(self.Bouton_User_noir_Rouge, state=tk.HIDDEN)
+        if self.boutonUser[2] == "gris":
+            self.Bouton_User_noir_Rouge = self.canvas.create_image(249.0,775.0,image=self.image_list[24])
+            self.boutonUser[2] = "noir"
         else:
-            pass
+            self.Bouton_User_noir_Rouge = self.canvas.create_image(249.0,775.0,image=self.image_list[23])
+            self.boutonUser[2] = "gris"
+        self.canvas.tag_bind(self.Bouton_User_noir_Rouge, "<Button-1>", self.BoutonIARouge)
+
     def BoutonIAVert(self,event):
-        print("vert")
-        if self.boutonUser[4] == "gris":
-            Bouton_User_gris_X = self.canvas.create_image(
-                1185.0,
-                775.0,
-                image=self.image_list[23]
-            )
-            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        print("vert", event)
+        # self.Bouton_User_gris_Vert.destroy()
+        self.canvas.itemconfigure(self.Bouton_User_gris_Vert, state=tk.HIDDEN)
+        self.canvas.itemconfigure(self.Bouton_Robot_noir_Vert, state=tk.HIDDEN)
+        if self.boutonUser[1] == "gris":
+            self.Bouton_User_gris_Vert = self.canvas.create_image(1185.0,256.0,image=self.image_list[24])
+            self.Bouton_Robot_noir_Vert = self.canvas.create_image(1295.0,256.0, image= self.image_list[20])
+            self.boutonUser[1] = "noir"
         else:
-            pass
+            self.Bouton_User_gris_Vert = self.canvas.create_image(1185.0,256.0,image=self.image_list[23])
+            self.Bouton_Robot_noir_Vert = self.canvas.create_image(1295.0,256.0, image= self.image_list[21])
+            self.boutonUser[1] = "gris"
+        self.canvas.tag_bind(self.Bouton_User_gris_Vert, "<Button-1>", self.BoutonIAVert)
+        
     def BoutonIABleu(self,event):
         print("bleu")
-        if self.boutonUser[4] == "gris":
-            Bouton_User_gris_X = self.canvas.create_image(
-                1185.0,
-                775.0,
-                image=self.image_list[23]
-            )
-            self.canvas.tag_bind(Bouton_User_gris_X, "<Button-1>", self.BoutonIABleu)
+        self.canvas.itemconfigure(self.Bouton_User_gris_Bleu, state=tk.HIDDEN)
+        self.canvas.itemconfigure(self.Bouton_IA_noir_Bleu, state=tk.HIDDEN)
+        
+        if self.boutonUser[3] == "gris":
+            self.Bouton_User_gris_Bleu = self.canvas.create_image(1185.0,775.0,image=self.image_list[24])
+            self.Bouton_IA_noir_Bleu = self.canvas.create_image(1295.0,775.0,image= self.image_list[20])
+            self.boutonUser[3] = "noir"
         else:
-            pass
-        # if personne == "bleu":
-        #     Noir_IA_Bleu_1 = self.canvas.create_image(1266.0,683.04345703125,image=self.image_list[18])
-        # elif personne == "Jaune":
-        #     pass
-        # elif personne == "Vert":
-        #     pass
-        # elif personne == "Rouge":
-        #     pass  
-            
+            self.Bouton_User_gris_Bleu = self.canvas.create_image(1185.0,775.0,image=self.image_list[23])
+            self.Bouton_IA_noir_Bleu = self.canvas.create_image(1295.0,775.0,image= self.image_list[21])
+            self.boutonUser[3] = "gris"
+        self.canvas.tag_bind(self.Bouton_User_gris_Bleu, "<Button-1>", self.BoutonIABleu)
 
 
 if __name__ == "__main__":
