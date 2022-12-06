@@ -1,6 +1,7 @@
 from Pieces import Pieces
 import numpy as np
 
+# Constante qui est un dictionnaire comportant l'ensemble des 21 pièces du jeu blokus 
 LISTEPIECES : dict[str,Pieces] = {
     "1" : Pieces(np.array([[1]]),1),
     "2" : Pieces(np.array([[1,1]]),2),

@@ -1,12 +1,40 @@
 from __future__ import annotations
 import numpy as np
 class Pieces:
+    """Classe représentant une pièce du jeu blokus
+    """
+
     def __init__(self: Pieces, forme : np.ndarray, identifiant: int) -> None:
+        """Constructeur créant une pièce identifié par un entier est étant sous forme d'un tableau 2d
+
+        Args:
+            self (Pieces): pieces
+            forme (np.ndarray): forme de la pièce représenter sous un tableau 2d 
+            ex : [[1,1],
+                  [1,0]]
+            les 1 représente un cube de la pièce, le 0 représente du vide
+            identifiant (int): numéro qui identifie la pièce
+        """
         self.__id : int = identifiant
         self.__forme : np.ndarray = forme
-        self.__delimitation : np.ndarray = self.__findCorners()
+        self.__delimitation : np.ndarray = self.__findCorners() # matrice permettant de connaitre les coins de la pièces voir _findCorners()
     
-    def __findCorners(self : Pieces):
+    def __findCorners(self : Pieces) -> np.ndarray:
+        """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
+
+        Args:
+            self (Pieces): pieces
+
+        Returns:
+            np.ndarray: Matrice de délimitation de la pièce
+              ex : [[2,1,1,2],
+                    [1,3,3,1],
+                    [1,3,1,2],
+                    [2,1,2,0]]
+            1 : bordure de la pièce
+            2 : coin de la pièce
+            3 : pièce
+        """
         delim : np.ndarray = np.empty( (len(self.__forme)+2,len(self.__forme[0])+2), dtype=int)
         delim.fill(1)
         for i in range(len(self.__forme)):
@@ -42,18 +70,72 @@ class Pieces:
         return delim
 
     def getDelimitation(self: Pieces) -> np.ndarray:
+        """Méthode getter permettant d'avoir la délimitation d'une pièce
+
+        Args:
+            self (Pieces): pieces
+
+        Returns:
+            np.ndarray: Matrice de délimitation de la pièce
+              ex : [[2,1,1,2],
+                    [1,3,3,1],
+                    [1,3,1,2],
+                    [2,1,2,0]]
+            1 : bordure de la pièce
+            2 : coin de la pièce
+            3 : pièce
+        """
         return self.__delimitation
 
     def rotate90(self : Pieces) -> None:
+        """Méthode permettant de tourner une pièce et la delimitation de 90 degrès sens horaire 
+
+        Args:
+            self (Pieces): pieces
+        """
         self.__delimitation : np.ndarray = np.rot90(self.__delimitation,1,axes=(1,0))
         self.__forme : np.ndarray = np.rot90(self.__delimitation,1,axes=(1,0))
 
     def flip(self : Pieces) -> None:
+        """Méthode permettant de retourner horizontalement une piece et la delimitation
+
+        Args:
+            self (Pieces): pieces
+        """
         self.__delimitation : np.ndarray = np.fliplr(self.__delimitation)
         self.__forme : np.ndarray = np.fliplr(self.__delimitation)
 
     def getNbCorners(self : Pieces) -> int:
+        """Méthode permettant de connaître le nombre de coin d'une pièce
+
+        Args:
+            self (Pieces): pieces
+
+        Returns:
+            int: nombre de coin de la pièce
+        """
         return np.count_nonzero(self.__delimitation == 2)
 
     def getForme(self : Pieces) -> np.ndarray:
+        """Méthode getter permettant de récupérer une pièce sous forme de tableau 2d
+
+        Args:
+            self (Pieces): piece
+
+        Returns:
+            np.ndarray: forme de la pièce représenter sous un tableau 2d 
+            ex : [[1,1],
+                  [1,0]]
+        """
         return self.__forme
+    
+    def getIdentifiant(self : Pieces) -> int:
+        """Méthode getter permettant d'avoir l'identifiant d'une pièce
+
+        Args:
+            self (Pieces): _description_
+
+        Returns:
+            int: identifiant de la pièce
+        """
+        return self.__id
