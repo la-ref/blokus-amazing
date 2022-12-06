@@ -4,12 +4,18 @@ import tkinter
 import sys
 from config import *
 import tkinter as tk
-
+import Player
 class lobbyLocal(Frame):
     def __init__(self,window,image_list):
         self.boutonUser = []
+        self.activeclavier = False
         self.window = window
         self.image_list = image_list
+        self.touche = None
+        self.type = "Vert"
+        self.joueur = Player.Player(4)
+        self.joueurs = [self.joueur.Player(1,"personne 1"),self.joueur.Player(1,"personne 2"),self.joueur.Player(1,"personne 3"),self.joueur.Player(1,"personne 4")]
+        self.window.bind("<Key>", self.touches)
         self.canvas = Canvas(
             window,
             bg = "#FFFFFF",
@@ -96,6 +102,7 @@ class lobbyLocal(Frame):
             fill="#FFFFFF",
             font=("LilitaOne", 48 * -1)
         )
+        self.canvas.tag_bind(self.text_vert, "<Button-1>", self.boutonVertChangerText)
 
         self.Bouton_Jaune = self.canvas.create_image(
             279.0,
@@ -156,6 +163,14 @@ class lobbyLocal(Frame):
         self.Bouton_IA_noir_Bleu = self.canvas.create_image(1295.0,775.0,image= self.image_list[21])
         self.canvas.tag_bind(self.Bouton_IA_noir_Bleu, "<Button-1>", self.boutonSwitchIABleu)
 
+    def touches(self,event):
+        self.touche = str(event.keysym)
+        if self.activeclavier == True:
+            if self.type == "Vert":
+                print(self.joueurs[1].name+self.touche)
+                nouveau = str(self.joueurs[1].name+self.touche)
+                self.joueurs[1].setName(nouveau)
+                self.canvas.itemconfigure(self.text_vert, text=self.joueurs[1].name)
 
     def QuitterBouton(self):
         pass
@@ -204,6 +219,18 @@ class lobbyLocal(Frame):
             self.Bouton_User_noir_Rouge = self.canvas.create_image(249.0,775.0,image=self.image_list[23])
             self.boutonUser[2] = "gris"
         self.canvas.tag_bind(self.Bouton_User_noir_Rouge, "<Button-1>", self.BoutonIARouge)
+    
+    def boutonVertChangerText(self,event):
+        print(self.activeclavier)
+        if self.activeclavier == True:
+            self.activeclavier = False
+        else:
+            self.activeclavier = True  
+            self.type = "Vert"
+        # prec = self.touche
+        # while self.activeclavier == True:
+        #     if prec == self.touche:
+        #         self.canvas.itemconfigure(self.text_vert, Text=self.touche)
 
     def BoutonIAVert(self,event):
         print("vert", event)

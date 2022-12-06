@@ -5,8 +5,8 @@ class Player:
         self.__nb : int = nb
                  
     @classmethod
-    def Player(cls, nb: int, name : str):
-        res = cls(nb)
+    def Player(self, nb: int, name : str):
+        res = self(nb)
         res.__name = name
         return res
 
@@ -14,6 +14,5 @@ class Player:
     @property
     def name(self): return self.__name
     
-    @name.setter
-    def name(self, n:str) -> None:
+    def setName(self, n:str) -> None:
         self.__name = n
