@@ -41,6 +41,7 @@ class Pieces:
             for y in range(len(self.__forme[0])):
                 if self.__forme[i][y]:
                     delim[i+1][y+1] = 3
+        # Recherche des coins "potentiels" (qui possède la pièce dans sa diagonale) de chaque élèment du tableau
         for i in range(len(delim)):
             for y in range(len(delim[0])):
                 countCorners : int = 0
@@ -51,6 +52,7 @@ class Pieces:
                                 countCorners+=1
                 borderCounter : int = 0
                 noneCounter : int = 0
+                # verification des coins "potentiels" pour vérifier si ils sont pas voisins avec une partie de la pièce pour déterminer les coins
                 for k in [-1,1]:
                     if (i+k >= 0 and i+k <= len(delim)-1):
                             if delim[i+k][y] == 3 and  countCorners > 0:
@@ -120,7 +122,7 @@ class Pieces:
         """Méthode getter permettant de récupérer une pièce sous forme de tableau 2d
 
         Args:
-            self (Pieces): piece
+            self (Pieces): pieces
 
         Returns:
             np.ndarray: forme de la pièce représenter sous un tableau 2d 
@@ -133,7 +135,7 @@ class Pieces:
         """Méthode getter permettant d'avoir l'identifiant d'une pièce
 
         Args:
-            self (Pieces): _description_
+            self (Pieces): pieces
 
         Returns:
             int: identifiant de la pièce

@@ -119,6 +119,7 @@ class Board:
         cornerReduction : int = 0
         for i in range(len(delimitation)):
             for v in range(len(delimitation[0])):
+                # vérfication du positionnement de la pièce en fonction de sa délimitation sur le plateau
                 if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
                     if (delimitation[i][v] == 3 and self.__board[y+i][x+v] > 0):
                         return False
@@ -140,12 +141,27 @@ class Board:
         return True
     
     def ajouterPiece(self: Board,piece : Pieces,column:int,row:int,player : Player,declageX : int,declageY : int) -> bool:
+        """Méthode qui permet d'ajouter à une coordonnée choisie une pièce jouer par un joueur en effectuant les vérifications de placement
+
+        voir : verifyApplication()
+        Args:
+            self (Board): plateau
+            piece (Pieces): pièce à placer sur le plateau
+            column (int): colonne du plateau correspond à x 
+            row (int): ligne du plateau correspond à y
+            player (Player): joueur qui souhaite placer une pièce sur le plateau
+            declageX (int): déclage de la sélection de la pièce en x en fonction de la matrice de delimiation de la pièce (quel bout de la pièce à était choisie)
+            declageY (int): déclage de la sélection de la pièce en y en fonction de la matrice de delimiation de la pièce (quel bout de la pièce à était choisie)
+
+        Returns:
+            bool: vrai si la pièce est ajouter sur le plateau,sinon faux
+        """
         if (self.verifyApplication(piece,column,row,player,declageX,declageY)):
             x : int = column-declageX
             y : int = row-declageY
             delimitation : np.ndarray = piece.getDelimitation()
             for i in range(len(delimitation)):
-                for v in range(len(delimitation)):
+                for v in range(len(delimitation[0])):
                     if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
                         if (delimitation[i][v] == 3):
                             self.__board[y+i][x+v] = player.getColor()
@@ -153,7 +169,17 @@ class Board:
         return False
     
     def getBoard(self) -> np.ndarray:
+        """Méthode getter qui retourne un plateau
+
+        Returns:
+            np.ndarray: tableau 2d représentant le plateau
+        """
         return self.__board
 
     def getBoardSize(self) -> int:
+        """Méthode getter permettant d'avoir la taille du plateau
+
+        Returns:
+            int: taille du plateau
+        """
         return self.__size
