@@ -95,8 +95,8 @@ class lobbyLocal(Frame):
         self.Bouton_Vert = self.canvas.create_image(1156.0,147.0,image= self.image_list[25])
 
         self.text_vert = self.canvas.create_text(
-            1034.639892578125,
-            104.0,
+            1050.639892578125,
+            115.0,
             anchor="nw",
             text="PERSONNE 2",
             fill="#FFFFFF",
@@ -167,9 +167,15 @@ class lobbyLocal(Frame):
         self.touche = str(event.keysym)
         if self.activeclavier == True:
             if self.type == "Vert":
-                print(self.joueurs[1].name+self.touche)
-                nouveau = str(self.joueurs[1].name+self.touche)
-                self.joueurs[1].setName(nouveau)
+                if self.touche != "BackSpace" and self.touche != "space":
+                    if len(self.joueurs[1].name) < 12:
+                        self.joueurs[1].setName(str(self.joueurs[1].name+self.touche))
+                elif self.touche == "space":
+                    if len(self.joueurs[1].name) < 12:
+                        self.joueurs[1].setName(str(self.joueurs[1].name)+" ")
+                else:
+                    if len(self.joueurs[1].name) > 0:
+                        self.joueurs[1].setName(str(self.joueurs[1].name)[:-1])
                 self.canvas.itemconfigure(self.text_vert, text=self.joueurs[1].name)
 
     def QuitterBouton(self):
