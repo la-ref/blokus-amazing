@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 
 class MouvementManager():
 
@@ -17,8 +18,10 @@ class MouvementManager():
     def add_dragable(self):
         self.widget.bind("<ButtonPress-1>", self.on_start)
         self.widget.bind("<Motion>", self.on_drag)
+        self.widget.parent.bind("<Motion>", self.on_drag)
         self.widget.bind("<ButtonRelease-1>", self.on_drop)
         self.widget.configure(cursor="hand1")
+        self.timer=time.perf_counter()
 
     def on_start(self, event):
         self.state = (self.state+1)%2
@@ -26,13 +29,15 @@ class MouvementManager():
 
     def on_drag(self, event):
         if self.state:
-            self.widget.on_drag(event)
+            if (time.perf_counter()-self.timer>0.02):
+                self.widget.on_drag(event)
+                self.timer=time.perf_counter()
 
     def on_drop(self, event):
         # commencons par trouver le widget sous le curseur de la souris
         x,y = event.widget.winfo_pointerxy()
         target = event.widget.winfo_containing(x,y)
-        self.widget.bind("<Motion>", None)
+        # self.widget.bind("<Motion>", None)
         try:
             pass
         except:

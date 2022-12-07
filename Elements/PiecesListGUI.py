@@ -14,6 +14,7 @@ class PiecesListGUI(tk.Frame):
     def __init__(self, parent : tk.Canvas, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
         super(PiecesListGUI,self).__init__(parent)
         self.parent = parent
+        self.nb_player=nb_player
         self.list = self.parent.create_image(
             0,
             0,

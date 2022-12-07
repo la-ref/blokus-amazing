@@ -1,17 +1,16 @@
 import tkinter as tk
 import Elements.PiecesListGUI as PG
 import MouvementManager as Mv
-from PIL import ImageTk
 
 class GridInterface(tk.Frame):
     
-    def __init__(self, parent : tk.Canvas):
+    def __init__(self, parent : tk.Canvas, images : list):
         super(GridInterface,self).__init__(parent)
         self.parent = parent
         self.board = self.parent.create_image(  #270x270
             0,
             0,
-            image=images[-1],
+            image=images[-2],
             anchor=tk.NW
         )
         # self.config(highlightbackground = "grey",highlightthickness=2)
@@ -26,13 +25,14 @@ if __name__=="__main__":
     window = tk.Tk()
     images = []
 
-    images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
+    images.append(PhotoImage(file="build/assets/frame0/empty_list.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
     images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
     images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
+    images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))#270x270
     
     window.geometry("1440x1024")
     
@@ -46,8 +46,8 @@ if __name__=="__main__":
         )
     border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
     
-    board = GridInterface(border)
-    board.move(x=720-270,y=512-270)
+    board = GridInterface(border,images)
+    board.move(x=450,y=242)
     
     List1 = PG.PiecesListGUI(border,images,"Joueur 1",1)
     List1.move(x=70,y=80)
@@ -60,7 +60,6 @@ if __name__=="__main__":
     
     List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
     List4.move(x=70,y=524)
-    Mv.MouvementManager(List4,True,True)
     
 
     

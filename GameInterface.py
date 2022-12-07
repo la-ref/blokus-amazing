@@ -1,50 +1,59 @@
 import tkinter as tk
 import GridInterface as GI
-import Elements.nameGUI as B
 import Elements.PiecesListGUI as P
 from tkinter import PhotoImage
+import GridInterface as Gi
 
-class GameInterface(tk.Frame):
+class GameInterface(tk.Canvas):
     
-    def __init__(self, parent : tk.Misc):
-        tk.Frame.__init__(self, parent)
+    def __init__(self, parent : tk.Misc, images : list):
+        tk.Canvas.__init__(self, parent)
+        self.config(bg="white")
+        self.create_image(
+                0,
+                0,
+                image=images[5],
+                anchor=tk.NW
+            )
+        self.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         
+        board = Gi.GridInterface(self,images)
+        board.move(x=450,y=242)
         
-    
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=10)
-        self.columnconfigure(2, weight=1)
+        List1 = P.PiecesListGUI(self,images,"Joueur 1",1)
+        List1.move(x=70,y=80)
         
-        List1 = P.PiecesListGUI(window,images,420,315)
-        List1.grid(row = 0, column = 0, pady = 2, padx=2)
+        List2 = P.PiecesListGUI(self,images,"Joueur 2",2)
+        List2.move(x=1047,y=80)
         
-        List2 = P.PiecesListGUI(window,images,420,315)
-        List2.grid(row = 0, column = 2, pady = 2, padx=2)
+        List3 = P.PiecesListGUI(self,images,"Joueur 3",3)
+        List3.move(x=1047,y=524)
         
-        List3 = P.PiecesListGUI(window,images,420,315)
-        List3.grid(row = 1, column = 2, pady = 2, padx=2)
-        
-        List4 = P.PiecesListGUI(window,images,420,315)
-        List4.grid(row = 1, column = 0, pady = 2, padx=2)
-        
-        # give_up_button = B.RoundedButton(text="Hors ligne", radius=50, hauteur=70, largueur=400, fontsize=20, btnbackground="#0078ff", btnforeground="#ffffff", clicked=None)
-        # give_up_button.place(x=720-200,y=0,height=70,width=400)
-        
-        board = GI.GridInterface(self)
-        board.grid(row = 0, rowspan=2 , column = 1, pady = 10, padx=50)
+        List4 = P.PiecesListGUI(self,images,"Joueur 4",4)
+        List4.move(x=70,y=524)
 
 
 if __name__=="__main__":
-
+    from tkinter import PhotoImage
+    
     window = tk.Tk()
-    window.geometry("1440x1024")
-    
     images = []
+
     images.append(PhotoImage(file="build/assets/frame0/empty_list.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
+    images.append(PhotoImage(file="build/assets/frame0/Appborder.png"))
+    images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
+    images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))#270x270
     
-    accueil=GameInterface(window)
-    accueil.pack()
+    window.geometry("1440x1024")
+    border = GameInterface(window,images)
 
+    
 
+    
+
+    
     window.mainloop()
