@@ -10,7 +10,7 @@ class lobbyUser(Frame):
         super(lobbyUser,self).__init__(parent)
         self.parent = parent
         self.window = window
-        self.window.bind("<Key>", self.touches)
+
         self.image_list = images
         self.joueurs = joueurs
         self.activeclavier = False
@@ -23,37 +23,46 @@ class lobbyUser(Frame):
         self.rheight = 107
         self.x=0
         self.y=0
-        
-        self.nameZone = self.parent.create_image(
-            15,
-            10,
-            image=images[nb_player],
-        )
+        self.nameZone = self.parent.create_image(15,10,image=images[nb_player])
         self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
+
+
+        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', 40),text=self.joueurs.getName(),anchor=tk.CENTER)
+        self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
         
-        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', 40),text=self.joueurs.name,anchor=tk.CENTER)
+        
 
         if self.hb == "haut":
             if self.dg == "droite":
-                self.rwidth = width/2
-                self.uwidth = 64-20
-            if self.dg == "gauche":
                 self.rwidth = 64-20
                 self.uwidth = width/2
+            if self.dg == "gauche":
+                self.rwidth = 64-20-30-20
+                self.uwidth = (-width/2)+64-30
             self.rheight = 107
         if self.hb == "bas":
             if self.dg == "droite":
-                self.rwidth = width/2
-                self.uwidth = 64-20
-            if self.dg == "gauche":
                 self.rwidth = 64-20
                 self.uwidth = width/2
+            if self.dg == "gauche":
+                self.uwidth = (-width/2)+64-30
+                self.rwidth = 64-20-30-20
             self.rheight = -107
+        
+        self.Noir_IA_1 = self.parent.create_image(self.uwidth+32,self.uwidth,image= self.image_list[18])
+        self.text_facile = self.parent.create_text(self.uwidth+32,self.uwidth,text="FACILE",fill="#FFFFFF",font=("LilitaOne", 32))
+
+        self.Noir_IA_2 = self.parent.create_image(self.uwidth+32,self.uwidth,image= self.image_list[18])
+        self.text_moyen = self.parent.create_text(self.uwidth+32,self.uwidth,text="MOYEN",fill="#FFFFFF",font=("LilitaOne", 32))
+
+        self.Noir_IA_3 = self.parent.create_image(self.uwidth+32,self.uwidth,image= self.image_list[18])
+        self.text_expert = self.parent.create_text(self.uwidth+32,self.uwidth,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", 32))
         
         self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[21])
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
         self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= self.image_list[23])
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
+        
     
 
     def changeName(self, newName : str):
@@ -66,49 +75,62 @@ class lobbyUser(Frame):
         self.parent.move(self.nameZone,x,y)
         self.parent.move(self.Bouton_Robot,x,y)
         self.parent.move(self.Bouton_User,x,y)
+
+        self.parent.move(self.Noir_IA_1,x,y)
+        self.parent.move(self.Noir_IA_2,x,y)
+        self.parent.move(self.Noir_IA_3,x,y)
+        self.parent.move(self.text_facile,x,y)
+        self.parent.move(self.text_moyen,x,y)
+        self.parent.move(self.text_expert,x,y)
     
     def moverobot(self, x : int, y : int):
         self.x = x
         self.y = y
         self.parent.move(self.Bouton_Robot,x,y)
         self.parent.move(self.Bouton_User,x,y)
-  
-    
-    # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
-
 
     def bind(self,event_tag,call):
         self.parent.tag_bind(self.text,event_tag,call)
 
     def boutonChangerText(self,event):
-        print(self.activeclavier)
         if self.activeclavier == True:
             self.activeclavier = False
         else:
             self.activeclavier = True  
+        print(self.activeclavier)
     
+    def getActiveClavier(self):
+        return self.activeclavier
+    
+    def setActiveClavier(self,boolean):
+        self.activeclavier = boolean
+
+
     def touches(self,event):
         self.touche = str(event.keysym)
         if self.activeclavier == True:
             if len(self.touche) == 1:
-                if len(self.joueurs.name) < 10:
-                    self.joueurs.setName(str(self.joueurs.name+self.touche))
+                if len(self.joueurs.getName()) < 10:
+                    self.joueurs.setName(str(self.joueurs.getName()+self.touche))
             elif self.touche == "space":
-                if len(self.joueurs.name) < 10:
-                    self.joueurs.setName(str(self.joueurs.name)+" ")
+                if len(self.joueurs.getName()) < 10:
+                    self.joueurs.setName(str(self.joueurs.getName())+" ")
             else:
-                if len(self.joueurs.name) > 0:
-                    self.joueurs.setName(str(self.joueurs.name)[:-1])
-            # print(self.parent.itemcget(self.text))
+                if len(self.joueurs.getName()) > 0:
+                    self.joueurs.setName(str(self.joueurs.getName())[:-1])
+
 
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueurs.name.upper(), font=('Lilita One', 32))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 30))
+
             else:
-                self.parent.itemconfigure(self.text, text=self.joueurs.name.upper(), font=('Lilita One', 40))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 40))
+                tailles = self.parent.bbox(self.text)
+                width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueurs.name.upper(), font=('Lilita One', 32))
+                    self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 30))
 
 
     def boutonSwitchIA(self,event):
@@ -131,12 +153,6 @@ class lobbyUser(Frame):
         self.moverobot(self.x,self.y)
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.BoutonIA)
-        
-        # prec = self.touche
-        # while self.activeclavier == True:
-        #     if prec == self.touche:
-        #         self.parent.itemconfigure(self.text_vert, Text=self.touche)
-
         
 
 if __name__ == "__main__":
