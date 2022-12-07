@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from PIL import ImageTk,Image
 
 
 
@@ -28,23 +28,32 @@ class PiecesListGUI(tk.Frame):
             anchor=tk.NW
         )
         
-        # self.config(width=width,height=height,bg="white",borderwidth=0,highlightthickness=0)
-        # self.place(x=-4,y=-4,height=height,width=width)
         
         self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', 32),text=playerName,anchor=tk.CENTER)
         
     def changeName(self, newName : str):
         self.parent.itemconfig(self.text, text=newName)
         
+        
+    # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
     def move(self, x : int, y : int):
         self.parent.move(self.text,x,y)
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         
-    def drag(self, event):
-        # self.move(event.x,event.y)
-        self.move(300,800)
-        # print(event.x,event.y)
+        
+    def on_click(self,event):
+        x,y=self.parent.coords(self.list)
+        self.delta=event.x-x,event.y-y
+        
+    def on_drag(self, event):
+        x,y=self.parent.coords(self.list)
+        self.move(event.x-x-self.delta[0],event.y-y-self.delta[1])
+        
+    def bind(self,event_tag,call):
+        self.parent.tag_bind(self.list,event_tag,call)
+        self.parent.tag_bind(self.nameZone,event_tag,call)
+        self.parent.tag_bind(self.text,event_tag,call)
 
 if __name__=="__main__":
     from tkinter import PhotoImage
@@ -56,11 +65,37 @@ if __name__=="__main__":
     border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
     
     images = []
-    images.append(PhotoImage(file="build/assets/frame0/empty_list.png"))
-    images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
+    images.append(Image.open("build/assets/frame0/empty_list.png"))
+    images.append(Image.open("build/assets/frame0/player_blue.png"))
+    Photo_images = []
+    Photo_images.append(ImageTk.PhotoImage(images[0]))
+    Photo_images.append(ImageTk.PhotoImage(images[1].rotate(angle=00, expand=True)))
     
-    accueil=PiecesListGUI(border,images,"Caaka",1)
+    accueil=PiecesListGUI(border,Photo_images,"Caaka",1)
     accueil.changeName("Joueur 1")
 
 
     window.mainloop()
+
+# from tkinter import *
+# from PIL import Image,ImageTk
+
+# #Create an instance of tkinter frame
+# win = Tk()
+
+# #Set the geometry of tkinter frame
+# win.geometry("750x250")
+
+# #Create a canvas
+# canvas= Canvas(win, width= 600, height= 400)
+# canvas.pack()
+
+# #Load an image in the script
+# images=[]
+# images.append(Image.open("build/assets/frame0/player_blue.png"))
+# img= ImageTk.PhotoImage(images[0].rotate(90))
+
+# #Add image to the Canvas Items
+# canvas.create_image(10,10,anchor=NW,image=img)
+
+# win.mainloop()
