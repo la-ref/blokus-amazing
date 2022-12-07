@@ -6,6 +6,8 @@ from config import *
 import tkinter as tk
 import Player
 import lobbyUser
+from accueil import *
+
 class lobbyLocal(Frame):
     def __init__(self,window,image_list):
         self.boutonUser = []
@@ -69,8 +71,8 @@ class lobbyLocal(Frame):
         self.bouton_jaune.touches(event)
         self.bouton_vert.touches(event)
 
-    def QuitterBouton(self):
-        pass
+    def QuitterBouton(self,event):
+        self.window = Accueil(self.window, self.image_list)
 
 if __name__ == "__main__":
     window = Tk()

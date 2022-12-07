@@ -14,6 +14,7 @@ class Accueil(Frame):
         # def relative_to_assets(path: str) -> Path:
         #     return ASSETS_PATH / Path(path)
         self.window = window
+        self.image_list = image_list
         canvas = Canvas(
             window,
             bg = "#FFFFFF",
@@ -40,7 +41,7 @@ class Accueil(Frame):
             image=image_list[5],
             anchor=tkinter.NW
         )
-        # canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
+        canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
 
 
         EnLigneBouton = canvas.create_image(
@@ -62,7 +63,6 @@ class Accueil(Frame):
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
 
         
-
 
         BoutonScore = canvas.create_image(
             1032, 
@@ -94,8 +94,12 @@ class Accueil(Frame):
         self.window.destroy()
     
     def HorsLigneBouton(self,event):
-        self.window.destroy()
-
+        import lobbyLocal
+        self.window = lobbyLocal.lobbyLocal(self.window, self.image_list)
+        
+        
+        
+        
 
 if __name__ == "__main__":
 
