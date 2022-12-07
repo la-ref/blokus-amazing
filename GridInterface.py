@@ -60,6 +60,7 @@ if __name__=="__main__":
     
     List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
     List4.move(x=70,y=524)
+    Mv.MouvementManager(List4,True,True)
     
 
     
