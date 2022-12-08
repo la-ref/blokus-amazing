@@ -59,18 +59,14 @@ class PiecesListGUI(tk.Frame):
             self.tableau_piece.append(valeur)
             self.tableau_piece_forme.append(i1)
             self.tableau_piece[i1]=PD.LISTEPIECES[valeur].getDelimitation()
+            
             for i in range(len(self.tableau_piece[i1])):
                 for v in range(len(self.tableau_piece[i1][0])):
                     if (self.tableau_piece[i1][i][v] == 3):
-                        y+=32
-                        x+=32
-                        test = self.parent.create_image(100+y*(piece_img.width()),100+x*(piece_img.height()),image=piece_img)
+                        test = self.parent.create_image(1+(v*piece_img.width()),1+(v*piece_img.height()),image=piece_img)
                         self.tableau_piece_forme[i1] = test
+                        print(self.tableau_piece_forme,self.tableau_piece)
             i1+=1
-
-        # List4 = (window,images,420,315)
-        # List4.grid(row = 1, column = 0, pady = 2, padx=2)
-
 
 
         
