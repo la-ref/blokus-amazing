@@ -42,7 +42,7 @@ class Game:
     def jeu(self : Game):
         from tkinter import PhotoImage
         import tkinter as tk
-        import Elements.PiecesListGUI as PG
+        import PiecesListGUI as PG
         import MouvementManager as Mv
         from PIL import ImageTk
     

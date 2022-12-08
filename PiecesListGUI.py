@@ -2,7 +2,8 @@ import tkinter as tk
 from PIL import ImageTk,Image
 import PiecesDeclaration as PD
 from tkinter import PhotoImage
-
+import Pieces as p
+import numpy as np
 
 class PiecesListGUI(tk.Frame):
     
@@ -43,14 +44,29 @@ class PiecesListGUI(tk.Frame):
         #             if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
         #                 if (delimitation[i][v] == 3):
         #                     self.__board[y+i][x+v] = player.getColor()
-        self.imagepiece = { 11:(PhotoImage(file="../build/assets/piece/yellow.png")),
-                            12:(PhotoImage(file="../build/assets/piece/green.png")),
-                            13:(PhotoImage(file="../build/assets/piece/red.png")),
-                            14:(PhotoImage(file="../build/assets/piece/blue.png"))}
+        self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
+                            12:(PhotoImage(file="build/assets/piece/green.png")),
+                            13:(PhotoImage(file="build/assets/piece/red.png")),
+                            14:(PhotoImage(file="build/assets/piece/blue.png"))}
+        y = 0
+        x = 0
+        self.tableau_piece = [[]]
+        self.tableau_piece_forme = []
+        nb_player = nb_player+10
+        i1 = 0
         for valeur in PD.LISTEPIECES:
-            print(valeur)
-            # piece = self.imagepiece[valeur]
-            # self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece)
+            piece_img = self.imagepiece[nb_player]
+            self.tableau_piece.append(valeur)
+            self.tableau_piece_forme.append(i1)
+            self.tableau_piece[i1]=PD.LISTEPIECES[valeur].getDelimitation()
+            for i in range(len(self.tableau_piece[i1])):
+                for v in range(len(self.tableau_piece[i1][0])):
+                    if (self.tableau_piece[i1][i][v] == 3):
+                        y+=32
+                        x+=32
+                        test = self.parent.create_image(100+y*(piece_img.width()),100+x*(piece_img.height()),image=piece_img)
+                        self.tableau_piece_forme[i1] = test
+            i1+=1
 
         # List4 = (window,images,420,315)
         # List4.grid(row = 1, column = 0, pady = 2, padx=2)
@@ -68,6 +84,8 @@ class PiecesListGUI(tk.Frame):
         self.parent.move(self.text,x,y)
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
+        for piece in self.tableau_piece_forme:
+            self.parent.move(piece,x,y)
         
         
     def on_click(self,event):

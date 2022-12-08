@@ -1,5 +1,5 @@
 import tkinter as tk
-import Elements.PiecesListGUI as PG
+import PiecesListGUI as PG
 import MouvementManager as Mv
 from tkinter import PhotoImage
 from Board import Board
