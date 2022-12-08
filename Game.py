@@ -87,6 +87,7 @@ class Game:
 
         def task():
             for joueur in self.__joueurs:
+                board.refreshPlayer(joueur.getColor())
                 print("c'est a : ",joueur.getName())
                 ajout = False
                 pieceid = 1

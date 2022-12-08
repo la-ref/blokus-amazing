@@ -6,7 +6,6 @@ from Board import Board
 from PIL import ImageTk
 
 class GridInterface(tk.Frame):
-    
     def __init__(self, parent : tk.Canvas,board,images):
         super(GridInterface,self).__init__(parent)
         self.parent = parent
@@ -17,15 +16,20 @@ class GridInterface(tk.Frame):
             anchor=tk.NW
         )
         self.board = board
-        # for i in range(20):
-        #     self.board.ajout(i,i,11)
-        # self.board.ajout(5,7,11)
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
                             12:(PhotoImage(file="build/assets/piece/green.png")),
                             13:(PhotoImage(file="build/assets/piece/red.png")),
                             14:(PhotoImage(file="build/assets/piece/blue.png"))} # 11 jaune, 12 vert, 13 rouge, 14 bleu
-        self.refreshBoard()
-        # self.config(highlightbackground = "grey",highlightthickness=2)
+        self.couleur = {
+            11:"#FFC700",
+            12:"#32BF00",
+            13:"#BC0000",
+            14:"#0045CC"
+        }
+        self.bordure = [self.parent.create_rectangle(439, 241, 1000, 231,outline=self.couleur[11], fill=self.couleur[11]),
+                        self.parent.create_rectangle(440, 792, 999, 782,outline=self.couleur[11], fill=self.couleur[11]),
+                        self.parent.create_rectangle(439, 241, 449, 791,outline=self.couleur[11], fill=self.couleur[11]),
+                        self.parent.create_rectangle(990, 242, 1000, 791,outline=self.couleur[11], fill=self.couleur[11])]
 
     def setBoard(self,board):
         self.board = board
@@ -36,7 +40,13 @@ class GridInterface(tk.Frame):
                 valeur = self.board.getColorAt(i,y)
                 if valeur:
                     piece = self.imagepiece[valeur]
-                    self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece)
+                    self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
+    
+    def refreshPlayer(self,playerColor):
+        if playerColor:
+            for bord in self.bordure:
+                self.parent.itemconfig(bord,fill=self.couleur[playerColor],outline=self.couleur[playerColor])
+                self.parent.tag_raise(bord)
     
         
     def move(self, x : int, y : int):
