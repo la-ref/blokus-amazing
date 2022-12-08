@@ -51,21 +51,23 @@ class PiecesListGUI(tk.Frame):
         y = 0
         x = 0
         self.tableau_piece = [[]]
-        self.tableau_piece_forme = []
+        self.tableau_piece_forme = [[]]
         nb_player = nb_player+10
         i1 = 0
         for valeur in PD.LISTEPIECES:
             piece_img = self.imagepiece[nb_player]
             self.tableau_piece.append(valeur)
-            self.tableau_piece_forme.append(i1)
+            self.tableau_piece_forme.append([])
             self.tableau_piece[i1]=PD.LISTEPIECES[valeur].getDelimitation()
-            
+            # print(nb_player, valeur, self.tableau_piece)
             for i in range(len(self.tableau_piece[i1])):
+                x+=27
                 for v in range(len(self.tableau_piece[i1][0])):
+                    y+=27
                     if (self.tableau_piece[i1][i][v] == 3):
-                        test = self.parent.create_image(1+(v*piece_img.width()),1+(v*piece_img.height()),image=piece_img)
-                        self.tableau_piece_forme[i1] = test
-                        print(self.tableau_piece_forme,self.tableau_piece)
+                        test = self.parent.create_image(x+27,y+27,image=piece_img)
+                        self.tableau_piece_forme[i1].append(test)
+            print(self.tableau_piece_forme[i1])
             i1+=1
 
 
@@ -81,7 +83,8 @@ class PiecesListGUI(tk.Frame):
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         for piece in self.tableau_piece_forme:
-            self.parent.move(piece,x,y)
+            for piece2 in piece:
+                self.parent.move(piece2,x,y)
         
         
     def on_click(self,event):
