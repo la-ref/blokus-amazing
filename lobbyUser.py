@@ -44,6 +44,8 @@ class lobbyUser(Frame):
             if self.dg == "droite":
                 self.rwidth = 64-20
                 self.uwidth = width/2
+
+                self.iawidth = self.uwidth+32
             if self.dg == "gauche":
                 self.uwidth = (-width/2)+64-30
                 self.rwidth = 64-20-30-20

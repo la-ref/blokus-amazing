@@ -46,7 +46,7 @@ class lobbyLocal(Frame):
 
         self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[3],15,hb="bas",droiteg="droite")
         self.bouton_bleu.move(1156,883)
-        # self.canvas.tag_bind(self.bouton_bleu, , "<Button-1>", self.bouton_bleu.boutonChangerText)
+
     
     def clique(self,event):
         actuelwidget = event.widget.find_withtag('current')[0]
