@@ -3,6 +3,7 @@ import GridInterface as GI
 import Elements.PiecesListGUI as P
 from tkinter import PhotoImage
 import GridInterface as Gi
+import Block as Bl
 
 class GameInterface(tk.Canvas):
     
@@ -31,6 +32,8 @@ class GameInterface(tk.Canvas):
         
         List4 = P.PiecesListGUI(self,images,"Joueur 4",4)
         List4.move(x=70,y=524)
+        
+        bl = Bl.Block(self,images,6,200,200)
 
 
 if __name__=="__main__":
@@ -45,6 +48,7 @@ if __name__=="__main__":
     images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
     images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
     images.append(PhotoImage(file="build/assets/frame0/Appborder.png"))
+    images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))
     images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
     images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))#270x270
     
