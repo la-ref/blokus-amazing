@@ -7,6 +7,7 @@ class Player:
     nbJoueur : int = 1
     def __init__(self : Player, idCouleur : int|None,nom: str|None):
         """Constructeur permettant de créer un joueur avec une couleur et un nom
+
         Args:
             self (Player): joueur
             idCouleur (int | None): couleur du joueur
@@ -20,6 +21,7 @@ class Player:
 
     def getName(self : Player) -> str:
         """Méthode getter permettant d'avoir le nom d'un joueur
+
         Args:
             self (Player): joueur
         
@@ -30,6 +32,7 @@ class Player:
     
     def setName(self : Player, nom:str) -> None:
         """Méthode setter permettant de changer le nom d'un joueur
+
         Args:
             self (Player): joueur
             nom (str): nom à remplacer
@@ -38,8 +41,10 @@ class Player:
 
     def getColor(self : Player) -> int:
         """Méthode getter permettant d'avoir la couleur d'un joueur
+
         Args:
             self (Player): joueur
+
         Returns:
             int: couleur du joueur
         """
@@ -47,8 +52,10 @@ class Player:
 
     def getNbTour(self : Player) -> int:
         """Méthode getter permettant d'avoir le nombre de tour où un joueur à jouer
+
         Args:
             self (Player): joueur
+
         Returns:
             int: nombre de tour réaliser par le joueur
         """
@@ -56,8 +63,10 @@ class Player:
 
     def getPieces(self : Player) -> dict[str,Pieces]:
         """Méthode getter permettant d'avoir la liste des pièces d'un joueur
+
         Args:
             self (Player): joueur
+
         Returns:
             dict[str,Pieces]: dictionnaire de pièces du joueur
         """
@@ -65,9 +74,11 @@ class Player:
 
     def getPiece(self : Player,id : str) -> Pieces|None:
         """Méthode getter permettant d'avoir une pièce choisie dans la liste des pièces d'un joueur
+
         Args:
             self (Player): joueur
             id (str): id de la pièce à choisir
+
         Returns:
             Pieces|None: pièce choisie dans la liste du joueur ou none si elle n'existe pas
         """
@@ -76,6 +87,7 @@ class Player:
 
     def removePiece(self : Player,id : str) -> None:
         """Méthode permettant de retirer une pièce choisie dans la liste des pièces d'un joueur
+
         Args:
             self (Player): joueur
             id (str):  id de la pièce choisie
@@ -84,6 +96,7 @@ class Player:
 
     def ajoutTour(self : Player) -> None:
         """Méthode permettant d'ajouter un tour à un joueur
+
         Args:
             self (Player): joueur
         """

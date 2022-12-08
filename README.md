@@ -1,1 +1,5 @@
-# Vive blokus
+"# blokus-amazing" 
+
+
+
+table numero image
