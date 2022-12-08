@@ -33,7 +33,6 @@ class GameInterface(tk.Canvas):
         List4 = P.PiecesListGUI(self,images,"Joueur 4",4)
         List4.move(x=70,y=524)
         
-        bl = Bl.Block(self,images,6,200,200)
 
 
 if __name__=="__main__":

@@ -28,14 +28,9 @@ class Block(tk.Frame):
             image=images[nb_player],
             anchor=tk.NW
         )
-        self.move(self.base_x,self.base_y)
+        self.parent.moveto(self.base_x,self.base_y)
         
-        
-    # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
-    def move(self, x : int, y : int):
-        self.parent.moveto(self.bl,x,y)
-        
-        
+         
     def on_click(self,event):
 
         if not self.state:
