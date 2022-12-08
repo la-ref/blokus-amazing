@@ -11,45 +11,58 @@ class Block(tk.Frame):
     #   Creer l'élément de gui pour la liste des pieces
     #
     #
-    def __init__(self, parent : tk.Canvas, images : list, nb_player : int):
+    def __init__(self, parent : tk.Canvas, images : list, nb_player : int, base_x : int, base_y : int):
         super(Block,self).__init__(parent)
         self.parent = parent
+        self.nb_player = nb_player
+        self.base_x = base_x
+        self.base_y = base_y
+        self.delta_x = 100
+        self.delta_y = 100
+        self.state = 0
+        
+        
         self.bl = self.parent.create_image(
             0,
             0,
             image=images[nb_player],
             anchor=tk.NW
         )
+        self.move(self.base_x,self.base_y)
         
         
     # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
     def move(self, x : int, y : int):
-        self.parent.move(self.bl,x,y)
+        self.parent.moveto(self.bl,x,y)
         
         
     def on_click(self,event):
-        x,y=self.parent.coords(self.bl)
-        self.delta=event.x-x,event.y-y
+
+        if not self.state:
+            x,y=self.parent.coords(self.bl)
+            self.delta_x,self.delta_y=event.x-x,event.y-y
+        elif self.state and (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+            self.parent.moveto(self.bl,self.base_x,self.base_y)
+        self.state = (self.state+1)%2
+            
         
     def on_drag(self, event):
         x,y=self.parent.coords(self.bl)
-        self.move(event.x-x-self.delta[0],event.y-y-self.delta[1])
+        self.parent.moveto(self.bl,event.x-self.delta_x,event.y-self.delta_y)
         
     def bind(self,event_tag,call):
         self.parent.tag_bind(self.bl,event_tag,call)
         
-    
+    def delete(self):
+        self.parent.delete(self.bl)
+        self.destroy()
 
 if __name__=="__main__":
     from tkinter import PhotoImage
 
-    
-    # def on_configure(e):
-    #     if e.widget == tk_root:
-    #         sleep(0.015)
             
     window = tk.Tk()
-    # window.bind("<Configure>", on_configure)
+
     window.geometry("1440x1024")
     border = tk.Canvas()
     border.config(bg="white")
@@ -59,9 +72,9 @@ if __name__=="__main__":
     images.append(PhotoImage(file="build/assets/frame0/empty_list.png"))
     images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))
     
-    accueil=Block(border,images,1)
+    accueil=Block(border,images,1,0,0)
     import MouvementManager as Mv
-    Mv.MouvementManager(accueil,True,True)
+    Mv.MouvementManager(accueil)
 
 
     window.mainloop()
