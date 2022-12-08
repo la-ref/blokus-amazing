@@ -1,7 +1,7 @@
 import tkinter as tk
 from PIL import ImageTk,Image
-
-
+import PiecesDeclaration as PD
+from tkinter import PhotoImage
 
 
 class PiecesListGUI(tk.Frame):
@@ -30,6 +30,34 @@ class PiecesListGUI(tk.Frame):
         
         
         self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', 32),text=playerName,anchor=tk.CENTER)
+
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=10)
+        self.columnconfigure(2, weight=1)
+
+        # x : int = column-declageX
+        #     y : int = row-declageY
+        #     delimitation : np.ndarray = piece.getDelimitation()
+        #     for i in range(len(delimitation)):
+        #         for v in range(len(delimitation[0])):
+        #             if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
+        #                 if (delimitation[i][v] == 3):
+        #                     self.__board[y+i][x+v] = player.getColor()
+        self.imagepiece = { 11:(PhotoImage(file="../build/assets/piece/yellow.png")),
+                            12:(PhotoImage(file="../build/assets/piece/green.png")),
+                            13:(PhotoImage(file="../build/assets/piece/red.png")),
+                            14:(PhotoImage(file="../build/assets/piece/blue.png"))}
+        for valeur in PD.LISTEPIECES:
+            print(valeur)
+            # piece = self.imagepiece[valeur]
+            # self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece)
+
+        # List4 = (window,images,420,315)
+        # List4.grid(row = 1, column = 0, pady = 2, padx=2)
+
+
+
+        
         
     def changeName(self, newName : str):
         self.parent.itemconfig(self.text, text=newName)

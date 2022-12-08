@@ -1,6 +1,6 @@
 import tkinter as tk
 import GridInterface as GI
-import Elements.nameGUI as B
+# import Elements.nameGUI as B
 import Elements.PiecesListGUI as P
 from tkinter import PhotoImage
 
@@ -26,6 +26,10 @@ class GameInterface(tk.Frame):
         
         List4 = P.PiecesListGUI(window,images,420,315)
         List4.grid(row = 1, column = 0, pady = 2, padx=2)
+
+
+
+        
         
         # give_up_button = B.RoundedButton(text="Hors ligne", radius=50, hauteur=70, largueur=400, fontsize=20, btnbackground="#0078ff", btnforeground="#ffffff", clicked=None)
         # give_up_button.place(x=720-200,y=0,height=70,width=400)
