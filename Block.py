@@ -8,17 +8,20 @@ class Block(tk.Frame):
     
     
     
-    #   Creer l'élément de gui pour la liste des pieces
+    #   Créé l'élément de gui pour la liste des pieces
     #
     #
     def __init__(self, parent : tk.Canvas, images : list, nb_player : int, base_x : int, base_y : int):
         super(Block,self).__init__(parent)
         self.parent = parent
         self.nb_player = nb_player
+        ## emplacement initiale 
         self.base_x = base_x
         self.base_y = base_y
+        ## sert à garder la position relative avec la souris lors du déplacement
         self.delta_x = 100
         self.delta_y = 100
+        ## sert à savoir si elle est en mvt
         self.state = 0
         
         
@@ -32,23 +35,37 @@ class Block(tk.Frame):
         
          
     def on_click(self,event):
-
+        '''
+        Fonction interne pour permettre le deplacement des blocks au clique
+        '''
+        ## si pas en mvt, enregistre la position relative avec la souris
         if not self.state:
             x,y=self.parent.coords(self.bl)
             self.delta_x,self.delta_y=event.x-x,event.y-y
+        ## si en dehors de la grille, tp le block à la position initiale
         elif self.state and (event.x<450 or event.x>990 or event.y<242 or event.y>782):
             self.parent.moveto(self.bl,self.base_x,self.base_y)
         self.state = (self.state+1)%2
             
         
     def on_drag(self, event):
+        '''
+        Fonction interne pour permettre le deplacement des blocks au mvt de la souris
+        '''
         x,y=self.parent.coords(self.bl)
         self.parent.moveto(self.bl,event.x-self.delta_x,event.y-self.delta_y)
         
+    
     def bind(self,event_tag,call):
+        '''
+        Fonction interne pour permettre la gestion des event des blocks
+        '''
         self.parent.tag_bind(self.bl,event_tag,call)
         
     def delete(self):
+        '''
+        Fonction interne pour détruire l'instance de block 
+        '''
         self.parent.delete(self.bl)
         self.destroy()
 

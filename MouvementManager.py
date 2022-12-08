@@ -19,6 +19,7 @@ class MouvementManager():
 
     def on_drag(self, event):
         if self.widget.state:
+            ## limite le frame rate pour empêcher des bizareries
             if (time.perf_counter()-self.timer>0.02):
                 self.widget.on_drag(event)
                 self.timer=time.perf_counter()
