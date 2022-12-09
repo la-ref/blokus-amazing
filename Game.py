@@ -14,7 +14,7 @@ class Game:
             plateau (Board | None): plateau de jeu ou rien
             taille (int): taille du plateau de jeu
         """
-        self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier")]#,Player(14,"inconnu")]
+        self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
         self.__plateau : Board = plateau or Board(taille)
     
     def getPlayers(self : Game):
@@ -52,8 +52,8 @@ class Game:
         images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
         images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
         images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
-        images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
         images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
+        images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
         images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
         images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
         

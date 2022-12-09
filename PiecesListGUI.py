@@ -4,6 +4,7 @@ import PiecesDeclaration as PD
 from tkinter import PhotoImage
 import Pieces as p
 import numpy as np
+import Pieces_placement as PP
 
 class PiecesListGUI(tk.Frame):
     
@@ -32,43 +33,34 @@ class PiecesListGUI(tk.Frame):
         
         self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', 32),text=playerName,anchor=tk.CENTER)
 
-        self.columnconfigure(0, weight=1)
-        self.columnconfigure(1, weight=10)
-        self.columnconfigure(2, weight=1)
-
-        # x : int = column-declageX
-        #     y : int = row-declageY
-        #     delimitation : np.ndarray = piece.getDelimitation()
-        #     for i in range(len(delimitation)):
-        #         for v in range(len(delimitation[0])):
-        #             if ((y+i >=0) and (y+i < self.__size) and (x+v >=0) and (x+v < self.__size)):
-        #                 if (delimitation[i][v] == 3):
-        #                     self.__board[y+i][x+v] = player.getColor()
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
                             12:(PhotoImage(file="build/assets/piece/green.png")),
                             13:(PhotoImage(file="build/assets/piece/red.png")),
                             14:(PhotoImage(file="build/assets/piece/blue.png"))}
-        y = 0
-        x = 0
-        self.tableau_piece = [[]]
-        self.tableau_piece_forme = [[]]
+        
+        decalageX = 2
+        decalageY = 100
+        self.tableau_piece = []
+        self.tableau_piece_forme = []
         nb_player = nb_player+10
         i1 = 0
+        maxheight = 0
         for valeur in PD.LISTEPIECES:
-            piece_img = self.imagepiece[nb_player]
-            self.tableau_piece.append(valeur)
             self.tableau_piece_forme.append([])
-            self.tableau_piece[i1]=PD.LISTEPIECES[valeur].getDelimitation()
-            # print(nb_player, valeur, self.tableau_piece)
-            for i in range(len(self.tableau_piece[i1])):
-                x+=27
-                for v in range(len(self.tableau_piece[i1][0])):
-                    y+=27
-                    if (self.tableau_piece[i1][i][v] == 3):
-                        test = self.parent.create_image(x+27,y+27,image=piece_img)
-                        self.tableau_piece_forme[i1].append(test)
-            print(self.tableau_piece_forme[i1])
+            self.tableau_piece_forme[i1] = PP.Pieces_placement(self.parent,nb_player,valeur)
+            self.tableau_piece_forme[i1].move(decalageX,decalageY)
+            decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+            if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
+                maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
+
             i1+=1
+
+            if (decalageX) >= 317-(20*3):
+                decalageX= 2
+                decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
+                maxheight = 0
+            # else:
+            #     decalageX+= -width/2
 
 
         
@@ -83,9 +75,8 @@ class PiecesListGUI(tk.Frame):
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         for piece in self.tableau_piece_forme:
-            for piece2 in piece:
-                self.parent.move(piece2,x,y)
-        
+            piece.move(x,y)
+
         
     def on_click(self,event):
         x,y=self.parent.coords(self.list)

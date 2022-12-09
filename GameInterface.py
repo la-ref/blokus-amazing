@@ -22,10 +22,10 @@ class GameInterface(tk.Frame):
         List2.grid(row = 0, column = 2, pady = 2, padx=2)
         
         List3 = P.PiecesListGUI(window,images,420,315)
-        List3.grid(row = 1, column = 2, pady = 2, padx=2)
+        List3.grid(row = 1, column = 0, pady = 2, padx=2)
         
         List4 = P.PiecesListGUI(window,images,420,315)
-        List4.grid(row = 1, column = 0, pady = 2, padx=2)
+        List4.grid(row = 1, column = 2, pady = 2, padx=2)
 
 
 
