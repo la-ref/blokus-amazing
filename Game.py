@@ -69,16 +69,16 @@ class Game:
         board = GridInterface(border,self.__plateau,images)
         board.move(x=720-270,y=512-270)
         
-        List1 = PG.PiecesListGUI(border,images,"Joueur 1",1)
+        List1 = PG.PiecesListGUI(self.window,border,images,"Joueur 1",1)
         List1.move(x=70,y=80)
         
-        List2 = PG.PiecesListGUI(border,images,"Joueur 2",2)
+        List2 = PG.PiecesListGUI(self.window,border,images,"Joueur 2",2)
         List2.move(x=1047,y=80)
         
-        List3 = PG.PiecesListGUI(border,images,"Joueur 3",3)
+        List3 = PG.PiecesListGUI(self.window,border,images,"Joueur 3",3)
         List3.move(x=1047,y=524)
         
-        List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
+        List4 = PG.PiecesListGUI(self.window,border,images,"Joueur 4",4)
         List4.move(x=70,y=524)
         Mv.MouvementManager(List4,True,True)
         

@@ -13,8 +13,9 @@ class PiecesListGUI(tk.Frame):
     #   Creer l'élément de gui pour la liste des pieces
     #
     #
-    def __init__(self, parent : tk.Canvas, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
+    def __init__(self, window, parent : tk.Canvas, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
         super(PiecesListGUI,self).__init__(parent)
+        
         self.parent = parent
         self.list = self.parent.create_image(
             0,
@@ -47,8 +48,9 @@ class PiecesListGUI(tk.Frame):
         maxheight = 0
         for valeur in PD.LISTEPIECES:
             self.tableau_piece_forme.append([])
-            self.tableau_piece_forme[i1] = PP.Pieces_placement(self.parent,nb_player,valeur)
-            self.tableau_piece_forme[i1].move(decalageX,decalageY)
+            self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
+
+            self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
@@ -59,8 +61,7 @@ class PiecesListGUI(tk.Frame):
                 decalageX= 2
                 decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
                 maxheight = 0
-            # else:
-            #     decalageX+= -width/2
+
 
 
         
@@ -75,17 +76,18 @@ class PiecesListGUI(tk.Frame):
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         for piece in self.tableau_piece_forme:
-            piece.move(x,y)
+            piece.move_init(x,y)
 
         
     def on_click(self,event):
         x,y=self.parent.coords(self.list)
         self.delta=event.x-x,event.y-y
         
-    def on_drag(self, event):
-        x,y=self.parent.coords(self.list)
-        self.move(event.x-x-self.delta[0],event.y-y-self.delta[1])
-        
+    # def on_drag(self, event):
+    #     for piece in self.tableau_piece_forme:
+    #         # x,y=self.parent.coords(piece.bl)
+    #         self.move(event.x,event.y)
+            
     def bind(self,event_tag,call):
         self.parent.tag_bind(self.list,event_tag,call)
         self.parent.tag_bind(self.nameZone,event_tag,call)

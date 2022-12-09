@@ -51,21 +51,21 @@ class lobbyUser(Frame):
 
         if self.hb == "haut":
             if self.dg == "droite":
-                self.rwidth = 64-20
-                self.uwidth = width/2
+                self.uwidth = 64-20
+                self.rwidth = width/2
             if self.dg == "gauche":
-                self.rwidth = 64-20-30-20
-                self.uwidth = (-width/2)+64-30
+                self.uwidth = 64-20-30-20
+                self.rwidth = (-width/2)+64-30
             self.rheight = 107
         if self.hb == "bas":
             if self.dg == "droite":
-                self.rwidth = 64-20
-                self.uwidth = width/2
+                self.uwidth = 64-20
+                self.rwidth = width/2
 
                 self.iawidth = self.uwidth+32
             if self.dg == "gauche":
-                self.uwidth = (-width/2)+64-30
-                self.rwidth = 64-20-30-20
+                self.rwidth = (-width/2)+64-30
+                self.uwidth = 64-20-30-20
             self.rheight = -107
         
         if self.hb == "haut":
@@ -107,9 +107,9 @@ class lobbyUser(Frame):
         self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", 32),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_expert, "<Button-1>", self.expert)
         
-        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[21])
+        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[20])
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
-        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= self.image_list[23])
+        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= self.image_list[24])
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         
     

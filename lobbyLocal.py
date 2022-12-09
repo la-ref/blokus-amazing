@@ -52,16 +52,16 @@ class lobbyLocal(Frame):
         actuelwidget = event.widget.find_withtag('current')[0]
         print(actuelwidget)
         if self.bouton_jaune.getActiveClavier() == True:
-            if (actuelwidget != 9) and (actuelwidget != 10):
+            if (actuelwidget != 5) and (actuelwidget != 4):
                 self.bouton_jaune.setActiveClavier(False)
         if self.bouton_vert.getActiveClavier() == True:
-            if (actuelwidget != 13) and (actuelwidget != 14):
+            if (actuelwidget != 15) and (actuelwidget != 14):
                 self.bouton_vert.setActiveClavier(False)
         if self.bouton_rouge.getActiveClavier() == True:
-            if (actuelwidget != 17) and (actuelwidget != 18):
+            if (actuelwidget != 25) and (actuelwidget != 24):
                 self.bouton_rouge.setActiveClavier(False)
         if self.bouton_bleu.getActiveClavier() == True:
-            if (actuelwidget != 21) and (actuelwidget != 22):
+            if (actuelwidget != 35) and (actuelwidget != 34):
                 self.bouton_bleu.setActiveClavier(False)
         
         
