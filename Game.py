@@ -39,14 +39,14 @@ class Game:
         """
         return self.__plateau
 
-    def jeu(self : Game):
+    def jeu(self : Game, window):
         from tkinter import PhotoImage
         import tkinter as tk
         import PiecesListGUI as PG
         import MouvementManager as Mv
         from PIL import ImageTk
     
-        window = tk.Tk()
+        self.window = window
         images = []
 
         images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
@@ -56,8 +56,6 @@ class Game:
         images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
         images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
         images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
-        
-        window.geometry("1440x1024")
         
         border = tk.Canvas()
         border.config(bg="white")
@@ -102,7 +100,7 @@ class Game:
                     print(str(pieceid))
                     joueur.removePiece(str(pieceid))
                 board.refreshBoard()
-            window.update()
+            self.window.update()
 
         while 1:
             task()  

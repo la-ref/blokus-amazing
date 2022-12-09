@@ -31,6 +31,7 @@ class lobbyLocal(Frame):
         self.canvas.bind("<Button-1>",self.clique)
         self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= self.image_list[14])
         self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= self.image_list[17])
+        self.canvas.tag_bind(self.Bouton_Jouer, "<Button-1>", self.jouer)
 
         self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= self.image_list[19])
         self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
@@ -47,7 +48,6 @@ class lobbyLocal(Frame):
         self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[3],15,hb="bas",droiteg="droite")
         self.bouton_bleu.move(1156,883)
 
-    
     def clique(self,event):
         actuelwidget = event.widget.find_withtag('current')[0]
         print(actuelwidget)
@@ -71,6 +71,11 @@ class lobbyLocal(Frame):
         self.bouton_jaune.touches(event)
         self.bouton_vert.touches(event)
 
+    def jouer(self,event):
+        from Game import Game
+        self.jeu = Game(self.joueurs,None,20)
+        self.window = self.jeu.jeu(self.window)
+    
     def QuitterBouton(self,event):
         self.window = Accueil(self.window, self.image_list)
 
