@@ -41,7 +41,7 @@ class Pieces_placement(tk.Frame):
                 if (self.tableau_piece[v][i] == 3):
                     # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
                     # print("1", self.x,self.y)
-                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y)
+                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
                     self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
                     self.tableau_piece_forme.append(test)
@@ -63,18 +63,43 @@ class Pieces_placement(tk.Frame):
         return len(self.tableau_piece[0])-2
 
     def move(self, x : int, y : int):
-        print("1", self.le_x,self.le_y)
+        # print("1", self.le_x,self.le_y)
         self.le_x+=x
         self.le_y+=y
         for piece in self.tableau_piece_forme:
             x2,y2=self.parent.coords(piece.bl)
             piece.move(x-x2-piece.base_x,y-y2-piece.base_y)
+    
 
     def move_init(self, x : int, y : int):
-        self.le_x=x
-        self.le_y=y
+        self.le_x+=x
+        self.le_y+=y
         for piece in self.tableau_piece_forme:
             piece.move(x,y)
+    
+    def move_init2(self, x : int, y : int):
+        self.le_x+=x
+        self.le_y+=y
+        for piece in self.tableau_piece_forme:
+            piece.move(x,y)
+            piece.base_x += x
+            piece.base_y += y
+            # print(piece.base_x,"base X")
+            # print(piece.base_y,"base Y")
+            piece.base_xoff2 = piece.base_x
+            piece.base_yoff2 = piece.base_y
+    
+    def move_init3(self, x : int, y : int):
+        self.le_x+=x
+        self.le_y+=y
+        for piece in self.tableau_piece_forme:
+            piece.move(x,y)
+            piece.base_x += x
+            piece.base_y += y
+            # print(piece.base_x,"base X")
+            # print(piece.base_y,"base Y")
+            self.base_xoff3 = self.le_x
+            self.base_yoff3 = self.le_y
 
 
     def on_click(self,event):
@@ -82,8 +107,12 @@ class Pieces_placement(tk.Frame):
         Fonction interne pour permettre le deplacement des blocks au clique
         '''
         ## si pas en mvt, enregistre la position relative avec la souris
-        for block in self.tableau_piece_forme:
-            block.on_click(event)
+        if self.state:
+            if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+                for block in self.tableau_piece_forme:
+                    block.on_click(event)
+            self.le_x = self.base_xoff3
+            self.le_y = self.base_yoff3
         # self.delta = 
         # x2,y2=self.parent.coords()
         # self.delta_x = event.x-
@@ -101,10 +130,10 @@ class Pieces_placement(tk.Frame):
         if self.mon_state == True:
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
-                piece.move(event.x-x2-piece.base_x+self.le_x,event.y-y2-piece.base_y+self.le_y)
+                piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y)
+                print("coord", piece.base_xoff, piece.base_yoff, x2, y2, self.le_x, self.le_y)
 
-
-                print(event.x-x2-piece.base_x+self.le_x,event.y-y2-piece.base_y+self.le_y)        
+                # print("drag",event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y)        
             
 
         # self.parent.move(event.x,event.y)

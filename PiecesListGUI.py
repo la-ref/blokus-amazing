@@ -50,8 +50,10 @@ class PiecesListGUI(tk.Frame):
             self.tableau_piece_forme.append([])
             self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
 
-            self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
+            self.tableau_piece_forme[i1].move_init2(decalageX,decalageY)
+            print("gros test", decalageX,decalageY) 
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+            print(decalageX)
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
 
@@ -76,7 +78,7 @@ class PiecesListGUI(tk.Frame):
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         for piece in self.tableau_piece_forme:
-            piece.move_init(x,y)
+            piece.move_init3(x,y)
 
         
     def on_click(self,event):
