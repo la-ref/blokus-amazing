@@ -6,13 +6,25 @@ from Board import Board
 from PIL import ImageTk
 
 class GridInterface(tk.Frame):
-    def __init__(self, parent : tk.Canvas,board,images):
+    def __init__(self, parent : tk.Canvas,board,controller= None):
         super(GridInterface,self).__init__(parent)
         self.parent = parent
+        self.images = []
+        self.controller = controller
+
+        self.images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/board.png"))
+        self.images.append(PhotoImage(file="build/assets/frame0/button_give_up.png"))
+        # self.images.append(PhotoImage(file=""))
         self.imageplateau = self.parent.create_image(  #270x270
             0,
             0,
-            image=images[-1],
+            image=self.images[6],
             anchor=tk.NW
         )
         self.board = board
@@ -31,10 +43,36 @@ class GridInterface(tk.Frame):
                         self.parent.create_rectangle(439, 241, 449, 791,outline=self.couleur[11], fill=self.couleur[11]),
                         self.parent.create_rectangle(990, 242, 1000, 791,outline=self.couleur[11], fill=self.couleur[11])]
 
+        self.giveUp = self.parent.create_image(
+            (1440//2)-(self.images[7].width()//2), 
+            120, 
+            image=self.images[7],
+            anchor=tk.NW
+        )
+        self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+
+        # self.surrender = self.parent.create_image(
+        #     (1440//2)-(self.images[8].width()//2), 
+        #     120, 
+        #     image=self.images[7],
+        #     anchor=tk.NW
+        # )
+        # self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+
+    def setController(self,control):
+        self.controller = control
+
+    def callBackGiveUp(self):
+        print(self.controller)
+        if self.controller:
+            from Controller import Controller
+            self.controller.surrender()
+
     def setBoard(self,board):
         self.board = board
 
-    def refreshBoard(self):
+    def refreshBoard(self,board):
+        self.board = board
         for i in range(self.board.getBoardSize()):
             for y in range(self.board.getBoardSize()):
                 valeur = self.board.getColorAt(i,y)
@@ -43,9 +81,10 @@ class GridInterface(tk.Frame):
                     self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
     
     def refreshPlayer(self,playerColor):
+        print("caca",playerColor)
         if playerColor:
             for bord in self.bordure:
-                self.parent.itemconfig(bord,fill=self.couleur[playerColor],outline=self.couleur[playerColor])
+                self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])
                 self.parent.tag_raise(bord)
     
         
@@ -53,52 +92,52 @@ class GridInterface(tk.Frame):
         self.parent.move(self.imageplateau,x,y)
 
 
-# if __name__=="__main__":
-#     from tkinter import PhotoImage
+if __name__=="__main__":
+    from tkinter import PhotoImage
     
-#     window = tk.Tk()
-#     images = []
+    window = tk.Tk()
+    images = []
 
-#     images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
-#     images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
+    images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
+    images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
+    images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
+    images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
     
-#     window.geometry("1440x1024")
+    window.geometry("1440x1024")
     
-#     border = tk.Canvas()
-#     border.config(bg="white")
-#     border.create_image(
-#             0,
-#             0,
-#             image=images[5],
-#             anchor=tk.NW
-#         )
-#     border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-#     board = GridInterface(border,game)
-#     board.move(x=720-270,y=512-270)
+    border = tk.Canvas()
+    border.config(bg="white")
+    border.create_image(
+            0,
+            0,
+            image=images[5],
+            anchor=tk.NW
+        )
+    border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
+    board = GridInterface(border,Board())
+    board.move(x=720-270,y=512-270)
     
-#     List1 = PG.PiecesListGUI(border,images,"Joueur 1",1)
-#     List1.move(x=70,y=80)
+    List1 = PG.PiecesListGUI(border,images,"Joueur 1",1)
+    List1.move(x=70,y=80)
     
-#     List2 = PG.PiecesListGUI(border,images,"Joueur 2",2)
-#     List2.move(x=1047,y=80)
+    List2 = PG.PiecesListGUI(border,images,"Joueur 2",2)
+    List2.move(x=1047,y=80)
     
-#     List3 = PG.PiecesListGUI(border,images,"Joueur 3",3)
-#     List3.move(x=1047,y=524)
+    List3 = PG.PiecesListGUI(border,images,"Joueur 3",3)
+    List3.move(x=1047,y=524)
     
-#     List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
-#     List4.move(x=70,y=524)
-#     Mv.MouvementManager(List4,True,True)
+    List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
+    List4.move(x=70,y=524)
+    Mv.MouvementManager(List4,True,True)
     
 
-#     def task():
-#         board.jouer()
-#         window.update()
-#         board.refreshBoard()
+    def task():
+        #board.jouer()
+        window.update()
+        #board.refreshBoard()
 
-#     while 1:
-#         task()  
+    while 1:
+        task()  
