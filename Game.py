@@ -1,6 +1,7 @@
 from __future__ import annotations
 from Player import Player
 from Board import Board
+from GridInterface import GridInterface
 class Game:
     """Classe de gestion des parties de jeu blokus
     """
@@ -38,8 +39,51 @@ class Game:
         """
         return self.__plateau
 
-    def jeu(self : Game):
-        while True:
+    def jeu(self : Game, window):
+        from tkinter import PhotoImage
+        import tkinter as tk
+        import PiecesListGUI as PG
+        import MouvementManager as Mv
+        from PIL import ImageTk
+    
+        self.window = window
+        images = []
+
+        images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
+        images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
+        images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
+        images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
+        images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
+        images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
+        images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
+        
+        border = tk.Canvas()
+        border.config(bg="white")
+        border.create_image(
+                0,
+                0,
+                image=images[5],
+                anchor=tk.NW
+            )
+        border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
+        board = GridInterface(border,self.__plateau,images)
+        board.move(x=720-270,y=512-270)
+        
+        List1 = PG.PiecesListGUI(self.window,border,images,"Joueur 1",1)
+        List1.move(x=70,y=80)
+        
+        List2 = PG.PiecesListGUI(self.window,border,images,"Joueur 2",2)
+        List2.move(x=1047,y=80)
+        
+        List3 = PG.PiecesListGUI(self.window,border,images,"Joueur 3",3)
+        List3.move(x=1047,y=524)
+        
+        List4 = PG.PiecesListGUI(self.window,border,images,"Joueur 4",4)
+        List4.move(x=70,y=524)
+        Mv.MouvementManager(List4,True,True)
+        
+
+        def task():
             for joueur in self.__joueurs:
                 print("c'est a : ",joueur.getName())
                 ajout = False
@@ -55,4 +99,8 @@ class Game:
                     joueur.ajoutTour()
                     print(str(pieceid))
                     joueur.removePiece(str(pieceid))
-                print(self.__plateau.getBoard())
+                board.refreshBoard()
+            self.window.update()
+
+        while 1:
+            task()  
