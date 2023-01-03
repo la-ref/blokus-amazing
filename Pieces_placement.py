@@ -107,12 +107,11 @@ class Pieces_placement(tk.Frame):
         Fonction interne pour permettre le deplacement des blocks au clique
         '''
         ## si pas en mvt, enregistre la position relative avec la souris
-        if self.state:
-            if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
-                for block in self.tableau_piece_forme:
-                    block.on_click(event)
-            self.le_x = self.base_xoff3
-            self.le_y = self.base_yoff3
+        if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+            for block in self.tableau_piece_forme:
+                block.on_click(event)
+        self.le_x = self.base_xoff3
+        self.le_y = self.base_yoff3
         # self.delta = 
         # x2,y2=self.parent.coords()
         # self.delta_x = event.x-
