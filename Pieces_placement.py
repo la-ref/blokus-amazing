@@ -18,7 +18,7 @@ class Pieces_placement(tk.Frame):
                             14:(PhotoImage(file="build/assets/piece/blue.png"))}
         self.x = 0
         self.y = 0
-
+        self.la_piece = la_piece
         self.le_x = 0
         self.le_y = 0
         
@@ -44,8 +44,52 @@ class Pieces_placement(tk.Frame):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
                     self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
                     self.tableau_piece_forme.append(test)
                     # self.tableau_piece_co.append((self.x,self.y))
+
+    def on_flip(self,event):
+        for piece in self.tableau_piece_forme:
+            piece.bl.destroy()
+        piece = PD.LISTEPIECES[self.la_piece]
+        piece.flip()
+        self.tableau_piece=piece.getDelimitation()
+        for i in range(len(self.tableau_piece[0])):
+            self.y+=self.image.height()
+            self.x=0
+            for v in range(len(self.tableau_piece)):
+                self.x+=self.image.width()
+                if (self.tableau_piece[v][i] == 3):
+                    # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
+                    # print("1", self.x,self.y)
+                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
+                    self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
+                    self.tableau_piece_forme.append(test)
+    
+    def on_rotate(self,event):
+        for piece in self.tableau_piece_forme:
+            piece.bl.destroy()
+        piece = PD.LISTEPIECES[self.la_piece]
+        piece.rotate90()
+        self.tableau_piece=piece.getDelimitation()
+        for i in range(len(self.tableau_piece[0])):
+            self.y+=self.image.height()
+            self.x=0
+            for v in range(len(self.tableau_piece)):
+                self.x+=self.image.width()
+                if (self.tableau_piece[v][i] == 3):
+                    # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
+                    # print("1", self.x,self.y)
+                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
+                    self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
+                    self.tableau_piece_forme.append(test)
 
     def getImage(self):
         return self.image

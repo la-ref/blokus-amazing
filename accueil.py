@@ -3,7 +3,13 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
 from config import *
-
+import os
+os.environ["OMP_NUM_THREADS"] = "8"
+os.environ["TF_DISABLE_MKL"] = "0"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "1"
+os.environ["KMP_BLOCKTIME"] = "1"
+os.environ["OMP_DYNAMIC"] = "true"
+os.environ["KMP_AFFINITY"] = "noverbose,granularity=fine,balanced,1,0"
 class Accueil(Frame):
     def __init__(self,window,image_list):
         super()
@@ -99,5 +105,5 @@ if __name__ == "__main__":
 
     MonAccueil = Accueil(window,image)
     # MonAccueil.pack()
-    window.resizable(False, False)
+    window.resizable(True, True)
     window.mainloop()
