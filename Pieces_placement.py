@@ -6,8 +6,9 @@ import Pieces as p
 import numpy as np
 import Block as b
 class Pieces_placement(tk.Frame):
-    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
+    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str, controller):
         super(Pieces_placement,self).__init__(parent)
+        self.controller=controller
         self.window = window
         self.window.bind("<Motion>", self.on_drag)
         self.parent = parent
@@ -111,7 +112,7 @@ class Pieces_placement(tk.Frame):
             for block in self.tableau_piece_forme:
                 block.on_click(event)
         else:
-            print(self.getCoord())
+            print(self.getPieceBoardCoord())
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
         # self.delta = 
@@ -139,14 +140,23 @@ class Pieces_placement(tk.Frame):
 
         # self.parent.move(event.x,event.y)
         
-    def getCoord(self):
+    def getPieceBoardCoord(self):
+        '''
+        Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
+        '''
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
         return (x-450)//27,(y-242)//27
-        
-        
-        
+
+    def getPieceCoord(self):
+        '''
+        Fonction pour obtenir les coords du coin gauche de la piece sur l'écran 
+        '''
+        x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
+        dy,dx=np.argwhere(self.tableau_piece==3)[0]
+        x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
+        return x-450,y-242
 
 if __name__=="__main__":
     from tkinter import PhotoImage
