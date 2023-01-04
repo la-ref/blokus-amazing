@@ -7,6 +7,7 @@ from PIL import ImageTk
 
 class GridInterface(tk.Frame):
     def __init__(self, parent : tk.Canvas,board,controller= None):
+        from Controller import Controller
         super(GridInterface,self).__init__(parent)
         self.parent = parent
         self.images = []
@@ -20,7 +21,7 @@ class GridInterface(tk.Frame):
         self.images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
         self.images.append(PhotoImage(file="build/assets/frame0/board.png"))
         self.images.append(PhotoImage(file="build/assets/frame0/button_give_up.png"))
-        # self.images.append(PhotoImage(file=""))
+        self.images.append(PhotoImage(file="build/assets/frame0/button_quit.png"))
         self.imageplateau = self.parent.create_image(  #270x270
             0,
             0,
@@ -51,21 +52,26 @@ class GridInterface(tk.Frame):
         )
         self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
 
-        # self.surrender = self.parent.create_image(
-        #     (1440//2)-(self.images[8].width()//2), 
-        #     120, 
-        #     image=self.images[7],
-        #     anchor=tk.NW
-        # )
-        # self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+        self.surrender = self.parent.create_image(
+            (1440//2)-(self.images[8].width()//2), 
+            820, 
+            image=self.images[8],
+            anchor=tk.NW
+        )
+        self.parent.tag_bind(self.surrender, "<Button-1>",lambda *_: self.leave())
 
     def setController(self,control):
         self.controller = control
 
-    def callBackGiveUp(self):
-        print(self.controller)
+    def leave(self):
         if self.controller:
-            from Controller import Controller
+        #     self.controller.surrender() for online
+            self.controller.updateWindows()
+            self.destroy()
+
+
+    def callBackGiveUp(self):
+        if self.controller:
             self.controller.surrender()
 
     def setBoard(self,board):

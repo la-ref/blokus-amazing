@@ -8,6 +8,7 @@ from GridInterface import GridInterface
 from Player import Player
 class Controller:
     def __init__(self) -> None:
+        self.playing = True
         self.game : Game = Game(None,None,20)
         self.window = tk.Tk()
         self.window.geometry("1440x1024")
@@ -23,14 +24,36 @@ class Controller:
         self.vueJeu : GridInterface = GridInterface(self.border,self.game.getBoard())
         self.vueJeu.move(x=720-270,y=512-270)
         self.vueJeu.setController(self)
+        
         while 1:
-            print(self.game.getCurrentPlayerId())
-            self.updatePlayers(self.game.getCurrentPlayerId())
-            self.game.jeu()
-            self.updateBoard()
+            if self.playing:
+                self.updatePlayers(self.game.getCurrentPlayerId())
+                self.game.jeu()
+                if self.playing:
+                    self.updateBoard()
             self.window.update()
+        #window.mainloop()
 
 
+
+    def updateWindows(self) -> None:
+        self.playing = False
+        import lobbyLocal
+        from config import config
+        self.window.destroy()
+        self.window = tk.Tk()
+        self.window.geometry("1440x1024")
+        self.window.tkraise(lobbyLocal.lobbyLocal(self.window, config.tableauImage()))
+        
+
+    # def restartLoop(self):
+    #     if not self.playing:
+    #         while not self.playing:
+    #             self.window.mainloop()
+    #     elif self.playing:
+    #         while self.playing:
+    #             self.window.quit()
+    #             self.window.update()
     def updatePlayers(self,couleur : int):
         self.vueJeu.refreshPlayer(couleur)
 
