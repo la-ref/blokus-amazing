@@ -93,8 +93,8 @@ class Pieces_placement(tk.Frame):
         difference_x = self.x-self.souris_x
         difference_y = self.y-self.sourix_y
 
-        self.back_x = self.x
-        self.back_y = self.y
+        self.back_x = self.x+difference_x
+        self.back_y = self.y+difference_y
 
         self.x=0
         self.y=0
@@ -113,7 +113,7 @@ class Pieces_placement(tk.Frame):
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_rotate)
                     self.tableau_piece_forme.append(le_block)
-
+                    le_block.move(self.back_x,self.back_y)
         for piece in self.tableau_piece_forme:
             x2,y2=self.parent.coords(piece.bl)
             print(x2,y2," ",self.souris_x,self.sourix_y," ",self.x,self.y," ",self.back_x,self.back_y)
