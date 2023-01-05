@@ -13,9 +13,9 @@ class PiecesListGUI(tk.Frame):
     #   Creer l'élément de gui pour la liste des pieces
     #
     #
-    def __init__(self, window, parent : tk.Canvas, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
+    def __init__(self, window, parent : tk.Canvas, controller, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
         super(PiecesListGUI,self).__init__(parent)
-        
+        self.controller=controller
         self.parent = parent
         self.list = self.parent.create_image(
             0,
@@ -48,7 +48,7 @@ class PiecesListGUI(tk.Frame):
         maxheight = 0
         for valeur in PD.LISTEPIECES:
             self.tableau_piece_forme.append([])
-            self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
+            self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur,self.controller)
 
             self.tableau_piece_forme[i1].move_init2(decalageX,decalageY)
             print("gros test", decalageX,decalageY) 

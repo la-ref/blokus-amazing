@@ -5,7 +5,7 @@ from GridInterface import GridInterface
 class Game:
     """Classe de gestion des parties de jeu blokus
     """
-    def __init__(self : Game,joueurs : list[Player]|None,plateau : Board|None,taille : int) -> None:
+    def __init__(self : Game, controller, joueurs : list[Player]|None,plateau : Board|None,taille : int) -> None:
         """Constructeur créant une partie avec des joueurs et un plateau de taille n
 
         Args:
@@ -16,6 +16,7 @@ class Game:
         """
         self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
         self.__plateau : Board = plateau or Board(taille)
+        self.controller=controller
     
     def getPlayers(self : Game):
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -69,16 +70,16 @@ class Game:
         board = GridInterface(border,self.__plateau,images)
         board.move(x=720-270,y=512-270)
         
-        List1 = PG.PiecesListGUI(self.window,border,images,"Joueur 1",1)
+        List1 = PG.PiecesListGUI(self.window,border,self.controller,images,"Joueur 1",1)
         List1.move(x=70,y=80)
         
-        List2 = PG.PiecesListGUI(self.window,border,images,"Joueur 2",2)
+        List2 = PG.PiecesListGUI(self.window,border,self.controller,images,"Joueur 2",2)
         List2.move(x=1047,y=80)
         
-        List3 = PG.PiecesListGUI(self.window,border,images,"Joueur 3",3)
+        List3 = PG.PiecesListGUI(self.window,border,self.controller,images,"Joueur 3",3)
         List3.move(x=1047,y=524)
         
-        List4 = PG.PiecesListGUI(self.window,border,images,"Joueur 4",4)
+        List4 = PG.PiecesListGUI(self.window,border,self.controller,images,"Joueur 4",4)
         List4.move(x=70,y=524)
         Mv.MouvementManager(List4,True,True)
         
