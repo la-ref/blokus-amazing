@@ -21,6 +21,10 @@ class Pieces_placement(tk.Frame):
         self.la_piece = la_piece
         self.le_x = 0
         self.le_y = 0
+
+        self.souris_x = 0
+        self.sourix_y = 0
+        
         
         self.state = 0
         self.tableau_piece = [[]]
@@ -48,28 +52,74 @@ class Pieces_placement(tk.Frame):
                     self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
                     self.tableau_piece_forme.append(test)
                     # self.tableau_piece_co.append((self.x,self.y))
+    def getPieceBoardCoord(self):
+        '''
+        Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
+        '''
+        x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
+        dy,dx=np.argwhere(self.tableau_piece==3)[0]
+        x,y=x-27(dx-1),y-27(dy-1) # calcul les coordonnées du coin haut gauche
+        return [(x-450)//27,(y-242)//27]
+
+    def getPieceCoord(self):
+        '''
+        Fonction pour obtenir les coords du coin gauche de la piece sur l'écran 
+        '''
+        x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
+        dy,dx=np.argwhere(self.tableau_piece==3)[0]
+        x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
+        return [x,y]
 
     def on_flip(self,event):
+        self.x,self.y=self.getPieceCoord()
+        print(self.x,self.y)
         for piece in self.tableau_piece_forme:
-            piece.bl.destroy()
+            objet = self.parent.find_withtag(piece.bl)
+            ma_piece = objet[0]
+            # print(ma_piece, piece.bl)
+            # ma_piece.config(image='')
+            self.parent.delete(ma_piece)
+        print("flip")
         piece = PD.LISTEPIECES[self.la_piece]
         piece.flip()
+        self.image = self.imagepiece[self.nb_player]
+        self.image = self.image.subsample(2)
+        self.image2 = self.image.subsample(28)
+        self.tableau_piece = [[]]
         self.tableau_piece=piece.getDelimitation()
+        print(self.tableau_piece)
+        print("le x et y", self.x, self.y, event.x, event.y)
+        self.tableau_piece_forme = []
+        difference_x = self.x-self.souris_x
+        difference_y = self.y-self.sourix_y
+
+        self.back_x = self.x
+        self.back_y = self.y
+
+        self.x=0
+        self.y=0
         for i in range(len(self.tableau_piece[0])):
             self.y+=self.image.height()
-            self.x=0
+            self.x = 0
             for v in range(len(self.tableau_piece)):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
                     # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
                     # print("1", self.x,self.y)
-                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
-                    self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
-                    self.tableau_piece_forme.append(test)
-    
+                    print("------------------", difference_x,difference_y)
+                    le_block = b.Block(self.parent,self.image,self.nb_player,0+self.x,0+self.y,self)
+                    self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
+                    self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
+                    self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_rotate)
+                    self.tableau_piece_forme.append(le_block)
+
+        for piece in self.tableau_piece_forme:
+            x2,y2=self.parent.coords(piece.bl)
+            print(x2,y2," ",self.souris_x,self.sourix_y," ",self.x,self.y," ",self.back_x,self.back_y)
+            piece.move(piece.base_xoff,piece.base_yoff)
+            print("coord", piece.base_xoff, piece.base_yoff, x2, y2, self.le_x, self.le_y)
+
     def on_rotate(self,event):
         for piece in self.tableau_piece_forme:
             piece.bl.destroy()
@@ -78,7 +128,6 @@ class Pieces_placement(tk.Frame):
         self.tableau_piece=piece.getDelimitation()
         for i in range(len(self.tableau_piece[0])):
             self.y+=self.image.height()
-            self.x=0
             for v in range(len(self.tableau_piece)):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
@@ -170,6 +219,8 @@ class Pieces_placement(tk.Frame):
         '''
         Fonction interne pour permettre le deplacement des blocks au mvt de la souris
         '''
+        self.souris_x = event.x
+        self.sourix_y = event.y
         if self.mon_state == True:
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
