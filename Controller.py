@@ -6,12 +6,19 @@ import Elements.PiecesListGUI as PG
 from PIL import ImageTk
 from GridInterface import GridInterface
 from Player import Player
+from config import config
 class Controller:
+
+    
     def __init__(self) -> None:
-        self.game : Game = Game(None,None,20)
         self.window = tk.Tk()
-        self.window.geometry("1440x1024")
+        
+        config.initialisation(self)
+        print(config.Config)
+        self.game : Game = Game(None,None,20)
+        self.window.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.border = tk.Canvas()
+
         self.border.create_image(
             0,
             0,
@@ -142,5 +149,7 @@ class Controller:
 # while 1:
 #     task(board,game)
 
+
 if __name__ == "__main__":
-    c = Controller()
+    global CT
+    CT = Controller()
