@@ -10,6 +10,7 @@ class Pieces_placement(tk.Frame):
         super(Pieces_placement,self).__init__(parent)
         self.window = window
         self.window.bind("<Motion>", self.on_drag)
+        self.window.bind("<MouseWheel>", self.on_rotate)
         self.parent = parent
         self.nb_player = nb_player
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
@@ -49,7 +50,7 @@ class Pieces_placement(tk.Frame):
                     self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
+                    # self.parent.tag_bind(test.bl, "<MouseWheel>", self.on_rotate)
                     self.tableau_piece_forme.append(test)
                     # self.tableau_piece_co.append((self.x,self.y))
     def getPieceBoardCoord(self):
@@ -72,73 +73,92 @@ class Pieces_placement(tk.Frame):
 
     def on_flip(self,event):
         self.x,self.y=self.getPieceCoord()
-        print(self.x,self.y)
+
         for piece in self.tableau_piece_forme:
             objet = self.parent.find_withtag(piece.bl)
             ma_piece = objet[0]
-            # print(ma_piece, piece.bl)
-            # ma_piece.config(image='')
             self.parent.delete(ma_piece)
-        print("flip")
+
         piece = PD.LISTEPIECES[self.la_piece]
         piece.flip()
-        self.image = self.imagepiece[self.nb_player]
-        self.image = self.image.subsample(2)
-        self.image2 = self.image.subsample(28)
+
         self.tableau_piece = [[]]
         self.tableau_piece=piece.getDelimitation()
-        print(self.tableau_piece)
-        print("le x et y", self.x, self.y, event.x, event.y)
+        
         self.tableau_piece_forme = []
-        difference_x = self.x-self.souris_x
-        difference_y = self.y-self.sourix_y
 
-        self.back_x = self.x+difference_x
-        self.back_y = self.y+difference_y
+        self.back_x = self.x
+        self.back_y = self.y
 
         self.x=0
         self.y=0
+
         for i in range(len(self.tableau_piece[0])):
             self.y+=self.image.height()
             self.x = 0
             for v in range(len(self.tableau_piece)):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
-                    # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
-                    # print("1", self.x,self.y)
-                    print("------------------", difference_x,difference_y)
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.x,0+self.y,self)
                     self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
-                    self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_rotate)
                     self.tableau_piece_forme.append(le_block)
-                    le_block.move(self.back_x,self.back_y)
+                    le_block.move(self.back_x-self.x,self.back_y-self.y)
+                
         for piece in self.tableau_piece_forme:
             x2,y2=self.parent.coords(piece.bl)
-            print(x2,y2," ",self.souris_x,self.sourix_y," ",self.x,self.y," ",self.back_x,self.back_y)
             piece.move(piece.base_xoff,piece.base_yoff)
-            print("coord", piece.base_xoff, piece.base_yoff, x2, y2, self.le_x, self.le_y)
+
+        for piece in self.tableau_piece_forme:
+            x2,y2=self.parent.coords(piece.bl)
+            piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
 
     def on_rotate(self,event):
-        for piece in self.tableau_piece_forme:
-            piece.bl.destroy()
-        piece = PD.LISTEPIECES[self.la_piece]
-        piece.rotate90()
-        self.tableau_piece=piece.getDelimitation()
-        for i in range(len(self.tableau_piece[0])):
-            self.y+=self.image.height()
-            for v in range(len(self.tableau_piece)):
-                self.x+=self.image.width()
-                if (self.tableau_piece[v][i] == 3):
-                    # test = self.parent.create_image(x,y,image=self.image,anchor=tk.NW)
-                    # print("1", self.x,self.y)
-                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
-                    self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_rotate)
-                    self.tableau_piece_forme.append(test)
+        print(event.delta)
+        if self.mon_state == True:
+            self.x,self.y=self.getPieceCoord()
+
+            for piece in self.tableau_piece_forme:
+                objet = self.parent.find_withtag(piece.bl)
+                ma_piece = objet[0]
+                self.parent.delete(ma_piece)
+
+            piece = PD.LISTEPIECES[self.la_piece]
+            piece.rotate90()
+
+            self.tableau_piece = [[]]
+            self.tableau_piece=piece.getDelimitation()
+            
+            self.tableau_piece_forme = []
+
+            self.back_x = self.x
+            self.back_y = self.y
+
+            self.x=0
+            self.y=0
+
+            for i in range(len(self.tableau_piece[0])):
+                self.y+=self.image.height()
+                self.x = 0
+                for v in range(len(self.tableau_piece)):
+                    self.x+=self.image.width()
+                    if (self.tableau_piece[v][i] == 3):
+                        le_block = b.Block(self.parent,self.image,self.nb_player,0+self.x,0+self.y,self)
+                        self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
+                        self.tableau_piece_forme.append(le_block)
+                        le_block.move(self.back_x-self.x,self.back_y-self.y)
+                    
+            for piece in self.tableau_piece_forme:
+                x2,y2=self.parent.coords(piece.bl)
+                piece.move(piece.base_xoff,piece.base_yoff)
+
+            for piece in self.tableau_piece_forme:
+                x2,y2=self.parent.coords(piece.bl)
+                piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
+        
 
     def getImage(self):
         return self.image
@@ -203,15 +223,25 @@ class Pieces_placement(tk.Frame):
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
             for block in self.tableau_piece_forme:
                 block.on_click(event)
+        else:
+            print(self.getPieceBoardCoord())
+            
+
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
-        # self.delta = 
-        # x2,y2=self.parent.coords()
-        # self.delta_x = event.x-
+
         if not self.mon_state:
+            self.image = self.image.zoom(2)
             self.le_x = self.le_x-event.x
             self.le_y = self.le_y-event.y
+            for piece in self.tableau_piece_forme:
+                self.parent.itemconfigure(piece.bl, image=self.image)
+            
             print(self.x,self.y, "|", event.x, event.y)
+        else:
+            self.image = self.image.subsample(2)
+            for piece in self.tableau_piece_forme:
+                self.parent.itemconfigure(piece.bl, image=self.image)
         self.mon_state=(self.mon_state+1)%2
 
 
@@ -225,6 +255,9 @@ class Pieces_placement(tk.Frame):
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
                 piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y)
+                # objet = self.parent.find_below(piece.bl)
+                # ma_piece = objet[0]
+                
                 print("coord", piece.base_xoff, piece.base_yoff, x2, y2, self.le_x, self.le_y)
 
                 # print("drag",event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y)        
