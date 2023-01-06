@@ -120,10 +120,12 @@ class Pieces_placement(tk.Frame):
         self.premier = 0
         for piece in self.tableau_piece_forme:
             print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
-            if self.premier == 0:                
+            if self.premier == 0:
                 self.ox2,self.oy2=self.parent.coords(piece.bl)
-                self.le_x = self.le_x-self.ox2
-                self.le_y = self.le_y-self.oy2
+                differenceX = self.le_x+piece.base_xoff
+                differenceY = self.le_y+piece.base_yoff
+                self.le_x = self.le_x-differenceX
+                self.le_y = self.le_y-differenceY
                 # piece.on_click2(self.ox2,self.oy2)
                 self.premier = 1
 
@@ -178,15 +180,41 @@ class Pieces_placement(tk.Frame):
                         self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                         self.tableau_piece_forme.append(le_block)
                         le_block.move(self.back_x-self.x,self.back_y-self.y)
-                    
+                
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
                 piece.move(piece.base_xoff,piece.base_yoff)
+            
+
+            # self.souris_x = self.souris_x-self.nombrezero
+            # self.sourix_y = self.sourix_y-self.nombrezero2
+            # for piece in self.tableau_piece_forme:
+            #     x2,y2=self.parent.coords(piece.bl)
+            #     piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
+            self.premier = 0
+            for piece in self.tableau_piece_forme:
+                print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
+                if self.premier == 0:
+                    self.ox2,self.oy2=self.parent.coords(piece.bl)
+                    differenceX = self.le_x+piece.base_xoff
+                    differenceY = self.le_y+piece.base_yoff
+                    self.le_x = self.le_x-differenceX
+                    self.le_y = self.le_y-differenceY
+                    # piece.on_click2(self.ox2,self.oy2)
+                    self.premier = 1
 
             for piece in self.tableau_piece_forme:
+                # print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
+                # if self.premier == 0:                
+                #     self.ox2,self.oy2=self.parent.coords(piece.bl)
+                #     self.le_x = self.le_x
+                #     self.le_y = self.le_y
+                #     # piece.on_click2(self.ox2,self.oy2)
+                #     self.premier = 1
+                # print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
                 x2,y2=self.parent.coords(piece.bl)
-                piece.move(self.souris_x-x2+piece.base_xoff+self.le_x-self.image.width(),self.sourix_y-y2+piece.base_yoff+self.le_y-self.image.height())
-        
+                print("eushgiusuhg",self.souris_x-x2+piece.base_xoff+self.le_x)
+                piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
 
     def getImage(self):
         return self.image
