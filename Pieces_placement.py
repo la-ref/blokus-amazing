@@ -33,7 +33,8 @@ class Pieces_placement(tk.Frame):
         # self.tableau_piece_co = []
         self.mon_state = 0
 
-        self.tableau_piece=PD.LISTEPIECES[la_piece].getDelimitation()
+        self.piece=PD.LISTEPIECES[la_piece]
+        self.tableau_piece=self.piece.getDelimitation()
         self.image = self.imagepiece[self.nb_player]
         self.image = self.image.subsample(2)
         self.image2 = self.image.subsample(28)
@@ -59,7 +60,7 @@ class Pieces_placement(tk.Frame):
         '''
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
-        x,y=x-27(dx-1),y-27(dy-1) # calcul les coordonnées du coin haut gauche
+        x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
         return [(x-450)//27,(y-242)//27]
 
     def getPieceCoord(self):
@@ -105,14 +106,36 @@ class Pieces_placement(tk.Frame):
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
                     le_block.move(self.back_x-self.x,self.back_y-self.y)
-                
-        for piece in self.tableau_piece_forme:
-            x2,y2=self.parent.coords(piece.bl)
-            piece.move(piece.base_xoff,piece.base_yoff)
+            
+        # for piece in self.tableau_piece_forme:
+        #     x2,y2=self.parent.coords(piece.bl)
+        #     piece.move(piece.base_xoff,piece.base_yoff)
+        
 
+        # self.souris_x = self.souris_x-self.nombrezero
+        # self.sourix_y = self.sourix_y-self.nombrezero2
+        self.on_click2()
+        self.on_click2()
         for piece in self.tableau_piece_forme:
             x2,y2=self.parent.coords(piece.bl)
             piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
+        # self.premier = 0
+        # self.premierX = 0
+        # self.premierY = 0
+        # for piece in self.tableau_piece_forme:
+        #     print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
+        #     if self.premier == 0:                
+        #         self.ox2,self.oy2=self.parent.coords(piece.bl)
+        #         self.le_x = self.le_x
+        #         self.le_y = self.le_y
+        #         # piece.on_click2(self.ox2,self.oy2)
+        #         self.premier = 1
+        #     print(self.souris_x,self.sourix_y,"----",self.le_x,self.le_y)
+        #     x2,y2=self.parent.coords(piece.bl)
+        #     print("eushgiusuhg",self.souris_x-x2+piece.base_xoff+self.le_x)
+        #     piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
+
+
 
     def on_rotate(self,event):
         print(event.delta)
@@ -157,7 +180,7 @@ class Pieces_placement(tk.Frame):
 
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
-                piece.move(self.souris_x-x2+piece.base_xoff+self.le_x,self.sourix_y-y2+piece.base_yoff+self.le_y)
+                piece.move(self.souris_x-x2+piece.base_xoff+self.le_x-self.image.width(),self.sourix_y-y2+piece.base_yoff+self.le_y-self.image.height())
         
 
     def getImage(self):
@@ -221,25 +244,75 @@ class Pieces_placement(tk.Frame):
         '''
         ## si pas en mvt, enregistre la position relative avec la souris
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+            self.ok = 0
             for block in self.tableau_piece_forme:
-                block.on_click(event)
+                if self.ok == 0:
+                    self.ox2,self.oy2=self.parent.coords(block.bl)
+                    self.le_x = self.le_x-self.ox2
+                    self.le_y = self.le_y-self.oy2
+                    self.ok = 1
+                block.on_click(self.ox2,self.oy2)
         else:
-            print(self.getPieceBoardCoord())
+            print("les cords :",self.getPieceBoardCoord())
             
 
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
 
         if not self.mon_state:
-            self.image = self.image.zoom(2)
-            self.le_x = self.le_x-event.x
-            self.le_y = self.le_y-event.y
+            # self.image = self.imagepiece[self.nb_player]
+            self.ok = 0
             for piece in self.tableau_piece_forme:
+                if self.ok == 0:
+                    self.ox2,self.oy2=self.parent.coords(piece.bl)
+                    print("hghsilughliudshgliudlighiudhuigd", self.ox2, self.oy2)
+                    print("hghsilughliudshgliudlighiudhuigd", self.le_x, self.le_y)
+                    self.le_x = self.le_x-self.ox2
+                    self.le_y = self.le_y-self.oy2
+                    print("hghsilughliudshgliudlighiudhuigd", self.le_x, self.le_y)
+                    self.ok = 1
                 self.parent.itemconfigure(piece.bl, image=self.image)
             
             print(self.x,self.y, "|", event.x, event.y)
         else:
-            self.image = self.image.subsample(2)
+            # self.image = self.image.subsample(2)
+            for piece in self.tableau_piece_forme:
+                self.parent.itemconfigure(piece.bl, image=self.image)
+        self.mon_state=(self.mon_state+1)%2
+    
+    def on_click2(self):
+        '''
+        Fonction interne pour permettre le deplacement des blocks au clique
+        '''
+        ## si pas en mvt, enregistre la position relative avec la souris
+        if (self.souris_x<450 or self.souris_x>990 or self.sourix_y<242 or self.sourix_y>782):
+            self.ok = 0
+            for block in self.tableau_piece_forme:
+                if self.ok == 0:
+                    self.ox2,self.oy2=self.parent.coords(block.bl)
+                    self.le_x = self.le_x-self.ox2
+                    self.le_y = self.le_y-self.oy2
+                    self.ok = 1
+                block.on_click(self.ox2,self.oy2)
+
+        self.le_x = self.base_xoff3
+        self.le_y = self.base_yoff3
+
+        if not self.mon_state:
+            # self.image = self.imagepiece[self.nb_player]
+            self.ok = 0
+            for piece in self.tableau_piece_forme:
+                if self.ok == 0:
+                    self.ox2,self.oy2=self.parent.coords(piece.bl)
+                    print("hghsilughliudshgliudlighiudhuigd", self.ox2, self.oy2)
+                    print("hghsilughliudshgliudlighiudhuigd", self.le_x, self.le_y)
+                    self.le_x = self.le_x-self.ox2
+                    self.le_y = self.le_y-self.oy2
+                    print("hghsilughliudshgliudlighiudhuigd", self.le_x, self.le_y)
+                    self.ok = 1
+                self.parent.itemconfigure(piece.bl, image=self.image)
+        else:
+            # self.image = self.image.subsample(2)
             for piece in self.tableau_piece_forme:
                 self.parent.itemconfigure(piece.bl, image=self.image)
         self.mon_state=(self.mon_state+1)%2
@@ -251,6 +324,7 @@ class Pieces_placement(tk.Frame):
         '''
         self.souris_x = event.x
         self.sourix_y = event.y
+        self.premier2 = 0
         if self.mon_state == True:
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
@@ -261,7 +335,7 @@ class Pieces_placement(tk.Frame):
                 print("coord", piece.base_xoff, piece.base_yoff, x2, y2, self.le_x, self.le_y)
 
                 # print("drag",event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y)        
-            
+        self.premier2 = 0
 
         # self.parent.move(event.x,event.y)
         

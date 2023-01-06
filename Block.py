@@ -55,14 +55,14 @@ class Block(tk.Frame):
     #     self.parent.moveto(self.bl,self.base_x,self.base_y)
     #     print("move", self.base_x,self.base_y)
     
-    def on_click(self,event):
+    def on_click(self,x2,y2):
         '''
         Fonction interne pour permettre le deplacement des blocks au clique
         '''
         ## si pas en mvt, enregistre la position relative avec la souris
         if not self.state:
             x,y=self.parent.coords(self.bl)
-            self.delta_x,self.delta_y=event.x-x,event.y-y
+            self.delta_x,self.delta_y=x2-x,y2-y
         ## si en dehors de la grille, tp le block à la position initiale
         else:
             self.parent.moveto(self.bl,self.base_x,self.base_y)
@@ -70,6 +70,13 @@ class Block(tk.Frame):
             print("test")         
 
         self.state = (self.state+1)%2
+    
+    def on_click2(self,x2,y2):
+        '''
+        Fonction interne pour permettre le deplacement des blocks au clique
+        '''
+        ## si pas en mvt, enregistre la position relative avec la souris
+        self.parent.moveto(self.bl,self.base_x,self.base_y)
             
         
     def on_drag(self, event):

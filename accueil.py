@@ -97,11 +97,12 @@ class Accueil(Frame):
 if __name__ == "__main__":
 
     window = Tk(className='Accueil')
-
+    from config import config
     window.geometry("1440x1024")
     window.configure(bg = "#FFFFFF")
 
-    image = config.tableauImage()
+    config.initialisation(None)
+    image = config.Config.image
 
     MonAccueil = Accueil(window,image)
     # MonAccueil.pack()
