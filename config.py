@@ -49,6 +49,12 @@ class config():
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_user_noir.png")) #24
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_vert.png")) #25
 
+
+        self.image.append(PhotoImage(file="build/assets/piece/yellow.png")) #26
+        self.image.append(PhotoImage(file="build/assets/piece/green.png")) #27
+        self.image.append(PhotoImage(file="build/assets/piece/red.png")) #28
+        self.image.append(PhotoImage(file="build/assets/piece/blue.png")) #29
+
         
     @staticmethod
     def initialisation(controller):

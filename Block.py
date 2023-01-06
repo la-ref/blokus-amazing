@@ -28,11 +28,11 @@ class Block(tk.Frame):
 
         self.base_xoff3 = base_x
         self.base_yoff3 = base_y
+        self.save_x,self.save_y = 0,0
         ## sert à garder la position relative avec la souris lors du déplacement
         self.delta_x = 100
         self.delta_y = 100
-        # self.decalage_x = decal_x
-        # self.decalage_y = decal_y
+
         ## sert à savoir si elle est en mvt
         self.state = 0
         
@@ -43,40 +43,25 @@ class Block(tk.Frame):
             image=image,
             anchor=tk.NW
         )
-        # self.parent.moveto(self.base_x,self.base_y)
+
         
     def move(self, x : int, y : int):
         self.parent.move(self.bl,x,y)
-    
-    # def move_init(self, x : int, y : int):
-    #     print("avant", self.base_x,self.base_y)
-    #     self.base_x+=x
-    #     self.base_y+=y
-    #     self.parent.moveto(self.bl,self.base_x,self.base_y)
-    #     print("move", self.base_x,self.base_y)
-    
-    def on_click(self,x2,y2):
+
+    def on_click(self,event):
         '''
         Fonction interne pour permettre le deplacement des blocks au clique
         '''
         ## si pas en mvt, enregistre la position relative avec la souris
         if not self.state:
+            self.save_x,self.save_y = self.parent.coords(self.bl)
             x,y=self.parent.coords(self.bl)
-            self.delta_x,self.delta_y=x2-x,y2-y
+            self.delta_x,self.delta_y=event.x-x,event.y-y
         ## si en dehors de la grille, tp le block à la position initiale
         else:
-            self.parent.moveto(self.bl,self.base_x,self.base_y)
-            # self.parent.move(self.bl,self.delta_x,self.delta_y)
-            print("test")         
+            self.parent.moveto(self.bl,self.base_x,self.base_y)  
 
         self.state = (self.state+1)%2
-    
-    def on_click2(self,x2,y2):
-        '''
-        Fonction interne pour permettre le deplacement des blocks au clique
-        '''
-        ## si pas en mvt, enregistre la position relative avec la souris
-        self.parent.moveto(self.bl,self.base_x,self.base_y)
             
         
     def on_drag(self, event):
@@ -86,7 +71,13 @@ class Block(tk.Frame):
         x,y=self.parent.coords(self.bl)
         self.parent.move(self.bl,event.x-self.delta_x,event.y-self.delta_y)
         
-    
+    def recreate(self,x,y,image):
+        self.bl = self.parent.create_image(
+            x,
+            y,
+            image=image,
+            anchor=tk.NW
+        )
     def bind(self,event_tag,call):
         '''
         Fonction interne pour permettre la gestion des event des blocks
