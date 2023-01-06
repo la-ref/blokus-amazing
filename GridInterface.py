@@ -6,11 +6,10 @@ from Board import Board
 from PIL import ImageTk
 
 class GridInterface(tk.Frame):
-    def __init__(self, parent : tk.Canvas,board,controller= None):
+    def __init__(self, parent : tk.Canvas,board):
         super(GridInterface,self).__init__(parent)
         self.parent = parent
         self.images = []
-        self.controller = controller
 
         self.images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
         self.images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
@@ -43,30 +42,6 @@ class GridInterface(tk.Frame):
                         self.parent.create_rectangle(439, 241, 449, 791,outline=self.couleur[11], fill=self.couleur[11]),
                         self.parent.create_rectangle(990, 242, 1000, 791,outline=self.couleur[11], fill=self.couleur[11])]
 
-        self.giveUp = self.parent.create_image(
-            (1440//2)-(self.images[7].width()//2), 
-            120, 
-            image=self.images[7],
-            anchor=tk.NW
-        )
-        self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
-
-        # self.surrender = self.parent.create_image(
-        #     (1440//2)-(self.images[8].width()//2), 
-        #     120, 
-        #     image=self.images[7],
-        #     anchor=tk.NW
-        # )
-        # self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
-
-    def setController(self,control):
-        self.controller = control
-
-    def callBackGiveUp(self):
-        print(self.controller)
-        if self.controller:
-            from Controller import Controller
-            self.controller.surrender()
 
     def setBoard(self,board):
         self.board = board

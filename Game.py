@@ -1,8 +1,10 @@
 from __future__ import annotations
 from typing import Callable
+from Pieces import Pieces
 from Player import Player
 from Board import Board
 from GridInterface import GridInterface
+from config import config
 class Game:
 
     """Classe de gestion des parties de jeu blokus
@@ -20,6 +22,7 @@ class Game:
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
+        self.joueur = self.getCurrentPlayer()
     
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -31,6 +34,17 @@ class Game:
             list[Player]: liste contenant les joueurs de la partie
         """
         return self.__joueurs
+    
+    def getCurrentPlayer(self : Game) -> Player:
+        """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
+
+        Args:
+            self (Game): game
+
+        Returns:
+            list[Player]: liste contenant les joueurs de la partie
+        """
+        return self.__joueurs[self.__currentPlayerPos]
     
     def getBoard(self : Game) -> Board:
         """Méthode getter permettant d'obtenir le plateau du jeu
@@ -53,8 +67,7 @@ class Game:
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
 
     def __nextPlayer(self):
-        nbPlayers = len(self.__joueurs)
-        self.__currentPlayerPos = (self.__currentPlayerPos+1)%nbPlayers
+        self.__currentPlayerPos = (self.__currentPlayerPos+1)%4
 
 
     # def jeu(self : Game):
@@ -122,3 +135,29 @@ class Game:
                     joueur.ajoutTour()
                     joueur.removePiece(str(pieceid))
         self.__nextPlayer()
+        
+        
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int):
+
+        if not self.isPlayerSurrendered():
+            print("c'est a : ",self.joueur.getName())   
+            if self.__plateau.ajouterPiece(piece,colonne,ligne,self.joueur,dc+1,dl+1):
+                self.joueur.removePiece(str(piece.getIdentifiant()))
+                
+                
+                # prep tour suivant
+                self.__nextPlayer()
+                self.joueur = self.getCurrentPlayer()
+                config.Config.controller.updateBoard()
+                
+                return True
+           
+        else:
+            # cas de joueur fantôme
+            self.__nextPlayer()
+            self.joueur = self.getCurrentPlayer()
+            self.playTurn(piece,colonne,ligne,dc,dl)
+        return False
+            
+
+    # def setPiece():

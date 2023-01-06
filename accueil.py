@@ -5,13 +5,16 @@ import sys
 from config import *
 
 class Accueil(Frame):
-    def __init__(self,window,image_list):
-        super()
-
+    def __init__(self,window):
+        super(Accueil, self).__init__()
         self.window = window
-        self.image_list = image_list
+
+    def initialize(self):
+        for widgets in self.winfo_children():
+            widgets.destroy()
+        
         canvas = Canvas(
-            window,
+            self.window,
             bg = "#FFFFFF",
             height = 1024,
             width = 1440,
@@ -24,13 +27,13 @@ class Accueil(Frame):
         background = canvas.create_image(
             720.0,
             512.0,
-            image=image_list[0]
+            image=config.Config.image[0]
         )
 
         HorsLigneBouton = canvas.create_image(
             470, 
             324, 
-            image=image_list[5],
+            image=config.Config.image[5],
             anchor=tkinter.NW
         )
         canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
@@ -39,14 +42,15 @@ class Accueil(Frame):
         EnLigneBouton = canvas.create_image(
             470, 
             488, 
-            image=image_list[1],
+            image=config.Config.image[1],
             anchor=tkinter.NW
         )
+
 
         QuitterBouton = canvas.create_image(
             470, 
             652, 
-            image=image_list[2],
+            image=config.Config.image[2],
             anchor=tkinter.NW
         )
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
@@ -56,7 +60,7 @@ class Accueil(Frame):
         BoutonScore = canvas.create_image(
             1032, 
             821, 
-            image=image_list[3],
+            image=config.Config.image[3],
             anchor=tkinter.NW
         )
 
@@ -64,7 +68,7 @@ class Accueil(Frame):
         BoutonInfo = canvas.create_image(
             334, 
             821, 
-            image=image_list[4],
+            image=config.Config.image[4],
             anchor=tkinter.NW
         )
 
@@ -82,7 +86,7 @@ class Accueil(Frame):
     
     def HorsLigneBouton(self,event):
         import lobbyLocal
-        self.window = lobbyLocal.lobbyLocal(self.window, self.image_list)
+        config.Config.controller.changePage("lobbyLocal")
         
         
         

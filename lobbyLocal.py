@@ -7,18 +7,26 @@ import tkinter as tk
 import Player
 import lobbyUser
 from accueil import *
+from GameInterface import GameInterface
 
 class lobbyLocal(Frame):
-    def __init__(self,window,image_list):
+    def __init__(self,window):
+        super(lobbyLocal, self).__init__()
+        self.window = window
+
+
+    def initialize(self):
+        for widgets in self.winfo_children():
+            widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False
-        self.window = window
-        self.image_list = image_list
+
+        self.image_list = config.Config.image
         self.touche = None
         self.joueurs = [Player.Player(11,"PERSONNE 1"),Player.Player(12,"PERSONNE 2"),Player.Player(13,"PERSONNE 3"),Player.Player(14,"PERSONNE 4")]
         self.window.bind("<Key>", self.touches)
         self.canvas = Canvas(
-            window,
+            self.window,
             bg = "#FFFFFF",
             height = 1024,
             width = 1440,
@@ -50,7 +58,7 @@ class lobbyLocal(Frame):
 
     def clique(self,event):
         actuelwidget = event.widget.find_withtag('current')[0]
-        print(actuelwidget)
+        # print(actuelwidget)
         if self.bouton_jaune.getActiveClavier() == True:
             if (actuelwidget != 5) and (actuelwidget != 4):
                 self.bouton_jaune.setActiveClavier(False)
@@ -74,10 +82,11 @@ class lobbyLocal(Frame):
     def jouer(self,event):
         from Game import Game
         self.jeu = Game(self.joueurs,None,20)
-        self.window = self.jeu.jeu(self.window)
+        # self.window = GameInterface(self.window)
+        config.Config.controller.changePage("GameInterface")
     
     def QuitterBouton(self,event):
-        self.window = Accueil(self.window, self.image_list)
+        config.Config.controller.changePage("Acceuil")
 
 if __name__ == "__main__":
     window = Tk()

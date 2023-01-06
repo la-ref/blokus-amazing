@@ -1,16 +1,27 @@
+from __future__ import annotations
 from tkinter import PhotoImage
 import tkinter
+# from Controller import Controller
 
 
 class config():
-    Config = None
+    Config : config
     
     def __init__(self, controller):
         
         self.largueur : int = 1440
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
+        self.imagepiece : dict = {}
         self.controller=controller
+        
+        import platform
+        if platform.system() == "Darwin":
+            self.taillePolice=[40,32,30]
+        elif platform.system() == "Windows" or platform.system() == "Linux":
+            self.taillePolice=[30,25,22]
+
+
         
         self.image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png")) #0
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_2.png")) #1
@@ -24,10 +35,10 @@ class config():
         self.image.append(PhotoImage(file="Plateau/assets/frame0/button_quit.png")) #7
         self.image.append(PhotoImage(file="Plateau/assets/frame0/game_board.png")) #8
         self.image.append(PhotoImage(file="Plateau/assets/frame0/empty_list.png")) #9
-        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_blue.png")) #10
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_yellow.png")) #10
         self.image.append(PhotoImage(file="Plateau/assets/frame0/player_green.png")) #11
         self.image.append(PhotoImage(file="Plateau/assets/frame0/player_red.png")) #12
-        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_yellow.png")) #13
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/player_blue.png")) #13
 
         # Lobby local
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/arriere_plan.png")) #14
@@ -42,6 +53,22 @@ class config():
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_user_gris.png")) #23
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_user_noir.png")) #24
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_vert.png")) #25
+
+        #Plateau 
+        self.image.append(PhotoImage(file="build/assets/frame0/AppBorder.png")) # 26
+        self.image.append(PhotoImage(file="build/assets/frame0/surrenderhover.png")) # 27
+        self.image.append(PhotoImage(file="build/assets/frame0/quitterhover.png")) # 28
+
+        #Piece
+        self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
+                    12:(PhotoImage(file="build/assets/piece/green.png")),
+                    13:(PhotoImage(file="build/assets/piece/red.png")),
+                    14:(PhotoImage(file="build/assets/piece/blue.png"))} 
+        
+
+        self.image[1] = self.image[1].subsample(2)
+        self.image[2] = self.image[2].subsample(2)
+        self.image[5] = self.image[5].subsample(2)
 
         
     @staticmethod

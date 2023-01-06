@@ -44,7 +44,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
 
 
-        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', 40),text=self.joueurs.getName(),anchor=tk.CENTER)
+        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueurs.getName(),anchor=tk.CENTER)
         self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
         
         
@@ -92,19 +92,19 @@ class lobbyUser(Frame):
         self.Noir_IA_1 = self.parent.create_image(self.w2,self.hf,image= self.image_list[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_1, "<Button-1>", self.facile)
         
-        self.text_facile = self.parent.create_text(self.w2,self.hf,text="FACILE",fill="#BBBBBB",font=("LilitaOne", 32),state=tk.HIDDEN)
+        self.text_facile = self.parent.create_text(self.w2,self.hf,text="FACILE",fill="#BBBBBB",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_facile, "<Button-1>", self.facile)
         
         self.Noir_IA_2 = self.parent.create_image(self.w2,self.hm,image= self.image_list[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_2, "<Button-1>", self.moyen)
         
-        self.text_moyen = self.parent.create_text(self.w2,self.hm,text="MOYEN",fill="#FFFFFF",font=("LilitaOne", 32),state=tk.HIDDEN)
+        self.text_moyen = self.parent.create_text(self.w2,self.hm,text="MOYEN",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_moyen, "<Button-1>", self.moyen)
         
         self.Noir_IA_3 = self.parent.create_image(self.w2,self.he,image= self.image_list[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_3, "<Button-1>", self.moyen)
         
-        self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", 32),state=tk.HIDDEN)
+        self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_expert, "<Button-1>", self.expert)
         
         self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[20])
@@ -225,14 +225,14 @@ class lobbyUser(Frame):
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 30))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[2]))
 
             else:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 40))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[0]))
                 tailles = self.parent.bbox(self.text)
                 width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', 30))
+                    self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[2]))
 
 
     def boutonSwitchIA(self,event):

@@ -5,10 +5,10 @@ from tkinter import PhotoImage
 import Pieces as p
 import numpy as np
 import Block as b
+from config import config
 class Pieces_placement(tk.Frame):
-    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str, controller):
+    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
         super(Pieces_placement,self).__init__(parent)
-        self.controller=controller
         self.window = window
         self.window.bind("<Motion>", self.on_drag)
         self.parent = parent
@@ -29,7 +29,8 @@ class Pieces_placement(tk.Frame):
         # self.tableau_piece_co = []
         self.mon_state = 0
 
-        self.tableau_piece=PD.LISTEPIECES[la_piece].getDelimitation()
+        self.piece=PD.LISTEPIECES[la_piece]
+        self.tableau_piece=self.piece.getDelimitation()
         self.image = self.imagepiece[self.nb_player]
         self.image = self.image.subsample(2)
         self.image2 = self.image.subsample(28)
@@ -107,12 +108,22 @@ class Pieces_placement(tk.Frame):
         '''
         Fonction interne pour permettre le deplacement des blocks au clique
         '''
-        ## si pas en mvt, enregistre la position relative avec la souris
+        ## reset la piece
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
             for block in self.tableau_piece_forme:
                 block.on_click(event)
         else:
-            print(self.getPieceBoardCoord())
+            ## teste si peut placer
+            col,lig,dc,dl = self.getPieceBoardCoord()
+            if config.Config.controller.placePiece(self.piece,col,lig,dc,dl):
+                # supprime si oui
+                for piece in self.tableau_piece_forme:
+                    piece.delete()
+            else:
+                # remet la piece à la position si non
+                for block in self.tableau_piece_forme:
+                    block.on_click(event)
+                
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
         # self.delta = 
@@ -141,13 +152,18 @@ class Pieces_placement(tk.Frame):
         # self.parent.move(event.x,event.y)
         
     def getPieceBoardCoord(self):
-        '''
-        Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
+        '''Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
+        
+        Returns:
+            - int : colonne du premier cube de la piece
+            - int : ligne du premier cube de la piece
+            - int : décalage entre la colonne du premier cube de la piece et celle de l'origine de la piece.
+            - int : décalage entre la ligne du premier cube de la piece et celle de l'origine de la piece.
         '''
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
-        return (x-450)//27,(y-242)//27
+        return (x-450)//27+dx,(y-242)//27+dy,dx,dy
 
     def getPieceCoord(self):
         '''

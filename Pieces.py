@@ -96,7 +96,7 @@ class Pieces:
             self (Pieces): pieces
         """
         self.__delimitation : np.ndarray = np.rot90(self.__delimitation,1,axes=(1,0))
-        self.__forme : np.ndarray = np.rot90(self.__delimitation,1,axes=(1,0))
+        self.__forme : np.ndarray = np.rot90(self.__forme,1,axes=(1,0))
 
     def flip(self : Pieces) -> None:
         """Méthode permettant de retourner horizontalement une piece et la delimitation
@@ -105,7 +105,7 @@ class Pieces:
             self (Pieces): pieces
         """
         self.__delimitation : np.ndarray = np.fliplr(self.__delimitation)
-        self.__forme : np.ndarray = np.fliplr(self.__delimitation)
+        self.__forme : np.ndarray = np.fliplr(self.__forme)
 
     def getNbCorners(self : Pieces) -> int:
         """Méthode permettant de connaître le nombre de coin d'une pièce
