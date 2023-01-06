@@ -22,6 +22,8 @@ class GridInterface(tk.Frame):
         self.images.append(PhotoImage(file="build/assets/frame0/board.png"))
         self.images.append(PhotoImage(file="build/assets/frame0/button_give_up.png"))
         self.images.append(PhotoImage(file="build/assets/frame0/button_quit.png"))
+        self.images.append(PhotoImage(file="surrenderhover.png"))
+        self.images.append(PhotoImage(file="quitterhover.png"))
         self.imageplateau = self.parent.create_image(  #270x270
             0,
             0,
@@ -51,14 +53,62 @@ class GridInterface(tk.Frame):
             anchor=tk.NW
         )
         self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+        self.parent.tag_bind(self.giveUp, "<Enter>",lambda *_: self.hoverSurrender("enter"))
+        self.parent.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
-        self.surrender = self.parent.create_image(
+        self.quitter = self.parent.create_image(
             (1440//2)-(self.images[8].width()//2), 
             820, 
             image=self.images[8],
             anchor=tk.NW
         )
-        self.parent.tag_bind(self.surrender, "<Button-1>",lambda *_: self.leave())
+        self.parent.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
+        self.parent.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
+        self.parent.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
+
+    def hoverSurrender(self,typ : str):
+        self.parent.delete(self.giveUp)
+        if typ == "enter":
+            self.giveUp = self.parent.create_image(
+                (1440//2)-(self.images[9].width()//2), 
+                120, 
+                image=self.images[9],
+                anchor=tk.NW
+            )
+            self.parent.config(cursor="hand2")
+            self.parent.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
+        elif typ == "leave":
+            self.giveUp = self.parent.create_image(
+                (1440//2)-(self.images[7].width()//2), 
+                120, 
+                image=self.images[7],
+                anchor=tk.NW
+            )
+            self.parent.config(cursor="")
+            self.parent.tag_bind(self.giveUp, "<Enter>",lambda *_: self.hoverSurrender("enter"))
+        self.parent.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+
+    def hoverLeave(self,typ : str):
+        self.parent.delete(self.quitter)
+        if typ == "enter":
+            self.quitter = self.parent.create_image(
+                (1440//2)-(self.images[10].width()//2), 
+                820, 
+                image=self.images[10],
+                anchor=tk.NW
+            )
+            self.parent.config(cursor="hand2")
+            self.parent.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
+        elif typ == "leave":
+            self.quitter = self.parent.create_image(
+                (1440//2)-(self.images[8].width()//2), 
+                820, 
+                image=self.images[8],
+                anchor=tk.NW
+            )
+            self.parent.config(cursor="")
+            self.parent.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
+        self.parent.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
 
     def setController(self,control):
         self.controller = control
@@ -87,7 +137,6 @@ class GridInterface(tk.Frame):
                     self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
     
     def refreshPlayer(self,playerColor):
-        print("caca",playerColor)
         if playerColor:
             for bord in self.bordure:
                 self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])

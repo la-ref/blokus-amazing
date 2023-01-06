@@ -120,4 +120,49 @@ class Game:
                 if ajout:
                     joueur.ajoutTour()
                     joueur.removePiece(str(pieceid))
+        if (len(joueur.getPieces()) == 0): # si un joueur a fini
+            self.addSurrenderedPlayer()
+        if self.getWinners():
+            print(self.getWinners())
+            return
         self.__nextPlayer()
+
+
+    def countBlocks(self,joueur : Player):
+        counter = 0
+        for i in range(self.__plateau.getBoardSize()):
+            for y in range(self.__plateau.getBoardSize()):
+                if (joueur.getColor() == self.__plateau.getColorAt(i,y)):
+                    counter+=1
+        return counter
+
+
+    def getWinners(self):
+        if (len(self.__joueursAbandon) == len(self.__joueurs)):
+            blockCount = []
+            winners = []
+            for joueur in self.__joueurs:
+                blockCount.append(self.countBlocks(joueur))
+            for i in range(len(blockCount)):
+                if blockCount[i] == max(blockCount):
+                    winners.append(self.__joueurs[i])
+            return winners
+        return False
+
+    def game(self,pieceId,x,y,decax,decay):
+        if not self.isPlayerSurrendered():
+            joueur = self.__joueurs[self.__currentPlayerPos]
+            piece = joueur.getPiece(str(pieceId))
+            ajout = False
+            if piece:
+                ajout = (self.__plateau.ajouterPiece(piece,int(x),int(y),joueur,int(decax),int(decay)))
+                joueur.ajoutTour()
+                joueur.removePiece(str(pieceId))
+                if (len(joueur.getPieces()) == 0): # si un joueur a fini
+                    self.addSurrenderedPlayer()
+                winners = self.getWinners()
+                if winners:
+                    return winners
+                self.__nextPlayer()
+            return ajout
+        return False

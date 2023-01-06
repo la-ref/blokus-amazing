@@ -7,6 +7,7 @@ from PIL import ImageTk
 from GridInterface import GridInterface
 from Player import Player
 class Controller:
+    Control = None
     def __init__(self) -> None:
         self.playing = True
         self.game : Game = Game(None,None,20)
@@ -165,5 +166,18 @@ class Controller:
 # while 1:
 #     task(board,game)
 
+    @staticmethod
+    def CreateController():
+        if not Controller.Control:
+            Controller.Control = Controller()
+            
+    @staticmethod
+    def GetController():
+        return Controller.Control
+
+
 if __name__ == "__main__":
-    c = Controller()
+    Controller.CreateController()
+
+# if __name__ == "__main__":
+#     c = Controller()
