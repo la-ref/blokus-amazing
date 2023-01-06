@@ -80,7 +80,7 @@ class Game:
         
         List4 = PG.PiecesListGUI(self.window,border,images,"Joueur 4",4)
         List4.move(x=70,y=524)
-        Mv.MouvementManager(List4,True,True)
+
         
 
         def task():
