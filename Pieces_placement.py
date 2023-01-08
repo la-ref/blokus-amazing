@@ -28,11 +28,11 @@ class Pieces_placement(tk.Frame):
         self.window.bind("<Motion>", self.on_drag, add='+')
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
-        self.nb_player = nb_player
-        self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
-                            12:(PhotoImage(file="build/assets/piece/green.png")),
-                            13:(PhotoImage(file="build/assets/piece/red.png")),
-                            14:(PhotoImage(file="build/assets/piece/blue.png"))}
+        self.nb_player = nb_player-11
+        self.imagepiece = { 0:(PhotoImage(file="build/assets/piece/yellow.png")),
+                            1:(PhotoImage(file="build/assets/piece/green.png")),
+                            2:(PhotoImage(file="build/assets/piece/red.png")),
+                            3:(PhotoImage(file="build/assets/piece/blue.png"))}
         self.x = 0
         self.y = 0
         self.la_piece = la_piece
@@ -360,7 +360,7 @@ class Pieces_placement(tk.Frame):
         else:
             ## teste si peut placer
             col,lig,dc,dl = self.getPieceBoardCoord()
-            if config.Config.controller.placePiece(self.piece,col,lig,dc,dl):
+            if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
                 # supprime si oui
                 for piece in self.tableau_piece_forme:
                     piece.delete()

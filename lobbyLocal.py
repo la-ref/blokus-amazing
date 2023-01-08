@@ -81,7 +81,7 @@ class lobbyLocal(Frame):
 
     def jouer(self,event):
         from Game import Game
-        self.jeu = Game(self.joueurs,None,20)
+        config.Config.controller.game = Game(self.joueurs,None,20)
         # self.window = GameInterface(self.window)
         config.Config.controller.changePage("GameInterface")
     

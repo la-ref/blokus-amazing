@@ -57,10 +57,9 @@ class GridInterface(tk.Frame):
     
     def refreshPlayer(self,playerColor):
         print("test",playerColor)
-        if playerColor:
-            for bord in self.bordure:
-                self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])
-                self.parent.tag_raise(bord)
+        for bord in self.bordure:
+            self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])
+            self.parent.tag_raise(bord)
     
         
     def move(self, x : int, y : int):

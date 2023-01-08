@@ -141,3 +141,4 @@ class Pieces:
             int: identifiant de la pièce
         """
         return self.__id
+

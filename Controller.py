@@ -51,11 +51,14 @@ class Controller(tk.Tk):
 
     def updateBoard(self):
         self.vueJeu.refreshBoard(self.game.getBoard())
+        print(self.game.getCurrentPlayerId(),"CONTROLLER CURRENT")
+        self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId())
 
     def surrender(self : Controller):
         print("hihihieooozo")
         if not self.game.isPlayerSurrendered():
             self.game.addSurrenderedPlayer()
+
     
     def getBoard(self : Controller):
         return self.game.getBoard()
@@ -172,7 +175,7 @@ class Controller(tk.Tk):
 #     task(board,game)
 
 
-    def placePiece(self, piece : Pieces, colonne : int, ligne : int, dc : int, dl : int):
+    def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int):
         '''Fonction de liaison entre le placement d'une piece graphique et moteur
         
         Args:
@@ -186,8 +189,16 @@ class Controller(tk.Tk):
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         '''
-        print("2",piece.getDelimitation())
-        return self.game.playTurn(piece, colonne, ligne, dc, dl)
+        if joueur == self.game.getCurrentPlayerId():
+
+            print("2",piece.getDelimitation())
+            play = self.game.playTurn(piece, colonne, ligne, dc, dl)
+            print(play)
+            return play
+        else:
+            print("false")
+            # Piece d'autres joueur
+            return False
 
 if __name__ == "__main__":
     global CT

@@ -18,11 +18,10 @@ class Game:
             plateau (Board | None): plateau de jeu ou rien
             taille (int): taille du plateau de jeu
         """
-        self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier")]#,Player(14,"inconnu")]
+        self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
-        self.joueur = self.getCurrentPlayer()
     
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -62,12 +61,22 @@ class Game:
 
     def addSurrenderedPlayer(self : Game) -> None:
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
+        self.__nextPlayer()
+        config.Config.controller.updateBoard()
+        return self.getWinners()
 
     def isPlayerSurrendered(self : Game) -> bool:
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
 
-    def __nextPlayer(self):
-        self.__currentPlayerPos = (self.__currentPlayerPos+1)%4
+    def __nextPlayer(self) -> Player:
+        self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
+        while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
+            self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
+        print(self.__currentPlayerPos,"GAME NEXT")
+        config.Config.controller.updateBoard()
+
+        
+        
 
 
     # def jeu(self : Game):
@@ -136,30 +145,55 @@ class Game:
                     joueur.removePiece(str(pieceid))
         self.__nextPlayer()
         
+    def countBlocks(self,joueur : Player):
+        counter = 0
+        for i in range(self.__plateau.getBoardSize()):
+            for y in range(self.__plateau.getBoardSize()):
+                if (joueur.getColor() == self.__plateau.getColorAt(i,y)):
+                    counter+=1
+        return counter
+
+
+    def getWinners(self):
+        if (len(self.__joueursAbandon) == len(self.__joueurs)):
+            blockCount = []
+            winners = []
+            for joueur in self.__joueurs:
+                blockCount.append(self.countBlocks(joueur))
+            for i in range(len(blockCount)):
+                if blockCount[i] == max(blockCount):
+                    winners.append(self.__joueurs[i])
+            return winners
+        return False
+    
+        
         
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int):
-
-        if not self.isPlayerSurrendered():
-            print("c'est a : ",self.joueur.getName()) 
-            
-            d= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.joueur,int(dc),int(dl))
-            if d:
-                self.joueur.removePiece(str(piece.getIdentifiant()))
+        if len(self.__joueursAbandon) != len(self.__joueurs):
                 
-                print("passe !")
-                # prep tour suivant
-                self.__nextPlayer()
-                self.joueur = self.getCurrentPlayer()
-                config.Config.controller.updateBoard()
-                # config.Config.controller.updatePlayers(self.joueur)
-                return True
-           
-        else:
-            # cas de joueur fantôme
-            self.__nextPlayer()
-            self.joueur = self.getCurrentPlayer()
-            self.playTurn(piece,colonne,ligne,dc,dl)
-        return False
+            print("c'est a : ",self.getCurrentPlayer().getName()) 
             
+            d= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+            if d:
+                self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                self.getCurrentPlayer().ajoutTour()
+
+
+            
+                if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
+                    self.addSurrenderedPlayer()
+                else:
+                    self.__nextPlayer()
+                config.Config.controller.updateBoard()
+                # prep tour suivant
+                
+                # config.Config.controller.updatePlayers(self.getCurrentPlayer())
+                
+                return True
+        
+
+        else:
+            print("tous les joueurs ont fini !")
+            return False
 
     # def setPiece():
