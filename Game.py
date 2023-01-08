@@ -151,7 +151,7 @@ class Game:
                 self.__nextPlayer()
                 self.joueur = self.getCurrentPlayer()
                 config.Config.controller.updateBoard()
-                config.Config.controller.updatePlayers()
+                # config.Config.controller.updatePlayers(self.joueur)
                 return True
            
         else:

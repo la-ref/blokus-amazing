@@ -56,7 +56,7 @@ class GridInterface(tk.Frame):
                     self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
     
     def refreshPlayer(self,playerColor):
-        print("caca <-- immature",playerColor)
+        print("test",playerColor)
         if playerColor:
             for bord in self.bordure:
                 self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])

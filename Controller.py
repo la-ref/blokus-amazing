@@ -46,8 +46,8 @@ class Controller(tk.Tk):
         
 
 
-    def updatePlayers(self,couleur : int):
-        self.vueJeu.refreshPlayer(couleur)
+    # def updatePlayers(self,couleur : int):
+    #     self.vueJeu.refreshPlayer(couleur)
 
     def updateBoard(self):
         self.vueJeu.refreshBoard(self.game.getBoard())
