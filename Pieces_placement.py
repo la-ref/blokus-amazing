@@ -262,7 +262,7 @@ class Pieces_placement(tk.Frame):
                 self.tableau_piece_forme = self.saveliste
 
                 for block in self.tableau_piece_forme:
-                    block.recreate(block.save_y,block.save_x,self.image)
+                    block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
@@ -273,15 +273,26 @@ class Pieces_placement(tk.Frame):
             col,lig,dc,dl = self.getPieceBoardCoord()
             if config.Config.controller.placePiece(self.piece,col,lig,dc,dl):
                 # supprime si oui
+                print("ouiiiiiiiiiiiiiiii")
                 for piece in self.tableau_piece_forme:
+                    self.parent.delete(piece)
+                for piece in self.saveliste:
                     self.parent.delete(piece)
             else:
                 # remet la piece à la position si non
-                self.image = self.imagepiece[self.nb_player]
-                self.ok = 0
+                for piece in self.tableau_piece_forme:
+                    objet = self.parent.find_withtag(piece.bl)
+                    ma_piece = objet[0]
+                    self.parent.delete(ma_piece)
+                
+                self.tableau_piece_forme = self.saveliste
+
                 for block in self.tableau_piece_forme:
-                    block.on_click(event)
-                    self.parent.itemconfigure(block.bl, image=self.image)
+                    block.recreate(block.save_x,block.save_y,self.image)
+                    self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
+                    self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                    self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    block.state = 0
 
         
         
