@@ -67,7 +67,7 @@ class Pieces_placement(tk.Frame):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
                     self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
                     self.tableau_piece_forme.append(test)
                     
     def getPieceBoardCoord(self):
@@ -168,7 +168,7 @@ class Pieces_placement(tk.Frame):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
                     self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
                     le_block.move(self.back_x-self.x,self.back_y-self.y)
                     le_block.state = 1
@@ -179,16 +179,12 @@ class Pieces_placement(tk.Frame):
             piece.move(piece.base_xoff,piece.base_yoff)
         
         # Sélection des coordonnées du premier bloc
-        # self.premier = 0
-        # for piece in self.tableau_piece_forme:
-        #     if self.premier == 0:
         piece = self.tableau_piece_forme[0]
         self.oy2,self.ox2=self.parent.coords(piece.bl)
         differenceX = self.le_x+piece.base_xoff
         differenceY = self.le_y+piece.base_yoff
         self.le_x = self.le_x-differenceX
         self.le_y = self.le_y-differenceY
-                # self.premier = 1
 
         # Téléportation de la pièce à la souris en fonction des coordonnées du premier bloc
         for piece in self.tableau_piece_forme:
@@ -322,13 +318,12 @@ class Pieces_placement(tk.Frame):
                 self.saveliste = self.tableau_piece_forme
 
                 # Change les coordonnés de téléportation au premier bloc de la pièce
-                self.ok = 0
-                for piece in self.tableau_piece_forme:
-                    if self.ok == 0:
-                        self.oy2,self.ox2=self.parent.coords(piece.bl)
-                        self.le_x = self.le_x-self.ox2
-                        self.le_y = self.le_y-self.oy2
-                        self.ok = 1
+                piece = self.tableau_piece_forme[0]
+                self.oy2,self.ox2=self.parent.coords(piece.bl)
+                differenceX = self.le_x+piece.base_xoff
+                differenceY = self.le_y+piece.base_yoff
+                self.le_x = self.le_x-differenceX
+                self.le_y = self.le_y-differenceY
                     
                 # Supprime tous les blocs
                 for piece in self.tableau_piece_forme:
@@ -359,7 +354,7 @@ class Pieces_placement(tk.Frame):
                     block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
                     block.state = 0
         
         else:
