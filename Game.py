@@ -75,7 +75,7 @@ class Game:
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
-        print(self.__currentPlayerPos,"GAME NEXT")
+        # print(self.__currentPlayerPos,"GAME NEXT")
         config.Config.controller.updateBoard()
 
     def isGameFinished(self) -> bool:

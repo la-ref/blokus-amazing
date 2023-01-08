@@ -58,9 +58,7 @@ class Controller(tk.Tk):
         self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
 
     def surrender(self : Controller):
-        print("hihihieooozo")
         if not self.game.isPlayerSurrendered():
-            print(self.game.getCurrentPlayerId())
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
             self.game.addSurrenderedPlayer()
 
@@ -199,9 +197,9 @@ class Controller(tk.Tk):
         '''
         if joueur == self.game.getCurrentPlayerId():
 
-            print("2",piece.getDelimitation())
+            # print("2",piece.getDelimitation())
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
-            print(play)
+            # print(play)
             return play
         else:
             # Piece d'autres joueur

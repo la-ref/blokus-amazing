@@ -83,17 +83,23 @@ class Accueil(Frame):
         if typ == "entre":
             if typ2 == "quitter":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[31])
+                self.canvas.config(cursor="hand2")
             elif typ2 == "horsligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[29])
+                self.canvas.config(cursor="hand2")
             elif typ2 == "enligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[30])
+                self.canvas.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "quitter":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[2])
+                self.canvas.config(cursor="")
             elif typ2 == "horsligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[5])
+                self.canvas.config(cursor="")
             elif typ2 == "enligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[1])
+                self.canvas.config(cursor="")
 
     def QuitterBouton(self,event):
         self.window.destroy()

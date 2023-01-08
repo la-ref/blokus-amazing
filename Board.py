@@ -77,7 +77,7 @@ class Board:
                     or (row == 0 and column == self.__size-1))
         return False
 
-    def __verifyApplicationStart(self: Board,row : int,column : int,decaX,decaY,player : Player,delim) -> bool:
+    def __verifyApplicationStart(self: Board,row : int,column : int,player : Player,delim : tuple) -> bool:
         """Méthode privé permettant de vérifier pour un joueur souhaitant placer une pièce sur la plateau
         si c'est son 1er tour et en conséquence de déterminer si il commence dans les coins du plateau ou non
 
@@ -91,9 +91,9 @@ class Board:
             bool: vrai si le joueur est dans les coins et que c'est son 1er tour,faux sinon
         """
         for i in range(len(delim)):
-            for y in range(len(delim[0])):
-                if ((i+decaY) < len(delim) and y+decaX < len(delim[0])):
-                    if delim[i+decaY][y+decaX] == 3 and self.isInCorner((row+i),(column+y)):
+            for v in range(len(delim[0])):
+                if ((row+i >=0) and (row+i < self.__size) and (column+v >=0) and (column+v < self.__size)):
+                    if delim[i][v] == 3 and self.isInCorner((row+i),(column+v)):
                         return player.getNbTour() == 0
         return False
 
@@ -139,7 +139,7 @@ class Board:
                     if (delimitation[i][v] == 2):
                         cornerReduction+=1
 
-        if self.__verifyApplicationStart(row,column,declageX,declageY,player,delimitation): #self.__verifyApplicationStart(y+declageY,x+declageX,player): # Vérification si le joueur 
+        if self.__verifyApplicationStart(y,x,player,delimitation): #self.__verifyApplicationStart(y+declageY,x+declageX,player): # Vérification si le joueur 
             return True
         if ((nbCorners-cornerReduction) == countCorners): # Vérification si la pièce est rattaché à un coin
             return False

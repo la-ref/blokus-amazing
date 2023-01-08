@@ -48,7 +48,6 @@ class PiecesListGUI(tk.Frame):
 
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
-            print(decalageX)
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
 

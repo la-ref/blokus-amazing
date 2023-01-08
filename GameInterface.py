@@ -60,7 +60,6 @@ class GameInterface(tk.Frame):
 
 
     def callBackGiveUp(self):
-        print(config.Config.controller)
         if config.Config.controller:
             from Controller import Controller
             config.Config.controller.surrender()
@@ -121,7 +120,6 @@ class GameInterface(tk.Frame):
                 self.List4.surrender()
 
     def leave(self):
-        print("wohoho")
             # self.controller.surrender() for online
         # config.Config.controller.updateWindows()
         #self.destroy()
