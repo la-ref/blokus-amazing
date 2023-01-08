@@ -140,16 +140,18 @@ class Game:
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int):
 
         if not self.isPlayerSurrendered():
-            print("c'est a : ",self.joueur.getName())   
-            if self.__plateau.ajouterPiece(piece,colonne,ligne,self.joueur,dc+1,dl+1):
+            print("c'est a : ",self.joueur.getName()) 
+            
+            d= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.joueur,int(dc),int(dl))
+            if d:
                 self.joueur.removePiece(str(piece.getIdentifiant()))
                 
-                
+                print("passe !")
                 # prep tour suivant
                 self.__nextPlayer()
                 self.joueur = self.getCurrentPlayer()
                 config.Config.controller.updateBoard()
-                
+                config.Config.controller.updatePlayers()
                 return True
            
         else:

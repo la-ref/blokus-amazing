@@ -66,10 +66,6 @@ class config():
                     14:(PhotoImage(file="build/assets/piece/blue.png"))} 
         
 
-        self.image[1] = self.image[1].subsample(2)
-        self.image[2] = self.image[2].subsample(2)
-        self.image[5] = self.image[5].subsample(2)
-
         
     @staticmethod
     def initialisation(controller):

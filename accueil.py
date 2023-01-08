@@ -37,6 +37,8 @@ class Accueil(Frame):
             anchor=tkinter.NW
         )
         canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
+        canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverLeave("enter","horsligne"))
+        canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverLeave("leave","horsligne"))
 
 
         EnLigneBouton = canvas.create_image(
@@ -45,6 +47,8 @@ class Accueil(Frame):
             image=config.Config.image[1],
             anchor=tkinter.NW
         )
+        canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverLeave("enter","enligne"))
+        canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverLeave("leave","enligne"))
 
 
         QuitterBouton = canvas.create_image(
@@ -54,6 +58,8 @@ class Accueil(Frame):
             anchor=tkinter.NW
         )
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
+        canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverLeave("enter","quitter"))
+        canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverLeave("leave","quitter"))
 
         
 
@@ -71,7 +77,28 @@ class Accueil(Frame):
             image=config.Config.image[4],
             anchor=tkinter.NW
         )
-
+    # def hoverLeave(self,typ : str,typ2 : str):
+    #     if typ2 == ""
+    #     self.border.delete(self.quitter)
+    #     if typ == "enter":
+    #         self.quitter = self.border.create_image(
+    #             (1440//2)-(config.Config.image[28].width()//2), 
+    #             820, 
+    #             image=config.Config.image[28],
+    #             anchor=tk.NW
+    #         )
+    #         self.border.config(cursor="hand2")
+    #         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
+    #     elif typ == "leave":
+    #         self.quitter = self.border.create_image(
+    #             (1440//2)-(config.Config.image[7].width()//2), 
+    #             820, 
+    #             image=config.Config.image[7],
+    #             anchor=tk.NW
+    #         )
+    #         self.border.config(cursor="")
+    #         self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
+    #     self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
     def QuitterBouton(self,event):
         self.window.destroy()
     
