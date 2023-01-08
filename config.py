@@ -66,6 +66,10 @@ class config():
         
         #Plateau
         self.image.append(PhotoImage(file="build/assets/frame0/player_surrender.png")) # 32
+
+        #Hover accueil
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/button_4_hover.png")) #33
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/button_5_hover.png")) #34
     
         #Piece
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),

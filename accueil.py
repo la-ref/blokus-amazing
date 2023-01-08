@@ -71,6 +71,9 @@ class Accueil(Frame):
             image=config.Config.image[3],
             anchor=tkinter.NW
         )
+        canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
+        canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
+
 
 
         BoutonInfo = canvas.create_image(
@@ -79,6 +82,9 @@ class Accueil(Frame):
             image=config.Config.image[4],
             anchor=tkinter.NW
         )
+        canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
+        canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
+
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         if typ == "entre":
             if typ2 == "quitter":
@@ -90,6 +96,12 @@ class Accueil(Frame):
             elif typ2 == "enligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[30])
                 self.canvas.config(cursor="hand2")
+            elif typ2 == "leader":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[33])
+                self.canvas.config(cursor="hand2")
+            elif typ2 == "info":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[34])
+                self.canvas.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "quitter":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[2])
@@ -99,6 +111,12 @@ class Accueil(Frame):
                 self.canvas.config(cursor="")
             elif typ2 == "enligne":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[1])
+                self.canvas.config(cursor="")
+            elif typ2 == "leader":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[3])
+                self.canvas.config(cursor="")
+            elif typ2 == "info":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[4])
                 self.canvas.config(cursor="")
 
     def QuitterBouton(self,event):
