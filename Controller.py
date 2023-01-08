@@ -21,7 +21,7 @@ class Controller(tk.Tk):
         self.joueurs = [Player(11,"PERSONNE 1"),Player(12,"PERSONNE 2"),Player(13,"PERSONNE 3"),Player(14,"PERSONNE 4")]
         self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
 
-        self.game : Game = Game(None,None,20)
+        self.game : Game = Game(self.joueurs,None,20)
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         # self.border = tk.Canvas()
 
@@ -43,6 +43,9 @@ class Controller(tk.Tk):
         self.vueJeu = self.frames[nomFrame]
         self.vueJeu.initialize(self.joueurs)
         self.vueJeu.tkraise()
+    
+    def changePlayer(self, players : list[Player],id : int):
+        self.joueurs[id] = players
         
 
 
