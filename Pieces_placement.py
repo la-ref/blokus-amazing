@@ -65,7 +65,6 @@ class Pieces_placement(tk.Frame):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
-                    self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
                     self.tableau_piece_forme.append(test)
@@ -166,7 +165,6 @@ class Pieces_placement(tk.Frame):
                 self.y+=self.image.width()
                 if (self.tableau_piece[i][v] == 3):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
-                    self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
@@ -352,7 +350,6 @@ class Pieces_placement(tk.Frame):
                 # Re-création de la pièce à l'endroit d'initialisation
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
                     block.state = 0
@@ -382,7 +379,6 @@ class Pieces_placement(tk.Frame):
                 # Re-création de la pièce à l'endroit d'initialisation
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
