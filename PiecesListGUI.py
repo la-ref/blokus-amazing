@@ -5,6 +5,7 @@ from tkinter import PhotoImage
 import Pieces as p
 import numpy as np
 import Pieces_placement as PP
+from config import config
 
 class PiecesListGUI(tk.Frame):
     
@@ -13,37 +14,32 @@ class PiecesListGUI(tk.Frame):
     #   Creer l'élément de gui pour la liste des pieces
     #
     #
-    def __init__(self, window, parent : tk.Canvas, images : list, playerName : str, nb_player : int, height : int = 420, width : int = 317):
+    def __init__(self, window, parent : tk.Canvas, playerName : str, nb_player : int, height : int = 420, width : int = 317):
         super(PiecesListGUI,self).__init__(parent)
         
         self.parent = parent
         self.list = self.parent.create_image(
             0,
             0,
-            image=images[0],
+            image=config.Config.image[9],
             anchor=tk.NW
         )
         
         self.nameZone = self.parent.create_image(
             15,
             10,
-            image=images[nb_player],
+            image=config.Config.image[nb_player],
             anchor=tk.NW
         )
         
         
         self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', 32),text=playerName,anchor=tk.CENTER)
-
-        self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
-                            12:(PhotoImage(file="build/assets/piece/green.png")),
-                            13:(PhotoImage(file="build/assets/piece/red.png")),
-                            14:(PhotoImage(file="build/assets/piece/blue.png"))}
         
         decalageX = 2
         decalageY = 100
         self.tableau_piece = []
         self.tableau_piece_forme = []
-        nb_player = nb_player+10
+        nb_player = nb_player+1
         i1 = 0
         maxheight = 0
         for valeur in PD.LISTEPIECES:
@@ -104,14 +100,7 @@ if __name__=="__main__":
     border.config(bg="white")
     border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
     
-    images = []
-    images.append(Image.open("build/assets/frame0/empty_list.png"))
-    images.append(Image.open("build/assets/frame0/player_blue.png"))
-    Photo_images = []
-    Photo_images.append(ImageTk.PhotoImage(images[0]))
-    Photo_images.append(ImageTk.PhotoImage(images[1].rotate(angle=00, expand=True)))
-    
-    accueil=PiecesListGUI(border,Photo_images,"Caaka",1)
+    accueil=PiecesListGUI(window, border,"Caaka",1)
     accueil.changeName("Joueur 1")
 
 
