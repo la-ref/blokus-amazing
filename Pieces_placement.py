@@ -260,7 +260,8 @@ class Pieces_placement(tk.Frame):
                     self.parent.delete(ma_piece)
                 
                 self.tableau_piece_forme = self.saveliste
-
+                self.image = self.imagepiece[self.nb_player]
+                self.image = self.image.subsample(2)
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)

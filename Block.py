@@ -35,8 +35,6 @@ class Block(tk.Frame):
 
         ## sert à savoir si elle est en mvt
         self.state = 0
-        
-        
         self.bl = self.parent.create_image(
             base_x,
             base_y,
