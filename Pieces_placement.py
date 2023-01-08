@@ -248,7 +248,8 @@ class Pieces_placement(tk.Frame):
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
-        self.mon_state=(self.mon_state+1)%2
+        if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+            self.mon_state=(self.mon_state+1)%2
 
 
     def on_drag(self, event):
