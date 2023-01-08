@@ -159,12 +159,12 @@ class Pieces_placement(tk.Frame):
         self.y=0
 
         # Création de la pièce
-        for i in range(len(self.tableau_piece[0])):
-            self.y+=self.image.height()
-            self.x = 0
-            for v in range(len(self.tableau_piece)):
-                self.x+=self.image.width()
-                if (self.tableau_piece[v][i] == 3):
+        for i in range(len(self.tableau_piece)):
+            self.x+=self.image.height()
+            self.y = 0
+            for v in range(len(self.tableau_piece[0])):
+                self.y+=self.image.width()
+                if (self.tableau_piece[i][v] == 3):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
                     self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
@@ -179,15 +179,16 @@ class Pieces_placement(tk.Frame):
             piece.move(piece.base_xoff,piece.base_yoff)
         
         # Sélection des coordonnées du premier bloc
-        self.premier = 0
-        for piece in self.tableau_piece_forme:
-            if self.premier == 0:
-                self.ox2,self.oy2=self.parent.coords(piece.bl)
-                differenceX = self.le_x+piece.base_xoff
-                differenceY = self.le_y+piece.base_yoff
-                self.le_x = self.le_x-differenceX
-                self.le_y = self.le_y-differenceY
-                self.premier = 1
+        # self.premier = 0
+        # for piece in self.tableau_piece_forme:
+        #     if self.premier == 0:
+        piece = self.tableau_piece_forme[0]
+        self.oy2,self.ox2=self.parent.coords(piece.bl)
+        differenceX = self.le_x+piece.base_xoff
+        differenceY = self.le_y+piece.base_yoff
+        self.le_x = self.le_x-differenceX
+        self.le_y = self.le_y-differenceY
+                # self.premier = 1
 
         # Téléportation de la pièce à la souris en fonction des coordonnées du premier bloc
         for piece in self.tableau_piece_forme:
@@ -324,7 +325,7 @@ class Pieces_placement(tk.Frame):
                 self.ok = 0
                 for piece in self.tableau_piece_forme:
                     if self.ok == 0:
-                        self.ox2,self.oy2=self.parent.coords(piece.bl)
+                        self.oy2,self.ox2=self.parent.coords(piece.bl)
                         self.le_x = self.le_x-self.ox2
                         self.le_y = self.le_y-self.oy2
                         self.ok = 1
