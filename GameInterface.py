@@ -15,7 +15,7 @@ class GameInterface(tk.Frame):
         self.window = window
         
         
-    def initialize(self,joueurs):
+    def initialize(self):
         for widgets in self.winfo_children():
             widgets.destroy()
             
@@ -26,16 +26,16 @@ class GameInterface(tk.Frame):
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,joueurs[0].getName().upper(),10)
+        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName().upper(),10)
         self.List1.move(x=70,y=80)
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,joueurs[1].getName().upper(),11)
+        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName().upper(),11)
         self.List2.move(x=1047,y=80)
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,joueurs[2].getName().upper(),12)
+        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName().upper(),12)
         self.List3.move(x=1047,y=524)
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,joueurs[3].getName().upper(),13)
+        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName().upper(),13)
         self.List4.move(x=70,y=524)
 
         self.giveUp = self.border.create_image(

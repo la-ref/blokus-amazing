@@ -41,11 +41,12 @@ class Controller(tk.Tk):
         
     def changePage(self, nomFrame):
         self.vueJeu = self.frames[nomFrame]
-        self.vueJeu.initialize(self.joueurs)
+        self.vueJeu.initialize()
         self.vueJeu.tkraise()
     
     def changePlayer(self, players : list[Player],id : int):
         self.joueurs[id] = players
+        self.game.setPlayers(self.joueurs)
         
 
 
@@ -66,6 +67,9 @@ class Controller(tk.Tk):
     
     def getBoard(self : Controller):
         return self.game.getBoard()
+    
+    def getGame(self : Controller):
+        return self.game
 
     def updateWindows(self) -> None:
         self.playing = False

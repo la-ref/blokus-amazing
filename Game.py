@@ -34,6 +34,9 @@ class Game:
         """
         return self.__joueurs
     
+    def setPlayers(self : Game, list : list[Player]):
+        self.__joueurs : list[Player] = list
+
     def getCurrentPlayer(self : Game) -> Player:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
 
