@@ -18,7 +18,7 @@ class Controller(tk.Tk):
         #self.window = tk.Tk()
         
         config.initialisation(self)
-        
+        self.joueurs = [Player(11,"PERSONNE 1"),Player(12,"PERSONNE 2"),Player(13,"PERSONNE 3"),Player(14,"PERSONNE 4")]
         self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
 
         self.game : Game = Game(None,None,20)
@@ -41,7 +41,7 @@ class Controller(tk.Tk):
         
     def changePage(self, nomFrame):
         self.vueJeu = self.frames[nomFrame]
-        self.vueJeu.initialize()
+        self.vueJeu.initialize(self.joueurs)
         self.vueJeu.tkraise()
         
 

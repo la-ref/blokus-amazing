@@ -15,7 +15,7 @@ class lobbyLocal(Frame):
         self.window = window
 
 
-    def initialize(self):
+    def initialize(self,joueurs):
         for widgets in self.winfo_children():
             widgets.destroy()
         self.boutonUser = []
@@ -23,6 +23,7 @@ class lobbyLocal(Frame):
 
         self.image_list = config.Config.image
         self.touche = None
+        self.joueurs = joueurs
         self.joueurs = [Player.Player(11,"PERSONNE 1"),Player.Player(12,"PERSONNE 2"),Player.Player(13,"PERSONNE 3"),Player.Player(14,"PERSONNE 4")]
         self.window.bind("<Key>", self.touches)
         self.canvas = Canvas(

@@ -9,7 +9,7 @@ class Accueil(Frame):
         super(Accueil, self).__init__()
         self.window = window
 
-    def initialize(self):
+    def initialize(self,joueurs):
         for widgets in self.winfo_children():
             widgets.destroy()
         

@@ -55,11 +55,15 @@ class GridInterface(tk.Frame):
                     piece = self.imagepiece[valeur]
                     self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
     
-    def refreshPlayer(self,playerColor):
+    def refreshPlayer(self,playerColor,affiche):
         print("test",playerColor)
         for bord in self.bordure:
-            self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])
-            self.parent.tag_raise(bord)
+            print(affiche)
+            if not affiche:
+                self.parent.itemconfig(bord,fill=self.couleur[11+playerColor],outline=self.couleur[11+playerColor])
+                self.parent.tag_raise(bord)
+            else:
+                self.parent.delete(bord)
     
         
     def move(self, x : int, y : int):
