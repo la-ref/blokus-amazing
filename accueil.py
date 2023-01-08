@@ -23,6 +23,8 @@ class Accueil(Frame):
             relief = "ridge"
         )
 
+        self.canvas = canvas
+
         canvas.place(x = 0, y = 0)
         background = canvas.create_image(
             720.0,
@@ -31,35 +33,35 @@ class Accueil(Frame):
         )
 
         HorsLigneBouton = canvas.create_image(
-            470, 
-            324, 
+            510, 
+            344, 
             image=config.Config.image[5],
             anchor=tkinter.NW
         )
         canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
-        canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverLeave("enter","horsligne"))
-        canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverLeave("leave","horsligne"))
+        canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",HorsLigneBouton))
+        canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",HorsLigneBouton))
 
 
         EnLigneBouton = canvas.create_image(
-            470, 
+            510, 
             488, 
             image=config.Config.image[1],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverLeave("enter","enligne"))
-        canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverLeave("leave","enligne"))
+        canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
+        canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
 
 
         QuitterBouton = canvas.create_image(
-            470, 
-            652, 
+            510, 
+            642, 
             image=config.Config.image[2],
             anchor=tkinter.NW
         )
         canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
-        canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverLeave("enter","quitter"))
-        canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverLeave("leave","quitter"))
+        canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",QuitterBouton))
+        canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",QuitterBouton))
 
         
 
@@ -77,28 +79,22 @@ class Accueil(Frame):
             image=config.Config.image[4],
             anchor=tkinter.NW
         )
-    # def hoverLeave(self,typ : str,typ2 : str):
-    #     if typ2 == ""
-    #     self.border.delete(self.quitter)
-    #     if typ == "enter":
-    #         self.quitter = self.border.create_image(
-    #             (1440//2)-(config.Config.image[28].width()//2), 
-    #             820, 
-    #             image=config.Config.image[28],
-    #             anchor=tk.NW
-    #         )
-    #         self.border.config(cursor="hand2")
-    #         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
-    #     elif typ == "leave":
-    #         self.quitter = self.border.create_image(
-    #             (1440//2)-(config.Config.image[7].width()//2), 
-    #             820, 
-    #             image=config.Config.image[7],
-    #             anchor=tk.NW
-    #         )
-    #         self.border.config(cursor="")
-    #         self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
-    #     self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
+    def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+        if typ == "entre":
+            if typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[31])
+            elif typ2 == "horsligne":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[29])
+            elif typ2 == "enligne":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[30])
+        elif typ == "sort":
+            if typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[2])
+            elif typ2 == "horsligne":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[5])
+            elif typ2 == "enligne":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[1])
+
     def QuitterBouton(self,event):
         self.window.destroy()
     

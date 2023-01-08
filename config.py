@@ -59,11 +59,17 @@ class config():
         self.image.append(PhotoImage(file="build/assets/frame0/surrenderhover.png")) # 27
         self.image.append(PhotoImage(file="build/assets/frame0/quitterhover.png")) # 28
 
+        #Hover accueil
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/button_1_hover.png")) #29
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/button_2_hover.png")) #30
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/button_3_hover.png")) #31
+    
         #Piece
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
                     12:(PhotoImage(file="build/assets/piece/green.png")),
                     13:(PhotoImage(file="build/assets/piece/red.png")),
                     14:(PhotoImage(file="build/assets/piece/blue.png"))} 
+        
         
 
         
