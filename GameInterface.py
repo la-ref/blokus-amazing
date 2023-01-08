@@ -65,49 +65,21 @@ class GameInterface(tk.Frame):
             config.Config.controller.surrender()
 
     def hoverSurrender(self,typ : str):
-        self.border.delete(self.giveUp)
         if typ == "enter":
-            self.giveUp = self.border.create_image(
-                (1440//2)-(config.Config.image[27].width()//2), 
-                120, 
-                image=config.Config.image[27],
-                anchor=tk.NW
-            )
+            self.border.itemconfigure(self.giveUp, image=config.Config.image[27])
             self.border.config(cursor="hand2")
-            self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
         elif typ == "leave":
-            self.giveUp = self.border.create_image(
-                (1440//2)-(config.Config.image[6].width()//2), 
-                120, 
-                image=config.Config.image[6],
-                anchor=tk.NW
-            )
+            self.border.itemconfigure(self.giveUp, image=config.Config.image[6])
             self.border.config(cursor="")
-            self.border.tag_bind(self.giveUp, "<Enter>",lambda *_: self.hoverSurrender("enter"))
-        self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
 
     def hoverLeave(self,typ : str):
-        self.border.delete(self.quitter)
         if typ == "enter":
-            self.quitter = self.border.create_image(
-                (1440//2)-(config.Config.image[28].width()//2), 
-                820, 
-                image=config.Config.image[28],
-                anchor=tk.NW
-            )
+            self.border.itemconfigure(self.quitter, image=config.Config.image[28])
             self.border.config(cursor="hand2")
-            self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
         elif typ == "leave":
-            self.quitter = self.border.create_image(
-                (1440//2)-(config.Config.image[7].width()//2), 
-                820, 
-                image=config.Config.image[7],
-                anchor=tk.NW
-            )
+            self.border.itemconfigure(self.quitter, image=config.Config.image[7])
             self.border.config(cursor="")
-            self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
-        self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
-        
+
     def surrender(self,player : int):
         match player:
             case 0:
