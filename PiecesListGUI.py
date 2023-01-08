@@ -66,6 +66,9 @@ class PiecesListGUI(tk.Frame):
     def changeName(self, newName : str):
         self.parent.itemconfig(self.text, text=newName)
         
+    def surrender(self):
+        self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
+        
         
     # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
     def move(self, x : int, y : int):

@@ -51,12 +51,13 @@ class Controller(tk.Tk):
 
     def updateBoard(self):
         self.vueJeu.refreshBoard(self.game.getBoard())
-        print(self.game.getCurrentPlayerId(),"CONTROLLER CURRENT")
-        self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId())
+        self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
 
     def surrender(self : Controller):
         print("hihihieooozo")
         if not self.game.isPlayerSurrendered():
+            print(self.game.getCurrentPlayerId())
+            self.vueJeu.surrender(self.game.getCurrentPlayerId())
             self.game.addSurrenderedPlayer()
 
     
@@ -196,7 +197,6 @@ class Controller(tk.Tk):
             print(play)
             return play
         else:
-            print("false")
             # Piece d'autres joueur
             return False
 

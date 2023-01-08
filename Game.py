@@ -75,7 +75,8 @@ class Game:
         print(self.__currentPlayerPos,"GAME NEXT")
         config.Config.controller.updateBoard()
 
-        
+    def isGameFinished(self) -> bool:
+        return len(self.__joueursAbandon) == len(self.__joueurs)    
         
 
 

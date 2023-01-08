@@ -27,17 +27,17 @@ class GameInterface(tk.Frame):
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
         
-        List1 = PG.PiecesListGUI(self.window,self.border,"Joueur 1",10)
-        List1.move(x=70,y=80)
-        
-        List2 = PG.PiecesListGUI(self.window,self.border,"Joueur 2",11)
-        List2.move(x=1047,y=80)
-        
-        List3 = PG.PiecesListGUI(self.window,self.border,"Joueur 3",12)
-        List3.move(x=1047,y=524)
-        
-        List4 = PG.PiecesListGUI(self.window,self.border,"Joueur 4",13)
-        List4.move(x=70,y=524)
+        self.List1 = PG.PiecesListGUI(self.window,self.border,"Joueur 1",10)
+        self.List1.move(x=70,y=80)
+
+        self.List2 = PG.PiecesListGUI(self.window,self.border,"Joueur 2",11)
+        self.List2.move(x=1047,y=80)
+
+        self.List3 = PG.PiecesListGUI(self.window,self.border,"Joueur 3",12)
+        self.List3.move(x=1047,y=524)
+
+        self.List4 = PG.PiecesListGUI(self.window,self.border,"Joueur 4",13)
+        self.List4.move(x=70,y=524)
 
         self.giveUp = self.border.create_image(
             (1440//2)-(config.Config.image[6].width()//2), 
@@ -109,6 +109,17 @@ class GameInterface(tk.Frame):
             self.border.config(cursor="")
             self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
         self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
+        
+    def surrender(self,player : int):
+        match player:
+            case 0:
+                self.List1.surrender()
+            case 1:
+                self.List2.surrender()
+            case 2:
+                self.List3.surrender()
+            case 3:
+                self.List4.surrender()
 
     def leave(self):
         print("wohoho")
@@ -120,8 +131,8 @@ class GameInterface(tk.Frame):
     def refreshBoard(self,plateau):
         self.board.refreshBoard(plateau)
 
-    def refreshPlayer(self,couleur):
-        self.board.refreshPlayer(couleur)
+    def refreshPlayer(self,couleur,affiche):
+        self.board.refreshPlayer(couleur,affiche)
 
     
 
