@@ -49,7 +49,7 @@ class Pieces_placement(tk.Frame):
             for v in range(len(self.tableau_piece)):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
-                    test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
+                    test = b.Block(self.parent,self.image,self.nb_player,self.y,self.x,self)
                     self.parent.tag_bind(test.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
@@ -88,9 +88,10 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
 
-            piece = PD.LISTEPIECES[self.la_piece]
-            piece.flip()
-            self.changement_piece_tourner(piece)
+            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece.flip()
+            print(self.piece.getDelimitation())
+            self.changement_piece_tourner(self.piece)
 
     def on_rotate(self,event):
         if self.mon_state == True:
@@ -102,16 +103,18 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
 
-            piece = PD.LISTEPIECES[self.la_piece]
-            piece.rotate90()
+            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece.rotate90()
+            print(self.piece.getDelimitation())
 
-            self.changement_piece_tourner(piece)
+            self.changement_piece_tourner(self.piece)
     
     def changement_piece_tourner(self,piece):
         self.rotate = True
 
         self.tableau_piece = [[]]
         self.tableau_piece=piece.getDelimitation()
+        print("1",self.piece.getDelimitation())
         
         self.tableau_piece_forme = []
 
@@ -127,7 +130,7 @@ class Pieces_placement(tk.Frame):
             for v in range(len(self.tableau_piece)):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
-                    le_block = b.Block(self.parent,self.image,self.nb_player,0+self.x,0+self.y,self)
+                    le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
                     self.parent.tag_bind(le_block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
@@ -259,7 +262,7 @@ class Pieces_placement(tk.Frame):
                 self.tableau_piece_forme = self.saveliste
 
                 for block in self.tableau_piece_forme:
-                    block.recreate(block.save_x,block.save_y,self.image)
+                    block.recreate(block.save_y,block.save_x,self.image)
                     self.parent.tag_bind(block.bl, "<Motion>", self.on_drag)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
                     self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
@@ -271,7 +274,7 @@ class Pieces_placement(tk.Frame):
             if config.Config.controller.placePiece(self.piece,col,lig,dc,dl):
                 # supprime si oui
                 for piece in self.tableau_piece_forme:
-                    piece.delete()
+                    self.parent.delete(piece)
             else:
                 # remet la piece à la position si non
                 self.image = self.imagepiece[self.nb_player]

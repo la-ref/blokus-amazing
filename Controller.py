@@ -186,6 +186,7 @@ class Controller(tk.Tk):
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         '''
+        print("2",piece.getDelimitation())
         return self.game.playTurn(piece, colonne, ligne, dc, dl)
 
 if __name__ == "__main__":
