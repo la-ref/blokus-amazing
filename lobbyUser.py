@@ -91,26 +91,48 @@ class lobbyUser(Frame):
 
         self.Noir_IA_1 = self.parent.create_image(self.w2,self.hf,image= self.image_list[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_1, "<Button-1>", self.facile)
+        self.parent.tag_bind(self.Noir_IA_1, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.Noir_IA_1))
+        self.parent.tag_bind(self.Noir_IA_1, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.Noir_IA_1))
         
         self.text_facile = self.parent.create_text(self.w2,self.hf,text="FACILE",fill="#BBBBBB",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_facile, "<Button-1>", self.facile)
+        self.parent.tag_bind(self.text_facile, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.text_facile))
+        self.parent.tag_bind(self.text_facile, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.text_facile))
         
         self.Noir_IA_2 = self.parent.create_image(self.w2,self.hm,image= self.image_list[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_2, "<Button-1>", self.moyen)
+        self.parent.tag_bind(self.Noir_IA_2, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.Noir_IA_2))
+        self.parent.tag_bind(self.Noir_IA_2, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.Noir_IA_2))
         
         self.text_moyen = self.parent.create_text(self.w2,self.hm,text="MOYEN",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_moyen, "<Button-1>", self.moyen)
+        self.parent.tag_bind(self.text_moyen, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.text_moyen))
+        self.parent.tag_bind(self.text_moyen, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.text_moyen))
         
         self.Noir_IA_3 = self.parent.create_image(self.w2,self.he,image= self.image_list[18],state=tk.HIDDEN)
-        self.parent.tag_bind(self.Noir_IA_3, "<Button-1>", self.moyen)
+        self.parent.tag_bind(self.Noir_IA_3, "<Button-1>", self.expert)
+        self.parent.tag_bind(self.Noir_IA_3, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonExpert",self.Noir_IA_3))
+        self.parent.tag_bind(self.Noir_IA_3, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.Noir_IA_3))
         
         self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_expert, "<Button-1>", self.expert)
+        self.parent.tag_bind(self.text_expert, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonExpert",self.text_expert))
+        self.parent.tag_bind(self.text_expert, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.text_expert))
+
         
         self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[20])
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
+        self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
+        self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
+
+
         self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= self.image_list[24])
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
+        self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
+        self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
+
+
+        
         
     
 
@@ -376,7 +398,64 @@ class lobbyUser(Frame):
         self.moverobot(self.x,self.y)
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
-        
+    
+    def hoverBouton(self, typ : str, typ2 : str, idButton : int):
+        if typ == "entre":
+            if typ2 == "user":
+                if self.boutonUser == "gris":
+                    self.parent.itemconfigure(idButton, image=config.Config.image[44])
+                else:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[45])
+                self.parent.config(cursor="hand2")
+            if typ2 == "robot":
+                if self.boutonUser == "gris":
+                    self.parent.itemconfigure(idButton, image=config.Config.image[44])
+                else:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[45])
+                self.parent.config(cursor="hand2")
+            if typ2 == "iaboutonFacile":
+                self.parent.itemconfigure(self.Noir_IA_1, image=config.Config.image[41])
+                if self.iatype != "facile":
+                    self.parent.itemconfigure(self.text_facile, fill="#000")
+                self.parent.config(cursor="hand2")
+            if typ2 == "iaboutonMoyen":
+                self.parent.itemconfigure(self.Noir_IA_2, image=config.Config.image[41])
+                if self.iatype != "moyen":
+                    self.parent.itemconfigure(self.text_moyen, fill="#000")
+                self.parent.config(cursor="hand2")
+            if typ2 == "iaboutonExpert":
+                self.parent.itemconfigure(self.Noir_IA_3, image=config.Config.image[41])
+                if self.iatype != "expert":
+                    self.parent.itemconfigure(self.text_expert, fill="#000")
+                self.parent.config(cursor="hand2")
+        elif typ == "sort":
+            if typ2 == "user":
+                if self.boutonUser == "gris":
+                    self.parent.itemconfigure(idButton, image=config.Config.image[23])
+                else:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[24])
+                self.parent.config(cursor="")
+            if typ2 == "robot":
+                if self.boutonUser == "gris":
+                    self.parent.itemconfigure(idButton, image=config.Config.image[20])
+                else:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[21])
+                self.parent.config(cursor="")
+            if typ2 == "iaboutonFacile":
+                self.parent.itemconfigure(self.Noir_IA_1, image=config.Config.image[18])
+                if self.iatype != "facile":
+                    self.parent.itemconfigure(self.text_facile, fill="#fff")
+                self.parent.config(cursor="")
+            if typ2 == "iaboutonMoyen":
+                self.parent.itemconfigure(self.Noir_IA_2, image=config.Config.image[18])
+                if self.iatype != "moyen":
+                    self.parent.itemconfigure(self.text_moyen, fill="#fff")
+                self.parent.config(cursor="")
+            if typ2 == "iaboutonExpert":
+                self.parent.itemconfigure(self.Noir_IA_3, image=config.Config.image[18])
+                if self.iatype != "expert":
+                    self.parent.itemconfigure(self.text_expert, fill="#fff")
+                self.parent.config(cursor="")
 
 if __name__ == "__main__":
     window = Tk()

@@ -38,11 +38,18 @@ class lobbyLocal(Frame):
         self.canvas.place(x = 0, y = 0)
         self.canvas.bind("<Button-1>",self.clique)
         self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= self.image_list[14])
+
         self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= self.image_list[17])
         self.canvas.tag_bind(self.Bouton_Jouer, "<Button-1>", self.jouer)
+        self.canvas.tag_bind(self.Bouton_Jouer, "<Enter>",lambda *_: self.hoverBouton("entre","jouer",self.Bouton_Jouer))
+        self.canvas.tag_bind(self.Bouton_Jouer, "<Leave>",lambda *_: self.hoverBouton("sort","jouer",self.Bouton_Jouer))
+
 
         self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= self.image_list[19])
         self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
+        self.canvas.tag_bind(self.Bouton_Quitter, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",self.Bouton_Quitter))
+        self.canvas.tag_bind(self.Bouton_Quitter, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",self.Bouton_Quitter))
+
 
         self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[0],16,hb="haut",droiteg="gauche")
         self.bouton_jaune.move(279,147)
@@ -88,6 +95,21 @@ class lobbyLocal(Frame):
     def QuitterBouton(self,event):
         config.Config.controller.changePage("Acceuil")
 
+    def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+        if typ == "entre":
+            if typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[40])
+                self.canvas.config(cursor="hand2")
+            elif typ2 == "jouer":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[39])
+                self.canvas.config(cursor="hand2")
+        elif typ == "sort":
+            if typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[19])
+                self.canvas.config(cursor="")
+            elif typ2 == "jouer":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[17])
+                self.canvas.config(cursor="")
 if __name__ == "__main__":
     window = Tk()
 
