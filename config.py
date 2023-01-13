@@ -81,6 +81,9 @@ class config():
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_robot_noir_hover.png")) #43
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_user_gris_hover.png")) #44
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_user_noir_hover.png")) #45
+
+        #Lobby winner
+        self.image.append(PhotoImage(file="Plateau/assets/frame0/image_winner.png")) #46
     
         #Piece
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),

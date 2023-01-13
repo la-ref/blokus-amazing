@@ -105,8 +105,7 @@ if __name__=="__main__":
     images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))
     
     accueil=Block(border,images,1,0,0)
-    import MouvementManager as Mv
-    Mv.MouvementManager(accueil)
+
 
 
     window.mainloop()

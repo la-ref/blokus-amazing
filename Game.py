@@ -60,96 +60,75 @@ class Game:
         return self.__plateau
 
     def getCurrentPlayerId(self : Game) -> int:
+        """Méthode getter permettant d'obtenir l'id du joueur courant
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            int: l'id du joueur courant
+        """
         return self.__currentPlayerPos
 
-    def addSurrenderedPlayer(self : Game) -> None:
+    def addSurrenderedPlayer(self : Game) -> bool|list[Player]:
+        """Méthode qui permet d'ajouter un joueur dans la liste des joueurs qui ont abandonné et de donne le status de la partie
+        voir : getWinners()
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            bool|list[Player]: false si il la game n'est pas terminée sinon retourne la liste des joueurs gagnant
+        """
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
         self.__nextPlayer()
-        config.Config.controller.updateBoard()
-        return self.getWinners()
+        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        return self.getWinners() 
 
     def isPlayerSurrendered(self : Game) -> bool:
+        """Méthode permettant de savoir si le joueur courant a abandonné
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            bool: vrai s'il a abandonné sinon faux
+        """
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
 
-    def __nextPlayer(self) -> Player:
+    def __nextPlayer(self : Game) -> None:
+        """Méthode qui permet de sélectionné le prochain joueur pour être le joueur courant
+
+        Args:
+            self (Game): Game
+        """
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
-        # print(self.__currentPlayerPos,"GAME NEXT")
-        config.Config.controller.updateBoard()
+        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
 
-    def isGameFinished(self) -> bool:
+    def isGameFinished(self : Game) -> bool:
+        """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau
+        des joueurs qui ont abandonné
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            bool: vrai si la partie est fini sinon faux
+        """
         return len(self.__joueursAbandon) == len(self.__joueurs)    
-        
 
+    def countBlocks(self : Game,joueur : Player) -> int:
+        """Méthode permettant d'obtenir le nombre de cubes posés sur la grille de jeu par un joueur
 
-    # def jeu(self : Game):
-    #     joueurs = self.__joueurs
-    #     plateau = self.__plateau
-    #     for joueur in joueurs:
-    #         if not self.isPlayerSurrendered(joueur):
-    #             self.__currentPlayer = joueur
-    #             self.__callBackController("PLAYERS",joueur.getColor())
-    #             print("c'est a : ",joueur.getName())
-    #             ajout = False
-    #             pieceid = 1
-    #             fini = False
-    #             while not fini:
-    #                 if self.isPlayerSurrendered(joueur): break
-    #                 if not self.isPlayerSurrendered(joueur):
-    #                     pieceid = input("Choisir pièce : ")
-    #                     piece = joueur.getPiece(pieceid)
-    #                     x = input("x = ")
-    #                     y = input("y = ")
-    #                     if self.isPlayerSurrendered(joueur):
-    #                         fini = True
-    #                     if piece:
-    #                         if self.isPlayerSurrendered(joueur):
-    #                             fini = True
-    #                         if not self.isPlayerSurrendered(joueur):
-    #                             ajout = (plateau.ajouterPiece(piece,int(x),int(y),joueur,1,1))
-    #                         if ajout:
-    #                             fini = True
-    #                 else:
-    #                     fini = True
-    #             if not self.isPlayerSurrendered(joueur):
-    #                 if ajout:
-    #                     joueur.ajoutTour()
-    #                     joueur.removePiece(str(pieceid))
-    #                     self.__callBackController("BOARD")
+        Args:
+            self (Game): Game
+            joueur (Player): Joueur de la partie
 
-    def jeu(self : Game):
-        joueur = self.__joueurs[self.__currentPlayerPos]
-        if not self.isPlayerSurrendered():
-            print("c'est a : ",joueur.getName())
-            ajout = False
-            pieceid = 1
-            fini = False
-            while not fini:
-                if self.isPlayerSurrendered(): break
-                if not self.isPlayerSurrendered():
-                    pieceid = input("Choisir pièce : ")
-                    piece = joueur.getPiece(pieceid)
-                    x = input("x = ")
-                    y = input("y = ")
-                    if self.isPlayerSurrendered():
-                        fini = True
-                    if piece:
-                        if self.isPlayerSurrendered():
-                            fini = True
-                        if not self.isPlayerSurrendered():
-                            ajout = (self.__plateau.ajouterPiece(piece,int(x),int(y),joueur,1,1))
-                        if ajout:
-                            fini = True
-                else:
-                    fini = True
-            if not self.isPlayerSurrendered():
-                if ajout:
-                    joueur.ajoutTour()
-                    joueur.removePiece(str(pieceid))
-        self.__nextPlayer()
-        
-    def countBlocks(self,joueur : Player):
+        Returns:
+            int: nombre de cubes posés par le joueur sur la grille de jeu
+        """
         counter = 0
         for i in range(self.__plateau.getBoardSize()):
             for y in range(self.__plateau.getBoardSize()):
@@ -157,8 +136,15 @@ class Game:
                     counter+=1
         return counter
 
+    def getWinners(self : Game) -> list[Player]:
+        """Méthode permettant de savoir si la partie est fini ou non et d'obtenir les vainqueurs de la partie si fini
 
-    def getWinners(self):
+        Args:
+            self (Game): _description_
+
+        Returns:
+            bool|list[Player]: false si il la game n'est pas terminée sinon retourne la liste des joueurs gagnant
+        """
         if (len(self.__joueursAbandon) == len(self.__joueurs)):
             blockCount = []
             winners = []
@@ -168,17 +154,26 @@ class Game:
                 if blockCount[i] == max(blockCount):
                     winners.append(self.__joueurs[i])
             return winners
-        return False
+        return []
     
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int) -> bool:
+        '''Méthode qui permet de jouer le tour du joueur courant
         
+        Args:
+            - piece : Pieces -> pièce jouée
+            - joueur : Player -> joueur de la pièce
+            - colonne : int -> colonne du premier cube de la piece
+            - ligne : int -> ligne du premier cube de la piece
+            - dc : int -> décalage entre la colonne du premier cube de la piece et celle de l'origine de la piece.
+            - dl : int -> décalage entre la ligne du premier cube de la piece et celle de l'origine de la piece.
         
-    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int):
+        Returns: 
+            - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
+        '''
         if len(self.__joueursAbandon) != len(self.__joueurs):
-                
-            print("c'est a : ",self.getCurrentPlayer().getName()) 
             
-            d= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
-            if d:
+            ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+            if ajout: # si une pièce peut être ajouter
                 self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
                 self.getCurrentPlayer().ajoutTour()
 
@@ -194,10 +189,8 @@ class Game:
                 # config.Config.controller.updatePlayers(self.getCurrentPlayer())
                 
                 return True
-        
-
-        else:
-            print("tous les joueurs ont fini !")
             return False
 
-    # def setPiece():
+        else:
+            # call fonction winner
+            return False

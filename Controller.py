@@ -111,6 +111,9 @@ class Controller(tk.Tk):
         '''
         if joueur == self.game.getCurrentPlayerId():
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
+            win = self.game.getWinners()
+            if (win):
+                self.vueJeu.partieTermine(win)
             return play
         else:
             return False
