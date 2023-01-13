@@ -1,4 +1,4 @@
-# Tic Tac Toe avec un serveur Linux en multijoueur
+# Jeu Blokus avec IA et communication serveur -> clients
 
 
 > **Auteurs :** CORION Gauthier, HAFFNER Aurelian, CZARKOWSKI Matthieu, DESSAILLY LEANDRE
