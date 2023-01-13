@@ -7,8 +7,7 @@
 ### **Présentation du projet** 
 <br>
 <p>
-Projet réalisé lors du 3ème semestre de BUT Informatique, il s'agissait de réaliser un Tic-Tac-Toe en multijoueur utilisant un serveur linux. 
-Il était demandé que celui-ci soit réalisé en C avec plusieurs étapes :
+LA DESCRIPTION
 
 <table>
     <thead>
