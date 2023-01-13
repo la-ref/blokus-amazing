@@ -72,10 +72,10 @@ class config():
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_5_hover.png")) #34
 
         #Hover lobby
-        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_bleu_hover.png")) #35
+        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_jaune_hover.png")) #35
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_vert_hover.png")) #36
-        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_jaune_hover.png")) #37
-        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_rouge_hover.png")) #38
+        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_rouge_hover.png")) #37
+        self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_bleu_hover.png")) #38
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_jouer_hover.png")) #39
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_quitter_hover.png")) #40
         self.image.append(PhotoImage(file="LobbyLocal/assets/frame0/bouton_noir_ia_hover.png")) #41
@@ -91,6 +91,8 @@ class config():
                     14:(PhotoImage(file="build/assets/piece/blue.png"))} 
         
         
+
+         
 
         
     @staticmethod

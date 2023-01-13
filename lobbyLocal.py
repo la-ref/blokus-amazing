@@ -53,15 +53,53 @@ class lobbyLocal(Frame):
 
         self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[0],16,hb="haut",droiteg="gauche")
         self.bouton_jaune.move(279,147)
+        self.namezone_jaune = self.bouton_jaune.getNameZone()
+        self.namezone_jaune_text = self.bouton_jaune.getNameZone_Text()
+        self.canvas.tag_bind(self.namezone_jaune, "<Button-1>",lambda *_: self.Boutonselect("jaune"))
+        self.canvas.tag_bind(self.namezone_jaune_text, "<Button-1>",lambda *_: self.Boutonselect("jaune"))
+
 
         self.bouton_vert = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[1],25,hb="haut",droiteg="droite")
         self.bouton_vert.move(1156,147)
+        self.namezone_vert = self.bouton_vert.getNameZone()
+        self.namezone_vert_text = self.bouton_vert.getNameZone_Text()
+        self.canvas.tag_bind(self.namezone_vert, "<Button-1>",lambda *_: self.Boutonselect("vert"))
+        self.canvas.tag_bind(self.namezone_vert_text, "<Button-1>",lambda *_: self.Boutonselect("vert"))
+
 
         self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[2],22,hb="bas",droiteg="gauche")
         self.bouton_rouge.move(279,883)
+        self.namezone_rouge = self.bouton_rouge.getNameZone()
+        self.namezone_rouge_text = self.bouton_rouge.getNameZone_Text()
+        self.canvas.tag_bind(self.namezone_rouge, "<Button-1>",lambda *_: self.Boutonselect("rouge"))
+        self.canvas.tag_bind(self.namezone_rouge_text, "<Button-1>",lambda *_: self.Boutonselect("rouge"))
+
 
         self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[3],15,hb="bas",droiteg="droite")
         self.bouton_bleu.move(1156,883)
+        self.namezone_bleu = self.bouton_bleu.getNameZone()
+        self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()
+        self.canvas.tag_bind(self.namezone_bleu, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
+        self.canvas.tag_bind(self.namezone_bleu_text, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
+
+
+    def Boutonselect(self, typ):
+        if typ == "bleu":
+            self.bouton_bleu.setActiveClavier(True)
+        else:
+            self.bouton_bleu.setActiveClavier(False)
+        if typ == "jaune":
+            self.bouton_jaune.setActiveClavier(True)
+        else:
+            self.bouton_jaune.setActiveClavier(False)
+        if typ == "vert":
+            self.bouton_vert.setActiveClavier(True)
+        else:
+            self.bouton_vert.setActiveClavier(False)
+        if typ == "rouge":
+            self.bouton_rouge.setActiveClavier(True)
+        else:
+            self.bouton_rouge.setActiveClavier(False)
 
     def clique(self,event):
         actuelwidget = event.widget.find_withtag('current')[0]

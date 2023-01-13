@@ -40,13 +40,25 @@ class lobbyUser(Frame):
         self.rheight = 107
         self.x=0
         self.y=0
+        self.nb_player = nb_player
+        if nb_player == 16 :
+            self.nb_player_hover = 35
+        if nb_player == 25 :
+            self.nb_player_hover = 36
+        if nb_player == 22 :
+            self.nb_player_hover = 37
+        if nb_player == 15 :
+            self.nb_player_hover = 38
         self.nameZone = self.parent.create_image(15,10,image=images[nb_player])
+        self.parent.tag_bind(self.nameZone, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
+        self.parent.tag_bind(self.nameZone, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
         self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
 
 
         self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueurs.getName(),anchor=tk.CENTER)
         self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
-        
+        self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.text))
+        self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.text))
         
 
         if self.hb == "haut":
@@ -201,8 +213,10 @@ class lobbyUser(Frame):
         """
         if self.activeclavier == True:
             self.activeclavier = False
+            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
         else:
             self.activeclavier = True  
+            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
     
     def getActiveClavier(self):
         """Fonction qui permet de savoir si le clavier est activé ou non
@@ -215,6 +229,12 @@ class lobbyUser(Frame):
         """
         return self.activeclavier
     
+    def getNameZone(self):
+        return self.nameZone
+    
+    def getNameZone_Text(self):
+        return self.text
+    
     def setActiveClavier(self,boolean):
         """Méthode qui permet d'activer ou non la saisie du clavier pour un utilisateur
         
@@ -223,6 +243,10 @@ class lobbyUser(Frame):
             event: évènement du clique
         """
         self.activeclavier = boolean
+        if boolean == True:
+            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
+        else:
+            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
 
     def touches(self,event):
         """Méthode qui actualise le pseudo du joueur à chaque touche appuyé de l'ordinateur
@@ -387,12 +411,22 @@ class lobbyUser(Frame):
 
         if self.boutonUser == "gris":
             self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=self.image_list[24])
+            self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
+            self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
+
             self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= self.image_list[20])
+            self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
+            self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "noir"
             self.joueurType = "joueur"
         else:
             self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=self.image_list[23])
+            self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
+            self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
+
             self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= self.image_list[21])
+            self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
+            self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "gris"
             self.joueurType = "ia"
         self.moverobot(self.x,self.y)
@@ -409,9 +443,9 @@ class lobbyUser(Frame):
                 self.parent.config(cursor="hand2")
             if typ2 == "robot":
                 if self.boutonUser == "gris":
-                    self.parent.itemconfigure(idButton, image=config.Config.image[44])
+                    self.parent.itemconfigure(idButton, image=config.Config.image[43])
                 else:
-                    self.parent.itemconfigure(idButton, image=config.Config.image[45])
+                    self.parent.itemconfigure(idButton, image=config.Config.image[42])
                 self.parent.config(cursor="hand2")
             if typ2 == "iaboutonFacile":
                 self.parent.itemconfigure(self.Noir_IA_1, image=config.Config.image[41])
@@ -428,6 +462,9 @@ class lobbyUser(Frame):
                 if self.iatype != "expert":
                     self.parent.itemconfigure(self.text_expert, fill="#000")
                 self.parent.config(cursor="hand2")
+            if typ2 == "namezone":
+                self.parent.itemconfigure(idButton, image=config.Config.image[self.nb_player_hover])
+                self.parent.config(cursor="")
         elif typ == "sort":
             if typ2 == "user":
                 if self.boutonUser == "gris":
@@ -437,9 +474,9 @@ class lobbyUser(Frame):
                 self.parent.config(cursor="")
             if typ2 == "robot":
                 if self.boutonUser == "gris":
-                    self.parent.itemconfigure(idButton, image=config.Config.image[20])
-                else:
                     self.parent.itemconfigure(idButton, image=config.Config.image[21])
+                else:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[20])
                 self.parent.config(cursor="")
             if typ2 == "iaboutonFacile":
                 self.parent.itemconfigure(self.Noir_IA_1, image=config.Config.image[18])
@@ -455,6 +492,10 @@ class lobbyUser(Frame):
                 self.parent.itemconfigure(self.Noir_IA_3, image=config.Config.image[18])
                 if self.iatype != "expert":
                     self.parent.itemconfigure(self.text_expert, fill="#fff")
+                self.parent.config(cursor="")
+            if typ2 == "namezone":
+                if self.activeclavier != True:
+                    self.parent.itemconfigure(idButton, image=config.Config.image[self.nb_player])
                 self.parent.config(cursor="")
 
 if __name__ == "__main__":
