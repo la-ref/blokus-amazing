@@ -4,11 +4,6 @@
 > **Auteurs :** CORION Gauthier, HAFFNER Aurelian, CZARKOWSKI Matthieu, DESSAILLY LEANDRE
 
 
-|une colonne|deux colonne|
-|-|-|
-|1|2|
-
-
 ### **Présentation du projet** 
 <br>
 <p>
@@ -33,11 +28,11 @@ LA DESCRIPTION
             <td>/</td>
         </tr>
         <tr>
-            <td>Version en ligne ✔️
+            <td>Version en ligne ✖
             <td>/</td>
         </tr>
         <tr>
-            <td>Version IA ✔️
+            <td>Version IA ✖
             <td>/</td>
         </tr>
         </tbody>
