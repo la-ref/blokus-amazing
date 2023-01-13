@@ -17,6 +17,7 @@ class lobbyLocal(Frame):
 
     def initialize(self):
         for widgets in self.winfo_children():
+            widgets.unbind('<ButtonPress-1>')
             widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False

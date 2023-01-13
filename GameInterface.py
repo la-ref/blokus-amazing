@@ -17,6 +17,10 @@ class GameInterface(tk.Frame):
         
     def initialize(self):
         for widgets in self.winfo_children():
+            widgets.unbind('<ButtonPress-1>')
+            widgets.unbind('<ButtonPress-3>')
+            widgets.unbind("<Motion>")
+            widgets.unbind("<MouseWheel>")
             widgets.destroy()
             
         self.border = tk.Canvas()

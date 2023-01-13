@@ -11,11 +11,12 @@ from Pieces import Pieces
 from lobbyLocal import lobbyLocal
 from GameInterface import GameInterface
 class Controller(tk.Tk):
+    """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
+    donc de la communication entre les différents élèments de l'application
+    """
 
-    
-    def __init__(self) -> None:
+    def __init__(self: Controller) -> None:
         tk.Tk.__init__(self)
-        #self.window = tk.Tk()
         
         config.initialisation(self)
         self.joueurs = [Player(11,"PERSONNE 1"),Player(12,"PERSONNE 2"),Player(13,"PERSONNE 3"),Player(14,"PERSONNE 4")]
@@ -23,165 +24,78 @@ class Controller(tk.Tk):
 
         self.game : Game = Game(self.joueurs,None,20)
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
-        # self.border = tk.Canvas()
-
-        # self.border.create_image(
-        #     0,
-        #     0,
-        #     image=PhotoImage(file="build/assets/frame0/AppBorder.png"),
-        #     anchor=tk.NW
-        # )
-        # self.border.config(bg="white")
-        # self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-        # self.vueJeu : GridInterface = GridInterface(self.border,self.game.getBoard())
         self.changePage('Acceuil')
-        # self.vueJeu.move(x=720-270,y=512-270)
-        # self.vueJeu.setController(self)
         self.mainloop()
-        
-    def changePage(self, nomFrame):
+
+     
+    def changePage(self : Controller, nomFrame : str):
+        """Méthode permettant de changer la page qui va être afficher sur l'application
+
+        Args:
+            self (Controller): Contorller
+            nomFrame (str): nom de la page
+        """
         self.vueJeu = self.frames[nomFrame]
         self.vueJeu.initialize()
         self.vueJeu.tkraise()
     
-    def changePlayer(self, players : list[Player],id : int):
-        self.joueurs[id] = players
+    def changePlayer(self : Controller, players : list[Player]) -> None:
+        """Méthode permettant de changer les joueurs de la partie
+
+        Args:
+            self (Controller): Contorller
+            players (list[Player]): liste des joueurs qui vont jouer
+        """
+        self.joueurs = players
         self.game.setPlayers(self.joueurs)
         
 
+    def updateBoard(self: Controller) -> None:
+        """Méthode callback permettant de mettre à jour le plateau avec les pièces et le joueur courant à afficher
 
-    # def updatePlayers(self,couleur : int):
-    #     self.vueJeu.refreshPlayer(couleur)
-
-    def updateBoard(self):
+        Args:
+            self (Controller): Contorller
+        """
         self.vueJeu.refreshBoard(self.game.getBoard())
         self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
 
-    def surrender(self : Controller):
+    def surrender(self : Controller) -> None:
+        """Méthode callback qui pour chaque personne qui on abandonné de mettre à jour leur status sur le jeu
+        et sur l'affichage de la page
+
+        Args:
+            self (Controller): Contorller
+        """
         if not self.game.isPlayerSurrendered():
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
-            self.game.addSurrenderedPlayer()
+            if type(self.game.addSurrenderedPlayer()) != bool:
+                # call fonction pour win
+                pass
 
     
     def getBoard(self : Controller):
+        """Méthode getter qui permet d'obtenir le plateau de la parite
+
+        Args:
+            self (Controller): Controller
+
+        Returns:
+            _type_: plateau de jeu de la partie
+        """
         return self.game.getBoard()
     
-    def getGame(self : Controller):
+    def getGame(self : Controller) -> Game:
+        """Méthode getter qui permet d'obtenir la game en cours
+
+        Args:
+            self (Controller): Controller
+
+        Returns:
+            Game: game en cours
+        """
         return self.game
 
-    def updateWindows(self) -> None:
-        self.playing = False
-        import accueil
-        from config import config
-        #self.window = accueil.Accueil(self.window)
-        print("au revoir")
-        # self.window = tk.Tk()
-        # self.window.geometry("1440x1024")
-        # self.window.tkraise(lobbyLocal.lobbyLocal(self.window, config.tableauImage()))
-
-# class Abandon(tk.Frame):
-#     def __init__(self,image,parent,game):
-#         super(Abandon,self).__init__(parent)
-#         self.parent = parent
-#         self.bout = self.parent.create_image(
-#             (1440//2)-(image.width()//2), 
-#             120, 
-#             image=image,
-#             anchor=tk.NW
-#         )
-#         self.parent.tag_bind(self.bout, "<Button-1>",lambda *_: self.test())
-
-#     def test(self):
-#         if game.currentPlayer not in game.joueursAbandon:
-#             game.joueursAbandon.append(game.currentPlayer)
-
-# def task(board,game : Game):
-
-#     joueurs = game.getPlayers()
-#     plateau = game.getBoard()
-#     for joueur in joueurs:
-#         if joueur not in game.joueursAbandon:
-#             game.currentPlayer = joueur
-#             board.refreshPlayer(joueur.getColor())
-#             print("c'est a : ",joueur.getName())
-#             ajout = False
-#             pieceid = 1
-#             fini = False
-#             while not fini:
-#                 if joueur not in game.joueursAbandon:
-#                     pieceid = input("Choisir pièce : ")
-#                     piece = joueur.getPiece(pieceid)
-#                     x = input("x = ")
-#                     y = input("y = ")
-#                     if joueur in game.joueursAbandon:
-#                         fini = True
-#                     if piece:
-#                         if joueur in game.joueursAbandon:
-#                             fini = True
-#                         if joueur not in game.joueursAbandon:
-#                             ajout = (plateau.ajouterPiece(piece,int(x),int(y),joueur,1,1))
-#                         if ajout:
-#                             fini = True
-#                 else:
-#                     fini = True
-#             if joueur not in game.joueursAbandon:
-#                 if ajout:
-#                     joueur.ajoutTour()
-#                     joueur.removePiece(str(pieceid))
-#                 board.refreshBoard()
-#     window.update()
-
-
-# game = Game(None,None,20)
-
-# window = tk.Tk()
-# images = []
-
-# images.append(ImageTk.PhotoImage(file="build/assets/frame0/empty_list.png"))
-# images.append(PhotoImage(file="build/assets/frame0/player_yellow.png"))
-# images.append(PhotoImage(file="build/assets/frame0/player_green.png"))
-# images.append(PhotoImage(file="build/assets/frame0/player_blue.png"))
-# images.append(PhotoImage(file="build/assets/frame0/player_red.png"))
-# images.append(PhotoImage(file="build/assets/frame0/AppBorder.png"))
-# images.append(PhotoImage(file="build/assets/frame0/board.png"))#270x270
-# images.append(PhotoImage(file="build/assets/frame0/button_give_up.png"))
-
-# window.geometry("1440x1024")
-
-# border = tk.Canvas()
-# border.config(bg="white")
-# border.create_image(
-#         0,
-#         0,
-#         image=images[5],
-#         anchor=tk.NW
-#     )
-
-
-# border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-# board = GridInterface(border,game.getBoard(),images)
-# board.move(x=720-270,y=512-270)
-
-# List1 = PG.PiecesListGUI(border,images,"Joueur 1",1)
-# List1.move(x=70,y=80)
-
-# List2 = PG.PiecesListGUI(border,images,"Joueur 2",2)
-# List2.move(x=1047,y=80)
-
-# List3 = PG.PiecesListGUI(border,images,"Joueur 3",3)
-# List3.move(x=1047,y=524)
-
-# List4 = PG.PiecesListGUI(border,images,"Joueur 4",4)
-# List4.move(x=70,y=524)
-
-# aba = Abandon(images[-1],border,game)
-
-
-# while 1:
-#     task(board,game)
-
-
-    def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int):
+    def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
         '''Fonction de liaison entre le placement d'une piece graphique et moteur
         
         Args:
@@ -196,13 +110,9 @@ class Controller(tk.Tk):
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         '''
         if joueur == self.game.getCurrentPlayerId():
-
-            # print("2",piece.getDelimitation())
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
-            # print(play)
             return play
         else:
-            # Piece d'autres joueur
             return False
 
 if __name__ == "__main__":

@@ -77,7 +77,7 @@ class Board:
                     or (row == 0 and column == self.__size-1))
         return False
 
-    def __verifyApplicationStart(self: Board,row : int,column : int,player : Player,delim : tuple) -> bool:
+    def __verifyApplicationStart(self: Board,row : int,column : int,player : Player,delim : np.ndarray) -> bool:
         """Méthode privé permettant de vérifier pour un joueur souhaitant placer une pièce sur la plateau
         si c'est son 1er tour et en conséquence de déterminer si il commence dans les coins du plateau ou non
 
@@ -161,7 +161,7 @@ class Board:
         Returns:
             bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        print(f"colonne : {column}, ligne : {row}, dc : {declageX}, dl : {declageY}") 
+        #print(f"colonne : {column}, ligne : {row}, dc : {declageX}, dl : {declageY}") 
         if (self.verifyApplication(piece,column,row,player,declageX,declageY)):
             x : int = column-declageX
             y : int = row-declageY
@@ -174,21 +174,35 @@ class Board:
             return True
         return False
     
-    def getBoard(self) -> np.ndarray:
+    def getBoard(self : Board) -> np.ndarray:
         """Méthode getter qui retourne un plateau
+
+        Args:
+            self (Board): plateau
 
         Returns:
             np.ndarray: tableau 2d représentant le plateau
         """
         return self.__board
 
-    def getBoardSize(self) -> int:
+    def getBoardSize(self : Board) -> int:
         """Méthode getter permettant d'avoir la taille du plateau
+
+        Args:
+            self (Board): plateau
 
         Returns:
             int: taille du plateau
         """
         return self.__size
 
-    def ajout(self,row,column,couleur):
+    def ajoutCouleur(self : Board,row : int,column : int,couleur : int) -> None:
+        """Méthode permettant d'ajouter une couleur sur une coordonnées du plateau
+
+        Args:
+            self (Board): plateau
+            row (int): ligne du plateau correspond à y
+            column (int): colonne du plateau correspond à x 
+            couleur (int): couleur d'un joueur
+        """
         self.__board[row][column] = couleur
