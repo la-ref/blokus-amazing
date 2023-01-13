@@ -20,8 +20,6 @@ class config():
             self.taillePolice=[40,32,30]
         elif platform.system() == "Windows" or platform.system() == "Linux":
             self.taillePolice=[30,25,22]
-
-
         
         self.image.append(PhotoImage(file="Accueil/assets/frame0/image_1.png")) #0
         self.image.append(PhotoImage(file="Accueil/assets/frame0/button_2.png")) #1
@@ -33,7 +31,7 @@ class config():
         # Plateau
         self.image.append(PhotoImage(file="Plateau/assets/frame0/button_give_up.png")) #6
         self.image.append(PhotoImage(file="Plateau/assets/frame0/button_quit.png")) #7
-        self.image.append(PhotoImage(file="Plateau/assets/frame0/game_board.png")) #8
+        self.image.append(PhotoImage(file="build/assets/frame0/board.png")) #8
         self.image.append(PhotoImage(file="Plateau/assets/frame0/empty_list.png")) #9
         self.image.append(PhotoImage(file="Plateau/assets/frame0/player_yellow.png")) #10
         self.image.append(PhotoImage(file="Plateau/assets/frame0/player_green.png")) #11
