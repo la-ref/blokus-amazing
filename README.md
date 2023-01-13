@@ -14,6 +14,11 @@
 <p>
 LA DESCRIPTION
 
+
+<!-- |une colonne|deux colonne|
+|-|-|
+|1|2| -->
+
 <table>
     <thead>
         <tr>
