@@ -42,3 +42,4 @@ from Player import Player
 #         self.
 
 #         return fonctionJson(prenom, nom, genre,dateNaissance,dateMort, bio)
+
