@@ -1,6 +1,5 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-import tkinter
 # from Controller import Controller
 
 
@@ -84,6 +83,9 @@ class config():
 
         #Lobby winner
         self.image.append(PhotoImage(file="Plateau/assets/frame0/image_winner.png")) #46
+        
+        #Icone
+        self.image.append(PhotoImage(file="Accueil/assets/frame0/blokus-icone.png")) #47
     
         #Piece
         self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
