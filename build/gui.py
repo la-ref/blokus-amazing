@@ -81,7 +81,7 @@ canvas.create_text(
     anchor="nw",
     text="MIREILLE",
     fill="#FFFFFF",
-    font=("LilitaOne", 32 * -1)
+    font=("Lilita One", 32 * -1)
 )
 
 image_image_6 = PhotoImage(
@@ -98,7 +98,7 @@ canvas.create_text(
     anchor="nw",
     text="JACK",
     fill="#FFFFFF",
-    font=("LilitaOne", 32 * -1)
+    font=("Lilita One", 32 * -1)
 )
 
 image_image_7 = PhotoImage(
@@ -139,7 +139,7 @@ canvas.create_text(
     anchor="nw",
     text="FRANÇOIS",
     fill="#FFFFFF",
-    font=("LilitaOne", 32 * -1)
+    font=("Lilita One", 32 * -1)
 )
 
 image_image_11 = PhotoImage(
@@ -156,7 +156,7 @@ canvas.create_text(
     anchor="nw",
     text="HUGETTE",
     fill="#FFFFFF",
-    font=("LilitaOne", 32 * -1)
+    font=("Lilita One", 32 * -1)
 )
 
 image_image_12 = PhotoImage(

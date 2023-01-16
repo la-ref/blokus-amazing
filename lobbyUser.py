@@ -106,7 +106,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.Noir_IA_1, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.Noir_IA_1))
         self.parent.tag_bind(self.Noir_IA_1, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.Noir_IA_1))
         
-        self.text_facile = self.parent.create_text(self.w2,self.hf,text="FACILE",fill="#BBBBBB",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
+        self.text_facile = self.parent.create_text(self.w2,self.hf,text="FACILE",fill="#BBBBBB",font=("Lilita One", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_facile, "<Button-1>", self.facile)
         self.parent.tag_bind(self.text_facile, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.text_facile))
         self.parent.tag_bind(self.text_facile, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.text_facile))
@@ -116,7 +116,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.Noir_IA_2, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.Noir_IA_2))
         self.parent.tag_bind(self.Noir_IA_2, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.Noir_IA_2))
         
-        self.text_moyen = self.parent.create_text(self.w2,self.hm,text="MOYEN",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
+        self.text_moyen = self.parent.create_text(self.w2,self.hm,text="MOYEN",fill="#FFFFFF",font=("Lilita One", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_moyen, "<Button-1>", self.moyen)
         self.parent.tag_bind(self.text_moyen, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.text_moyen))
         self.parent.tag_bind(self.text_moyen, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.text_moyen))
@@ -126,7 +126,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.Noir_IA_3, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonExpert",self.Noir_IA_3))
         self.parent.tag_bind(self.Noir_IA_3, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.Noir_IA_3))
         
-        self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("LilitaOne", config.Config.taillePolice[1]),state=tk.HIDDEN)
+        self.text_expert = self.parent.create_text(self.w2,self.he,text="EXPERT",fill="#FFFFFF",font=("Lilita One", config.Config.taillePolice[1]),state=tk.HIDDEN)
         self.parent.tag_bind(self.text_expert, "<Button-1>", self.expert)
         self.parent.tag_bind(self.text_expert, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonExpert",self.text_expert))
         self.parent.tag_bind(self.text_expert, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.text_expert))

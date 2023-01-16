@@ -168,12 +168,12 @@ class GameInterface(tk.Frame):
         )
         
         if len(listPlayer)==1:
-            self.text_winners = self.border.create_text(config.Config.largueur/2,config.Config.hauteur/2,text="Le gagnant de la partie est "+listPlayer[0].getName()+", Bravo ! ",fill="#000000",font=("LilitaOne", config.Config.taillePolice[0]),anchor=tk.CENTER)
+            self.text_winners = self.border.create_text(config.Config.largueur/2,config.Config.hauteur/2,text="Le gagnant de la partie est "+listPlayer[0].getName()+", Bravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER)
         else:
             winStr = "Les gagnants de la partie sont"
             for pl in listPlayer:
                 winStr+=" "+pl.getName()+","
-            self.text_winners = self.border.create_text(config.Config.largueur/2,config.Config.hauteur/2,text=winStr+" Bravo ! ",fill="#000000",font=("LilitaOne", config.Config.taillePolice[0]),anchor=tk.CENTER)
+            self.text_winners = self.border.create_text(config.Config.largueur/2,config.Config.hauteur/2,text=winStr+" Bravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER)
         
         self.border.tag_raise(self.quitter)
 
