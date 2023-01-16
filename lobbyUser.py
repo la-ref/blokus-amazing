@@ -2,7 +2,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
-from config import *
+from config import config
 import tkinter as tk
 import Player
 class lobbyUser(Frame):
