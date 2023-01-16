@@ -68,9 +68,10 @@ class Controller(tk.Tk):
         """
         if not self.game.isPlayerSurrendered():
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
-            if type(self.game.addSurrenderedPlayer()) != bool:
+            self.game.addSurrenderedPlayer()
+            if self.game.getWinners():
                 # call fonction pour win
-                pass
+                self.vueJeu.partieTermine(self.game.getWinners())
 
     
     def getBoard(self : Controller):
@@ -112,7 +113,8 @@ class Controller(tk.Tk):
         if joueur == self.game.getCurrentPlayerId():
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
             win = self.game.getWinners()
-            if (1):
+            
+            if (win):
                 self.vueJeu.partieTermine(win)
             return play
         else:

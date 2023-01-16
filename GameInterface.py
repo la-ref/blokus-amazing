@@ -40,16 +40,16 @@ class GameInterface(tk.Frame):
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName().upper(),10)
+        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),10)
         self.List1.move(x=70,y=80) # jaune
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName().upper(),11)
+        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),11)
         self.List2.move(x=1047,y=80) # vert
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName().upper(),12)
+        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),12)
         self.List3.move(x=1047,y=524) #  rouge
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName().upper(),13)
+        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),13)
         self.List4.move(x=70,y=524) #bleu
 
         self.giveUp = self.border.create_image(
@@ -168,12 +168,12 @@ class GameInterface(tk.Frame):
         )
         
         if len(listPlayer)==1:
-            self.text_winners = self.border.create_text(config.Config.largueur/2,config.Config.hauteur/2,text="Le gagnant de la partie est "+listPlayer[0].getName()+", Bravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER)
+            self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text="Le gagnant de la partie est : \n"+listPlayer[0].getName()+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         else:
-            winStr = "Les gagnants de la partie sont"
+            winStr = "Les gagnants de la partie sont :\n"
             for pl in listPlayer:
-                winStr+=" "+pl.getName()+","
-            self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0],text=winStr+" Bravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER)
+                winStr+=pl.getName()+", "
+            self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0],text=winStr+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[1]),anchor=tk.CENTER,justify='center')
         
         self.border.tag_raise(self.quitter)
 

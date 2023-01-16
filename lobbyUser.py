@@ -271,14 +271,14 @@ class lobbyUser(Frame):
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[2]))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
 
             else:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[0]))
+                self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[0]))
                 tailles = self.parent.bbox(self.text)
                 width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueurs.getName().upper(), font=('Lilita One', config.Config.taillePolice[2]))
+                    self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
 
             config.Config.controller.changePlayer(self.joueurs,(self.joueurs.getColor()-11))
 

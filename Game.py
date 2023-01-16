@@ -83,7 +83,9 @@ class Game:
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
         self.__nextPlayer()
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
-        return self.getWinners() 
+        if self.getWinners():
+            config.Config.controller.vueJeu.partieTermine
+        return self.getWinners()
 
     def isPlayerSurrendered(self : Game) -> bool:
         """Méthode permettant de savoir si le joueur courant a abandonné

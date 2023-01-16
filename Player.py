@@ -37,7 +37,7 @@ class Player:
             self (Player): joueur
             nom (str): nom à remplacer
         """
-        self.__name = nom
+        self.__name = nom.upper()
 
     def getColor(self : Player) -> int:
         """Méthode getter permettant d'avoir la couleur d'un joueur
