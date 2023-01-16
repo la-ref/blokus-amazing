@@ -9,7 +9,7 @@ class Accueil(Frame):
         super(Accueil, self).__init__()
         self.window = window
         self.window.title("Blockus")
-        # self.window.wm_iconphoto(True, config.Config.image[47])
+        self.window.wm_iconphoto(True, config.Config.image[47])
 
     def initialize(self):
         for widgets in self.winfo_children():
