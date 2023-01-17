@@ -6,7 +6,8 @@ from config import config
 import tkinter as tk
 import Elements.Player as Player
 class lobbyUser(Frame):
-    """Méthode qui permet d'initialiser tout l'objet lobbyUser
+    def __init__(self, window, parent : tk.Canvas, images : list, joueurs : Player.Player, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite"):
+        """Méthode qui permet d'initialiser tout l'objet lobbyUser
 
         Args:
             self: l'utilisateur tout entier
@@ -20,15 +21,13 @@ class lobbyUser(Frame):
             droiteg: si l'objet et haut ou bas
             hb: si l'objet et à droite ou à gauche
         
-    """
-    def __init__(self, window, parent : tk.Canvas, images : list, joueurs : Player.Player, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite"):
+        """
         super(lobbyUser,self).__init__(parent)
         self.parent = parent
         self.window = window
         self.iatype = "facile"
         self.joueurType = "joueur"
         self.stateactuel = 0
-        self.image_list = images
         self.joueurs = joueurs
         self.activeclavier = False
         self.boutonUser = "noir"
@@ -101,7 +100,7 @@ class lobbyUser(Frame):
             self.hm = self.h2-64
             self.he = self.h2-64-64
 
-        self.Noir_IA_1 = self.parent.create_image(self.w2,self.hf,image= self.image_list[18],state=tk.HIDDEN)
+        self.Noir_IA_1 = self.parent.create_image(self.w2,self.hf,image= config.Config.image[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_1, "<Button-1>", self.facile)
         self.parent.tag_bind(self.Noir_IA_1, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.Noir_IA_1))
         self.parent.tag_bind(self.Noir_IA_1, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.Noir_IA_1))
@@ -111,7 +110,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.text_facile, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonFacile",self.text_facile))
         self.parent.tag_bind(self.text_facile, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonFacile",self.text_facile))
         
-        self.Noir_IA_2 = self.parent.create_image(self.w2,self.hm,image= self.image_list[18],state=tk.HIDDEN)
+        self.Noir_IA_2 = self.parent.create_image(self.w2,self.hm,image= config.Config.image[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_2, "<Button-1>", self.moyen)
         self.parent.tag_bind(self.Noir_IA_2, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.Noir_IA_2))
         self.parent.tag_bind(self.Noir_IA_2, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.Noir_IA_2))
@@ -121,7 +120,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.text_moyen, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonMoyen",self.text_moyen))
         self.parent.tag_bind(self.text_moyen, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonMoyen",self.text_moyen))
         
-        self.Noir_IA_3 = self.parent.create_image(self.w2,self.he,image= self.image_list[18],state=tk.HIDDEN)
+        self.Noir_IA_3 = self.parent.create_image(self.w2,self.he,image= config.Config.image[18],state=tk.HIDDEN)
         self.parent.tag_bind(self.Noir_IA_3, "<Button-1>", self.expert)
         self.parent.tag_bind(self.Noir_IA_3, "<Enter>",lambda *_: self.hoverBouton("entre","iaboutonExpert",self.Noir_IA_3))
         self.parent.tag_bind(self.Noir_IA_3, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.Noir_IA_3))
@@ -132,13 +131,13 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.text_expert, "<Leave>",lambda *_: self.hoverBouton("sort","iaboutonExpert",self.text_expert))
 
         
-        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=self.image_list[20])
+        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image=config.Config.image[20])
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
         self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
         self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
 
 
-        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= self.image_list[24])
+        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image= config.Config.image[24])
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
         self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
@@ -230,9 +229,19 @@ class lobbyUser(Frame):
         return self.activeclavier
     
     def getNameZone(self):
+        """ Fonction qui permet de savoir l'identifiant de l'arrière plan du text sur le canvas 
+        
+        Returns:
+            self.nameZone: Identifiant de la zone sur le canvas
+        """
         return self.nameZone
     
     def getNameZone_Text(self):
+        """ Fonction qui permet de savoir l'identifiant du text du joueur sur le canvas 
+        
+        Returns:
+            self.nameZone: Identifiant de la zone sur le canvas
+        """
         return self.text
     
     def setActiveClavier(self,boolean):
@@ -410,21 +419,21 @@ class lobbyUser(Frame):
         self.hiddenAll()
 
         if self.boutonUser == "gris":
-            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=self.image_list[24])
+            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[24])
             self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
             self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
 
-            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= self.image_list[20])
+            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[20])
             self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
             self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "noir"
             self.joueurType = "joueur"
         else:
-            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=self.image_list[23])
+            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[23])
             self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
             self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
 
-            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= self.image_list[21])
+            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[21])
             self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
             self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "gris"
@@ -434,6 +443,12 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
     
     def hoverBouton(self, typ : str, typ2 : str, idButton : int):
+        """ Fonction qui permet de modifier l'image quand on la survole à la souris
+
+        Args:
+            typ (str): "Entre" ou "Sort"
+            typ2 (str): "user" ou "robot"
+        """
         if typ == "entre":
             if typ2 == "user":
                 if self.boutonUser == "gris":

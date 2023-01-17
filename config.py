@@ -7,6 +7,11 @@ class config():
     Config : config
     
     def __init__(self, controller):
+        """ Constructeur qui permet d'initialiser les émléments principaux du jeu
+
+        Args:
+            Controller: Controller qui gère le jeu
+        """
         
         self.largueur : int = 1440
         self.hauteur : int = 1024
@@ -107,12 +112,27 @@ class config():
     
 
     def tableauImage(self):
+        """ Fonction qui permet de retourner le dictionnaire image
+
+        Return:
+            self.image: Tableau d'images
+        """
         return self.image
     
     def hauteurFenetre(self):
+        """ Fonction qui permet de retourner la hauteur de la fenêtre
+
+        Return:
+            self.hauteur (int): Valeur de la hauteur de la fenêtre
+        """
         return self.hauteur
     
     def largueurFenetre(self):
+        """ Fonction qui permet de retourner la largueur de la fenêtre
+
+        Return:
+            self.largueur (int): Valeur de la largueur de la fenêtre
+        """
         return self.largueur
     
 

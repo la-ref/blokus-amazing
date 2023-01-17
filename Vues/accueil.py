@@ -12,6 +12,8 @@ class Accueil(Frame):
         self.window.wm_iconphoto(True, config.Config.image[47])
 
     def initialize(self):
+        """ Fonction qui initialise la page d'accueil
+        """
         for widgets in self.winfo_children():
             widgets.destroy()
         
@@ -122,18 +124,33 @@ class Accueil(Frame):
                 self.canvas.config(cursor="")
 
     def QuitterBouton(self,event):
+        """ Fonction qui permet le callback du bouton "Quitter"
+        
+        """
         self.window.destroy()
     
     def BoutonInfo(self,event):
+        """ Fonction qui permet le callback du bouton "Info"
+        
+        """
         self.window.destroy()
     
     def BoutonScore(self,event):
+        """ Fonction qui permet le callback du bouton "Score"
+        
+        """
         self.window.destroy()
     
     def EnLigneBouton(self,event):
+        """ Fonction qui permet le callback du bouton "En ligne"
+        
+        """
         self.window.destroy()
     
     def HorsLigneBouton(self,event):
+        """ Fonction qui permet le callback du bouton "Hors ligne"
+        
+        """
         import Vues.Lobby.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
         

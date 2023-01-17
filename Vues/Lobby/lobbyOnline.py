@@ -17,13 +17,14 @@ class lobbyOnline(Frame):
 
 
     def initialize(self):
+        """ Fonction qui initialise le lobby Online
+        """
         for widgets in self.winfo_children():
             widgets.unbind('<ButtonPress-1>')
             widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False
 
-        self.image_list = config.Config.image
         self.touche = None
         self.joueurs = [Player.Player(11,"PERSONNE 1"),Player.Player(12,"PERSONNE 2"),Player.Player(13,"PERSONNE 3"),Player.Player(14,"PERSONNE 4")]
         self.window.bind("<Key>", self.touches)
@@ -39,21 +40,21 @@ class lobbyOnline(Frame):
 
         self.canvas.place(x = 0, y = 0)
         self.canvas.bind("<Button-1>",self.clique)
-        self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= self.image_list[14])
+        self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= config.Config.image[14])
 
-        self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= self.image_list[17])
+        self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= config.Config.image[17])
         self.canvas.tag_bind(self.Bouton_Jouer, "<Button-1>", self.jouer)
         self.canvas.tag_bind(self.Bouton_Jouer, "<Enter>",lambda *_: self.hoverBouton("entre","jouer",self.Bouton_Jouer))
         self.canvas.tag_bind(self.Bouton_Jouer, "<Leave>",lambda *_: self.hoverBouton("sort","jouer",self.Bouton_Jouer))
 
 
-        self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= self.image_list[19])
+        self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= config.Config.image[19])
         self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
         self.canvas.tag_bind(self.Bouton_Quitter, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",self.Bouton_Quitter))
         self.canvas.tag_bind(self.Bouton_Quitter, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",self.Bouton_Quitter))
 
 
-        self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[0],16,hb="haut",droiteg="gauche")
+        self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[0],16,hb="haut",droiteg="gauche")
         self.bouton_jaune.move(279,147)
         self.namezone_jaune = self.bouton_jaune.getNameZone()
         self.namezone_jaune_text = self.bouton_jaune.getNameZone_Text()
@@ -61,7 +62,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_jaune_text, "<Button-1>",lambda *_: self.Boutonselect("jaune"))
 
 
-        self.bouton_vert = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[1],25,hb="haut",droiteg="droite")
+        self.bouton_vert = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[1],25,hb="haut",droiteg="droite")
         self.bouton_vert.move(1156,147)
         self.namezone_vert = self.bouton_vert.getNameZone()
         self.namezone_vert_text = self.bouton_vert.getNameZone_Text()
@@ -69,7 +70,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_vert_text, "<Button-1>",lambda *_: self.Boutonselect("vert"))
 
 
-        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[2],22,hb="bas",droiteg="gauche")
+        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],22,hb="bas",droiteg="gauche")
         self.bouton_rouge.move(279,883)
         self.namezone_rouge = self.bouton_rouge.getNameZone()
         self.namezone_rouge_text = self.bouton_rouge.getNameZone_Text()
@@ -77,7 +78,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_rouge_text, "<Button-1>",lambda *_: self.Boutonselect("rouge"))
 
 
-        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,self.image_list,self.joueurs[3],15,hb="bas",droiteg="droite")
+        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],15,hb="bas",droiteg="droite")
         self.bouton_bleu.move(1156,883)
         self.namezone_bleu = self.bouton_bleu.getNameZone()
         self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()

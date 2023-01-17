@@ -8,6 +8,17 @@ class Block(tk.Frame):
     #
     #
     def __init__(self, parent : tk.Canvas, image, nb_player : int, base_x : int, base_y : int, piece):
+        """Constructeur créant un bloc de la pièce
+
+        Args:
+            self (Game): game
+            window: La fenêtre de jeu
+            parent (tk.Canvas): La fauille de dessin de la pièce
+            image: Le tableau d'image
+            nb_player (int): Identifiant du joueur
+            base_x (int): Coordonnée en X du point d'origine de la pièce
+            base_y (int): Coordonnée en Y du point d'origine de la pièce
+        """
         super(Block,self).__init__(parent)
         self.parent = parent
         self.nb_player = nb_player
@@ -44,6 +55,8 @@ class Block(tk.Frame):
 
         
     def move(self, x : int, y : int):
+        """ Méthode permettant le mouvement du bloc à une coordonnée X et Y 
+        """
         self.parent.move(self.bl,x,y)
 
     def on_click(self,event):

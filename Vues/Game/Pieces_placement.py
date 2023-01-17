@@ -27,11 +27,7 @@ class Pieces_placement(tk.Frame):
         self.window.bind("<Motion>", self.on_drag, add='+')
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
-        self.nb_player = nb_player-11
-        self.imagepiece = { 0:(PhotoImage(file="Images/Plateau/yellow.png")),
-                            1:(PhotoImage(file="Images/Plateau/green.png")),
-                            2:(PhotoImage(file="Images/Plateau/red.png")),
-                            3:(PhotoImage(file="Images/Plateau/blue.png"))}
+        self.nb_player = nb_player
         self.x = 0
         self.y = 0
         self.la_piece = la_piece
@@ -52,7 +48,7 @@ class Pieces_placement(tk.Frame):
         self.tableau_piece=self.piece.getDelimitation()
 
         # Définition de l'image d'un bloc de la pièce
-        self.image = self.imagepiece[self.nb_player]
+        self.image = config.Config.image[self.nb_player+48]
         self.image = self.image.subsample(2)
         
         # Création de la pièce
@@ -277,7 +273,7 @@ class Pieces_placement(tk.Frame):
 
         ## reset la piece
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
-            self.image = self.imagepiece[self.nb_player]
+            self.image = config.Config.image[self.nb_player+48]
             self.ok = 0
             for block in self.tableau_piece_forme:
                 block.on_click(event)
@@ -289,7 +285,7 @@ class Pieces_placement(tk.Frame):
 
         # Condition si la pièce est sur le plateau
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
-            self.image = self.imagepiece[self.nb_player]
+            self.image = config.Config.image[self.nb_player+48]
 
             # Changement de la taille de l'image
             for block in self.tableau_piece_forme:
@@ -298,7 +294,7 @@ class Pieces_placement(tk.Frame):
             
             # Si a pièce n'est pas motion (sélectionné et téléporté à la souris)
             if not self.mon_state:
-                self.image = self.imagepiece[self.nb_player]
+                self.image = config.Config.image[self.nb_player+48]
                 self.saveliste = self.tableau_piece_forme
 
                 # Change les coordonnés de téléportation au premier bloc de la pièce
@@ -330,7 +326,7 @@ class Pieces_placement(tk.Frame):
                 self.tableau_piece_forme = self.saveliste
 
                 # Changement de la taille de l'image à une taille pour la liste
-                self.image = self.imagepiece[self.nb_player]
+                self.image = config.Config.image[self.nb_player+48]
                 self.image = self.image.subsample(2)
 
                 # Re-création de la pièce à l'endroit d'initialisation
@@ -359,7 +355,7 @@ class Pieces_placement(tk.Frame):
                 self.tableau_piece_forme = self.saveliste
 
                 # Changement de la taille de l'image à une taille pour la liste
-                self.image = self.imagepiece[self.nb_player]
+                self.image = config.Config.image[self.nb_player+48]
                 self.image = self.image.subsample(2)
 
                 # Re-création de la pièce à l'endroit d'initialisation
