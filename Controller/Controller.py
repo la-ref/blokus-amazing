@@ -8,7 +8,7 @@ from Vues.accueil import Accueil
 from Elements.Player import Player
 from config import config
 from Elements.Pieces.Pieces import Pieces
-from Vues.lobbyLocal import lobbyLocal
+from Vues.Lobby.lobbyLocal import lobbyLocal
 from Vues.Game.GameInterface import GameInterface
 
 class Controller(tk.Tk):

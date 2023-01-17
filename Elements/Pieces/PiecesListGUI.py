@@ -1,10 +1,10 @@
 import tkinter as tk
 from PIL import ImageTk,Image
-import PiecesDeclaration as PD
+import Elements.Pieces.PiecesDeclaration as PD
 from tkinter import PhotoImage
 import Elements.Pieces.Pieces as p
 import numpy as np
-import Pieces_placement as PP
+import Vues.Game.Pieces_placement as PP
 from config import config
 
 class PiecesListGUI(tk.Frame):

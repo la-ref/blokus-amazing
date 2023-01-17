@@ -5,7 +5,7 @@ import sys
 from config import *
 import tkinter as tk
 import Elements.Player as Player
-import Vues.lobbyUser as lobbyUser
+import Vues.Lobby.lobbyUser as lobbyUser
 from Vues.accueil import *
 from Vues.Game.GameInterface import GameInterface
 

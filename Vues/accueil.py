@@ -134,7 +134,7 @@ class Accueil(Frame):
         self.window.destroy()
     
     def HorsLigneBouton(self,event):
-        import Vues.lobbyLocal as lobbyLocal
+        import Vues.Lobby.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
         
         
