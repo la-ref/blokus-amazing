@@ -195,14 +195,3 @@ class Board:
             int: taille du plateau
         """
         return self.__size
-
-    def ajoutCouleur(self : Board,row : int,column : int,couleur : int) -> None:
-        """Méthode permettant d'ajouter une couleur sur une coordonnées du plateau
-
-        Args:
-            self (Board): plateau
-            row (int): ligne du plateau correspond à y
-            column (int): colonne du plateau correspond à x 
-            couleur (int): couleur d'un joueur
-        """
-        self.__board[row][column] = couleur

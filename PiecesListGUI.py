@@ -28,7 +28,7 @@ class PiecesListGUI(tk.Frame):
         self.nameZone = self.parent.create_image(
             15,
             10,
-            image=config.Config.image[nb_player],
+            image=config.Config.image[nb_player+10],
             anchor=tk.NW
         )
         
@@ -39,7 +39,6 @@ class PiecesListGUI(tk.Frame):
         decalageY = 100
         self.tableau_piece = []
         self.tableau_piece_forme = []
-        nb_player = nb_player+1
         i1 = 0
         maxheight = 0
         for valeur in PD.LISTEPIECES:

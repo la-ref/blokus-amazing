@@ -27,7 +27,6 @@ class GridInterface(tk.Frame):
             anchor=tk.NW
         )
         self.board : Board = board
-        self.imagepiece : dict = config.Config.imagepiece
         self.couleur : dict = {
             11:"#FFC700",
             12:"#32BF00",
@@ -62,7 +61,7 @@ class GridInterface(tk.Frame):
             for y in range(self.board.getBoardSize()):
                 valeur : int|None = self.board.getColorAt(i,y)
                 if valeur:
-                    piece = self.imagepiece[valeur]
+                    piece = config.Config.image[valeur+47]#self.imagepiece[valeur]
                     if ((i,y) not in self.pieces):
                         self.parent.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
                         self.pieces.append((i,y))

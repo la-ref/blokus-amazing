@@ -40,16 +40,16 @@ class GameInterface(tk.Frame):
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),10)
+        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
         self.List1.move(x=70,y=80) # jaune
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),11)
+        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
         self.List2.move(x=1047,y=80) # vert
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),12)
+        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
         self.List3.move(x=1047,y=524) #  rouge
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),13)
+        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
         self.List4.move(x=70,y=524) #bleu
 
         self.giveUp = self.border.create_image(

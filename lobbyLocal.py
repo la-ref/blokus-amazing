@@ -24,7 +24,7 @@ class lobbyLocal(Frame):
 
         self.image_list = config.Config.image
         self.touche = None
-        self.joueurs = [Player.Player(11,"PERSONNE 1"),Player.Player(12,"PERSONNE 2"),Player.Player(13,"PERSONNE 3"),Player.Player(14,"PERSONNE 4")]
+        self.joueurs = [Player.Player(0,"PERSONNE 1"),Player.Player(1,"PERSONNE 2"),Player.Player(2,"PERSONNE 3"),Player.Player(3,"PERSONNE 4")]
         self.window.bind("<Key>", self.touches)
         self.canvas = Canvas(
             self.window,

@@ -18,7 +18,7 @@ class Game:
             plateau (Board | None): plateau de jeu ou rien
             taille (int): taille du plateau de jeu
         """
-        self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
+        self.__joueurs : list[Player] = joueurs or [Player(0,"matthieu"),Player(1,"aurelian"),Player(2,"gauthier"),Player(3,"inconnu")]
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
