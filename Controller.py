@@ -11,7 +11,6 @@ from Pieces import Pieces
 from lobbyLocal import lobbyLocal
 from GameInterface import GameInterface
 
-
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
     donc de la communication entre les différents élèments de l'application
