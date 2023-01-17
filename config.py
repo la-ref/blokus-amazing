@@ -88,10 +88,10 @@ class config():
         self.image.append(PhotoImage(file="Images/Accueil/blokus-icone.png")) #47
     
         #Piece
-        self.imagepiece = { 11:(PhotoImage(file="build/assets/piece/yellow.png")),
-                    12:(PhotoImage(file="build/assets/piece/green.png")),
-                    13:(PhotoImage(file="build/assets/piece/red.png")),
-                    14:(PhotoImage(file="build/assets/piece/blue.png"))} 
+        self.image.append(PhotoImage(file="Images/Plateau/yellow.png")) #48
+        self.image.append(PhotoImage(file="Images/Plateau/green.png")) #49
+        self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 50
+        self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 51
         
         
 
