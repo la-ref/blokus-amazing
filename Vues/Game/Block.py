@@ -47,9 +47,9 @@ class Block(tk.Frame):
         self.parent.move(self.bl,x,y)
 
     def on_click(self,event):
-        '''
+        """
         Fonction interne pour permettre le deplacement des blocks au clique
-        '''
+        """
         ## si pas en mvt, enregistre la position relative avec la souris
         if not self.state:
             self.save_x,self.save_y = self.parent.coords(self.bl)
@@ -63,9 +63,9 @@ class Block(tk.Frame):
             
         
     def on_drag(self, event):
-        '''
+        """
         Fonction interne pour permettre le deplacement des blocks au mvt de la souris
-        '''
+        """
         x,y=self.parent.coords(self.bl)
         self.parent.move(self.bl,event.x-self.delta_x,event.y-self.delta_y)
         
@@ -77,15 +77,15 @@ class Block(tk.Frame):
             anchor=tk.NW
         )
     def bind(self,event_tag,call):
-        '''
+        """
         Fonction interne pour permettre la gestion des event des blocks
-        '''
+        """
         self.parent.tag_bind(self.bl,event_tag,call)
         
     def delete(self):
-        '''
+        """
         Fonction interne pour détruire l'instance de block 
-        '''
+        """
         self.parent.delete(self.bl)
         self.destroy()
 

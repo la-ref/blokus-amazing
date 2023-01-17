@@ -1,7 +1,7 @@
 from __future__ import annotations
 import numpy as np
-from Player import Player 
-from Pieces import Pieces
+from Elements.Player import Player 
+from Elements.Pieces.Pieces import Pieces
 class Board:
     """Classe représentant le plateau de jeu du jeu blokus
     """

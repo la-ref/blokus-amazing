@@ -1,15 +1,15 @@
 from __future__ import annotations
-from Game import Game
+from Elements.Game import Game
 from tkinter import PhotoImage
 import tkinter as tk
-import Elements.PiecesListGUI as PG
+import Elements.Pieces.PiecesListGUI as PG
 from PIL import ImageTk
-from accueil import Accueil
-from Player import Player
+from Vues.accueil import Accueil
+from Elements.Player import Player
 from config import config
-from Pieces import Pieces
-from lobbyLocal import lobbyLocal
-from GameInterface import GameInterface
+from Elements.Pieces.Pieces import Pieces
+from Vues.lobbyLocal import lobbyLocal
+from Vues.Game.GameInterface import GameInterface
 
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
@@ -98,7 +98,7 @@ class Controller(tk.Tk):
         return self.game
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
-        '''Fonction de liaison entre le placement d'une piece graphique et moteur
+        """Fonction de liaison entre le placement d'une piece graphique et moteur
         
         Args:
             - piece : Pieces -> pièce jouée
@@ -110,7 +110,7 @@ class Controller(tk.Tk):
         
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
-        '''
+        """
         if joueur == self.game.getCurrentPlayerId():
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
             win = self.game.getWinners()

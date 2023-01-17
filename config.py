@@ -100,9 +100,9 @@ class config():
         
     @staticmethod
     def initialisation(controller):
-        '''
+        """
         Initialisation de la configuration. L'accès à la configuration ce fait via config.Config 
-        '''
+        """
         config.Config = config(controller)
     
 

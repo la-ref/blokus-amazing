@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import ImageTk,Image
 import PiecesDeclaration as PD
 from tkinter import PhotoImage
-import Pieces as p
+import Elements.Pieces.Pieces as p
 import numpy as np
 import Pieces_placement as PP
 from config import config
@@ -55,6 +55,7 @@ class PiecesListGUI(tk.Frame):
 
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+            print(decalageX)
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
 
@@ -75,12 +76,12 @@ class PiecesListGUI(tk.Frame):
             newName (str): Nom du joueur
         """
         self.parent.itemconfig(self.text, text=newName)
-    
+        
     def surrender(self):
         """ Changer l'arrière plan de la zone du joueur 
         """
         self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
-  
+        
 
     def move(self, x : int, y : int):
         """ Déplacement de toute la zone du joueur
@@ -96,6 +97,7 @@ class PiecesListGUI(tk.Frame):
             piece.move_init2(x,y)
 
 
+
     def on_click(self,event):
         """ Gestion du clic d'un joueur
 
@@ -104,7 +106,7 @@ class PiecesListGUI(tk.Frame):
         """
         x,y=self.parent.coords(self.list)
         self.delta=event.x-x,event.y-y
-
+        
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
 

@@ -1,8 +1,8 @@
 from __future__ import annotations
 import tkinter as tk
-import Elements.PiecesListGUI as PG
+import Elements.Pieces.PiecesListGUI as PG
 from tkinter import PhotoImage
-from Board import Board
+from Elements.Board import Board
 from PIL import ImageTk
 from config import config
 

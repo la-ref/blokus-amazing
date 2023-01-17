@@ -4,7 +4,7 @@ import tkinter
 import sys
 from config import config
 import tkinter as tk
-import Player
+import Elements.Player as Player
 class lobbyUser(Frame):
     """Méthode qui permet d'initialiser tout l'objet lobbyUser
 

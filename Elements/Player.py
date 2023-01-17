@@ -1,6 +1,6 @@
 from __future__ import annotations
 from PiecesDeclaration import LISTEPIECES
-from Pieces import Pieces
+from Elements.Pieces.Pieces import Pieces
 class Player:
     """Classe représentant un joueur du jeu blokus
     """

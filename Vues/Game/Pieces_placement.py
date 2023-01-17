@@ -2,9 +2,9 @@ import tkinter as tk
 from PIL import ImageTk,Image
 import PiecesDeclaration as PD
 from tkinter import PhotoImage
-import Pieces as p
+import Elements.Pieces.Pieces as p
 import numpy as np
-import Block as b
+import Vues.Game.Block as b
 from config import config
 class Pieces_placement(tk.Frame):
 
@@ -68,23 +68,23 @@ class Pieces_placement(tk.Frame):
                     self.tableau_piece_forme.append(test)
                     
     def getPieceBoardCoord(self):
-        '''Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
+        """Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
         
         Returns:
             - int : colonne du premier cube de la piece
             - int : ligne du premier cube de la piece
             - int : décalage entre la colonne du premier cube de la piece et celle de l'origine de la piece.
             - int : décalage entre la ligne du premier cube de la piece et celle de l'origine de la piece.
-        '''
+        """
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
         return (x-450)//27+dx-1,(y-242)//27+dy-1,dx,dy
 
     def getPieceCoord(self):
-        '''
+        """
         Fonction pour obtenir les coords du coin gauche de la piece sur l'écran 
-        '''
+        """
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche

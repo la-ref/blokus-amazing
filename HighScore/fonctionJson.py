@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 import string
-from Player import Player
+from Elements.Player import Player
 
 # Exemple de fonction pour gérer les Json
 

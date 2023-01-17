@@ -134,7 +134,7 @@ class Accueil(Frame):
         self.window.destroy()
     
     def HorsLigneBouton(self,event):
-        import lobbyLocal
+        import Vues.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
         
         
@@ -143,7 +143,7 @@ class Accueil(Frame):
 
 if __name__ == "__main__":
     from config import config
-    from Controller import Controller
+    from Controller.Controller import Controller
     window = Tk(className='Accueil')
 
     window.geometry("1440x1024")

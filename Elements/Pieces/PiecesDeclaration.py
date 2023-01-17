@@ -1,4 +1,4 @@
-from Pieces import Pieces
+from Elements.Pieces.Pieces import Pieces
 import numpy as np
 
 # Constante qui est un dictionnaire comportant l'ensemble des 21 pièces du jeu blokus 

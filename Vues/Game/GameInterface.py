@@ -1,12 +1,12 @@
 from __future__ import annotations
 from tkinter import PhotoImage
 import tkinter as tk
-import Elements.PiecesListGUI as PG
+import Elements.Pieces.PiecesListGUI as PG
 from PIL import ImageTk
-from GridInterface import GridInterface
+from Vues.Game.GridInterface import GridInterface
 from config import config
-from Board import Board
-import accueil 
+from Elements.Board import Board
+import Vues.accueil as accueil 
 
 class GameInterface(tk.Frame):
     """Classe qui est une frame étant la page de jeu régroupant les joueurs et les pièces ainsi que la grille de jeu de manière graphique 

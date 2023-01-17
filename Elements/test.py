@@ -188,6 +188,6 @@
 
 # # print(a)
 # # print(appliquePiece(kk,a,0,0,5))
-from Game import Game
+from Elements.Game import Game
 game = Game(None,None,20)
 game.jeu()

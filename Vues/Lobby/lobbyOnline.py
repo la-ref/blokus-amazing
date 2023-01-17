@@ -4,12 +4,12 @@ import tkinter
 import sys
 from config import *
 import tkinter as tk
-import Player
-import lobbyUser
-from accueil import *
-from GameInterface import GameInterface
+import Elements.Player as Player
+import Vues.lobbyUser as lobbyUser
+from Vues.accueil import *
+from Vues.Game.GameInterface import GameInterface
 
-class lobbyLocal(Frame):
+class lobbyOnline(Frame):
     def __init__(self,window):
         super(lobbyLocal, self).__init__()
         self.window = window
@@ -126,7 +126,7 @@ class lobbyLocal(Frame):
         self.bouton_vert.touches(event)
 
     def jouer(self,event):
-        from Game import Game
+        from Elements.Game import Game
         config.Config.controller.game = Game(self.joueurs,None,20)
         # self.window = GameInterface(self.window)
         config.Config.controller.changePage("GameInterface")

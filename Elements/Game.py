@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import Callable
-from Pieces import Pieces
-from Player import Player
-from Board import Board
-from GridInterface import GridInterface
+from Elements.Pieces.Pieces import Pieces
+from Elements.Player import Player
+from Elements.Board import Board
+from Vues.Game.GridInterface import GridInterface
 from config import config
 class Game:
 
@@ -159,7 +159,7 @@ class Game:
         return []
     
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int) -> bool:
-        '''Méthode qui permet de jouer le tour du joueur courant
+        """Méthode qui permet de jouer le tour du joueur courant
         
         Args:
             - piece : Pieces -> pièce jouée
@@ -171,7 +171,7 @@ class Game:
         
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
-        '''
+        """
         if len(self.__joueursAbandon) != len(self.__joueurs):
             
             ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
