@@ -106,7 +106,6 @@ class lobbyOnline(Frame):
 
     def clique(self,event):
         actuelwidget = event.widget.find_withtag('current')[0]
-        # print(actuelwidget)
         if self.bouton_jaune.getActiveClavier() == True:
             if (actuelwidget != 5) and (actuelwidget != 4):
                 self.bouton_jaune.setActiveClavier(False)

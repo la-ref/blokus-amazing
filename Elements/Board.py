@@ -161,7 +161,6 @@ class Board:
         Returns:
             bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        #print(f"colonne : {column}, ligne : {row}, dc : {declageX}, dl : {declageY}") 
         if (self.verifyApplication(piece,column,row,player,declageX,declageY)):
             x : int = column-declageX
             y : int = row-declageY
