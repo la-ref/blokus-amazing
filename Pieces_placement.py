@@ -12,7 +12,6 @@ class Pieces_placement(tk.Frame):
     """
     def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
         """Constructeur créant une pièce du joueur
-
         Args:
             self (Game): game
             window: La fenêtre de jeu
@@ -29,10 +28,10 @@ class Pieces_placement(tk.Frame):
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
         self.nb_player = nb_player-11
-        self.imagepiece = { 0:(PhotoImage(file="build/assets/piece/yellow.png")),
-                            1:(PhotoImage(file="build/assets/piece/green.png")),
-                            2:(PhotoImage(file="build/assets/piece/red.png")),
-                            3:(PhotoImage(file="build/assets/piece/blue.png"))}
+        self.imagepiece = { 0:(PhotoImage(file="Images/Plateau/yellow.png")),
+                            1:(PhotoImage(file="Images/Plateau/green.png")),
+                            2:(PhotoImage(file="Images/Plateau/red.png")),
+                            3:(PhotoImage(file="Images/Plateau/blue.png"))}
         self.x = 0
         self.y = 0
         self.la_piece = la_piece
@@ -55,7 +54,6 @@ class Pieces_placement(tk.Frame):
         # Définition de l'image d'un bloc de la pièce
         self.image = self.imagepiece[self.nb_player]
         self.image = self.image.subsample(2)
-        self.image2 = self.image.subsample(28)
         
         # Création de la pièce
         for i in range(len(self.tableau_piece[0])):
@@ -94,7 +92,6 @@ class Pieces_placement(tk.Frame):
 
     def on_flip(self,event):
         """Méthode qui permet de retourner la pièce (effet miroir)
-
         Args:
             event : évènement
         """
@@ -117,7 +114,6 @@ class Pieces_placement(tk.Frame):
 
     def on_rotate(self,event):
         """Méthode qui permet de tourner à 90 degré la pièce
-
         Args:
             event : évènement
         """
@@ -140,7 +136,6 @@ class Pieces_placement(tk.Frame):
     
     def changement_piece(self,piece):
         """Méthode qui permet de créer la pièce une fois quelle est supprimée
-
         Args:
             piece : la pièce
         """
@@ -191,7 +186,6 @@ class Pieces_placement(tk.Frame):
 
     def getImage(self):
         """Fonction qui permet de savoir l'image 
-
         Returns:
             self.image: L'image
         """
@@ -199,7 +193,6 @@ class Pieces_placement(tk.Frame):
     
     def getWidth(self):
         """Fonction qui permet de savoir la taille de la pièce
-
         Returns:
             len(self.tableau_piece): La largueur de la pièce
         """
@@ -207,7 +200,6 @@ class Pieces_placement(tk.Frame):
 
     def getHeight(self):
         """Fonction qui permet de savoir la taille de la pièce
-
         Returns:
             len(self.tableau_piece[0]): La hauteur de la pièce
         """
@@ -215,7 +207,6 @@ class Pieces_placement(tk.Frame):
     
     def getWidth_Petit(self):
         """Fonction qui permet de savoir la taille de la pièce moins la bordure
-
         Returns:
             len(self.tableau_piece)-2: La pièce moins la bordure
         """
@@ -223,7 +214,6 @@ class Pieces_placement(tk.Frame):
 
     def getHeight_Petit(self):
         """Fonction qui permet de savoir la taille de la pièce moins la bordure
-
         Returns:
             len(self.tableau_piece[0])-2: La pièce moins la bordure
         """
@@ -231,7 +221,6 @@ class Pieces_placement(tk.Frame):
 
     def move(self, x : int, y : int):
         """Méthode qui permet de modifier l'emplacement de chaque bloc
-
         Args:
             x : coordonnées en X
             y : coordonnées en Y
@@ -244,7 +233,6 @@ class Pieces_placement(tk.Frame):
     
     def move_init(self, x : int, y : int):
         """Méthode qui permet la téléportation de la pièce à l'endroit d'initialisation
-
         Args:
             x : coordonnées en X
             y : coordonnées en Y
@@ -260,7 +248,6 @@ class Pieces_placement(tk.Frame):
     
     def move_init2(self, x : int, y : int):
         """Méthode qui permet la téléportation de la pièce dans la liste du joueur
-
         Args:
             x : coordonnées en X
             y : coordonnées en Y
@@ -284,7 +271,6 @@ class Pieces_placement(tk.Frame):
                 Va téléporter la pièce à l'endroit d'initialisation
         Deuxième condition "si le bloc ne touche pas le plateau"
             Va téléporter la pièce à l'endroit d'initialisation
-
         Args:
             event : l'évènement
         """
@@ -391,7 +377,6 @@ class Pieces_placement(tk.Frame):
     def on_drag(self, event):
         """
         Fonction interne pour permettre le deplacement des blocks au mvt de la souris
-
         Args:
             event : l'évènement
         """

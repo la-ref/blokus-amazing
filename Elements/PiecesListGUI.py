@@ -9,19 +9,12 @@ from config import config
 
 class PiecesListGUI(tk.Frame):
     
+    
+    
+    #   Creer l'élément de gui pour la liste des pieces
+    #
+    #
     def __init__(self, window, parent : tk.Canvas, playerName : str, nb_player : int, height : int = 420, width : int = 317):
-        """ Constructeur qui génère l'emplacement du joueur sur la page de jeu
-        avec notamment l'arrière plan de sa zone, le pseudo du joueur et ses pièces.
-
-        Args:
-            self (Game): game
-            window: La fenêtre de jeu
-            parent (tk.Canvas): La fauille de dessin de la pièce
-            playerName (str): Nom du joueur
-            nb_player (int): Numéro du joueur
-            height (int): Hauteur de la fenêtre
-            width (int): Largueur de la fenêtre
-        """
         super(PiecesListGUI,self).__init__(parent)
         
         self.parent = parent
@@ -55,6 +48,7 @@ class PiecesListGUI(tk.Frame):
 
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+            print(decalageX)
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
 
@@ -68,50 +62,33 @@ class PiecesListGUI(tk.Frame):
 
 
         
+        
     def changeName(self, newName : str):
-        """ Changer le nom affiché sur la zone du joueur
-
-        Args:
-            newName (str): Nom du joueur
-        """
         self.parent.itemconfig(self.text, text=newName)
-    
+        
     def surrender(self):
-        """ Changer l'arrière plan de la zone du joueur 
-        """
         self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
-  
-
+        
+        
+    # Fonction utiliser par Mouvement Manager (à supprimer plus tard)
     def move(self, x : int, y : int):
-        """ Déplacement de toute la zone du joueur
-
-        Args:
-            x (int): Coordonnées en X
-            y (int): Coordonnées en Y
-        """
         self.parent.move(self.text,x,y)
         self.parent.move(self.list,x,y)
         self.parent.move(self.nameZone,x,y)
         for piece in self.tableau_piece_forme:
             piece.move_init2(x,y)
 
-
+        
     def on_click(self,event):
-        """ Gestion du clic d'un joueur
-
-        Args:
-            event (Tkinter): Coordonnées X et Y du clic
-        """
         x,y=self.parent.coords(self.list)
         self.delta=event.x-x,event.y-y
-
+        
+    # def on_drag(self, event):
+    #     for piece in self.tableau_piece_forme:
+    #         # x,y=self.parent.coords(piece.bl)
+    #         self.move(event.x,event.y)
+            
     def bind(self,event_tag,call):
-        """ Gestion des paramètres de liaison au bloc 
-
-        Args:
-            event_tag (Tkinter event): Évènement attaché au joueur
-            call (Tkinter callback): Callback attaché à l'évènement
-        """
         self.parent.tag_bind(self.list,event_tag,call)
         self.parent.tag_bind(self.nameZone,event_tag,call)
         self.parent.tag_bind(self.text,event_tag,call)
