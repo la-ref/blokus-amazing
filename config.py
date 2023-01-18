@@ -23,13 +23,17 @@ class config():
         
         import platform
         if platform.system() == "Darwin":
-            self.taillePolice=[40,32,30]
+            self.taillePolice=[40,32,30,22]
         elif platform.system() == "Windows" or platform.system() == "Linux":
-            self.taillePolice=[30,25,22]
+            self.taillePolice=[30,25,22,15]
 
+
+        # vérifie si la police est installée
         import tkinter as tk, tkinter.font as tk_font
-        if 'Lilita One' not in tk_font.names():
+        if 'Lilita One' not in tk_font.families():
+            # sinon
             if platform.system() == "Windows":
+                # si sous windows, auto installation
                 print("Font installation : start")
                 print("Font installation : 0%")
                 import win32api
@@ -41,7 +45,9 @@ class config():
                 win32api.SendMessage(win32con.HWND_BROADCAST, win32con.WM_FONTCHANGE)
                 print("Font installation : 100%")
                 print("Font installation : complete")
+            
             else:
+                # si autre, previens et quitte
                 print("Police non installée ! Veillez l'installer (voir manuel utilisateur)")
                 exit(-5)
         

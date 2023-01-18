@@ -289,7 +289,7 @@ class lobbyUser(Frame):
                 if width > 300:
                     self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
 
-            config.Config.controller.changePlayer(self.joueurs,(self.joueurs.getColor()-11))
+            config.Config.controller.changePlayer(self.joueurs)
 
     def boutonSwitchIA(self,event):
         """Méthode qui permet de faire apparaitre les types de l'ia du joueur

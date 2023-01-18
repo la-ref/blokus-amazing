@@ -92,6 +92,7 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
+        print("iughesugs")
         if self.mon_state == True:
             self.x,self.y=self.getPieceCoord()
             self.ancienx,self.ancieny=self.getPieceCoord()
@@ -362,7 +363,7 @@ class Pieces_placement(tk.Frame):
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
                     block.state = 0
 
         

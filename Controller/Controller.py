@@ -20,8 +20,11 @@ class Controller(tk.Tk):
         tk.Tk.__init__(self)
         
         config.initialisation(self)
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
+        
 
+
+
+        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.changePage('Acceuil')
@@ -73,7 +76,7 @@ class Controller(tk.Tk):
                 # call fonction pour win
                 self.vueJeu.partieTermine(self.game.getWinners())
 
-    
+
     def getBoard(self : Controller):
         """Méthode getter qui permet d'obtenir le plateau de la parite
 

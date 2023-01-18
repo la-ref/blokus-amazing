@@ -40,7 +40,7 @@ class PiecesListGUI(tk.Frame):
         )
         
         
-        self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', 22),text=playerName,anchor=tk.CENTER)
+        self.text = parent.create_text((width+50)/2,55,fill="white",font=('Lilita One', config.Config.taillePolice[3]),text=playerName,anchor=tk.CENTER)
         
         decalageX = 2
         decalageY = 100
