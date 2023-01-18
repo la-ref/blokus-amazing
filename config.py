@@ -42,7 +42,7 @@ class config():
                 print("Font installation : 100%")
                 print("Font installation : complete")
             else:
-                print("Police non installée ! Veillez ")
+                print("Police non installée ! Veillez l'installer (voir manuel ")
         
         self.image.append(PhotoImage(file="Images/Accueil/image_1.png")) #0
         self.image.append(PhotoImage(file="Images/Accueil/button_2.png")) #1
