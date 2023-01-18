@@ -26,6 +26,23 @@ class config():
             self.taillePolice=[40,32,30]
         elif platform.system() == "Windows" or platform.system() == "Linux":
             self.taillePolice=[30,25,22]
+
+        import tkinter as tk, tkinter.font as tk_font
+        if 'Lilita One' not in tk_font.names():
+            if platform.system() == "Windows":
+                print("Font installation : start")
+                print("Font installation : 0%")
+                import win32api
+                import win32con
+                import ctypes
+                print("Font installation : 35%") # =)
+                gdi32 = ctypes.WinDLL('gdi32'); 
+                result = gdi32.AddFontResourceW(u"./Elements/bouton/police.ttf")
+                win32api.SendMessage(win32con.HWND_BROADCAST, win32con.WM_FONTCHANGE)
+                print("Font installation : 100%")
+                print("Font installation : complete")
+            else:
+                print("Police non installée ! Veillez ")
         
         self.image.append(PhotoImage(file="Images/Accueil/image_1.png")) #0
         self.image.append(PhotoImage(file="Images/Accueil/button_2.png")) #1
@@ -103,6 +120,7 @@ class config():
         #Accueil
         self.image.append(PhotoImage(file="Images/Accueil/regle_fond.png")) # 52
         self.image.append(PhotoImage(file="Images/Accueil/regle_text.png")) # 53
+        self.image.append(PhotoImage(file="Images/Accueil/voile.png")) # 54
         
         
 
