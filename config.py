@@ -1,9 +1,11 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-# from Controller import Controller
+from Controller import Controller
 
 
 class config():
+    """ Classe de configuration de l'application
+    """
     Config : config
     
     def __init__(self, controller):
@@ -97,6 +99,10 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/green.png")) #49
         self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 50
         self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 51
+
+        #Accueil
+        self.image.append(PhotoImage(file="Images/Accueil/regle_fond.png")) # 52
+        self.image.append(PhotoImage(file="Images/Accueil/regle_text.png")) # 53
         
         
 

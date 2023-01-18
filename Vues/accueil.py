@@ -3,13 +3,19 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
 import tkinter
 import sys
 from config import *
+from Vues.ScrollableFrame import ScrollableFrame
 
 class Accueil(Frame):
+    """ Classe étant une frame réprésentant la page d'acceuil
+    """
     def __init__(self,window):
         super(Accueil, self).__init__()
         self.window = window
         self.window.title("Blockus")
         self.window.wm_iconphoto(True, config.Config.image[47])
+        self.hidden = True
+        self.scrollable_frame = None
+        self.windowRegle = None
 
     def initialize(self):
         """ Fonction qui initialise la page d'accueil
@@ -17,7 +23,7 @@ class Accueil(Frame):
         for widgets in self.winfo_children():
             widgets.destroy()
         
-        canvas = Canvas(
+        self.canvas = Canvas(
             self.window,
             bg = "#FFFFFF",
             height = 1024,
@@ -27,67 +33,75 @@ class Accueil(Frame):
             relief = "ridge"
         )
 
-        self.canvas = canvas
-
-        canvas.place(x = 0, y = 0)
-        background = canvas.create_image(
+        self.canvas.place(x = 0, y = 0)
+        background = self.canvas.create_image(
             720.0,
             512.0,
             image=config.Config.image[0]
         )
+        self.canvas.tag_bind(background, "<Button-1>", self.fermerRegle)
 
-        HorsLigneBouton = canvas.create_image(
+        HorsLigneBouton = self.canvas.create_image(
             510, 
             344, 
             image=config.Config.image[5],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
-        canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",HorsLigneBouton))
-        canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",HorsLigneBouton))
+        self.canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
+        self.canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",HorsLigneBouton))
+        self.canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",HorsLigneBouton))
 
 
-        EnLigneBouton = canvas.create_image(
+        EnLigneBouton = self.canvas.create_image(
             510, 
             488, 
             image=config.Config.image[1],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
-        canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
+        self.canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
+        self.canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
 
 
-        QuitterBouton = canvas.create_image(
+        QuitterBouton = self.canvas.create_image(
             510, 
             642, 
             image=config.Config.image[2],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
-        canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",QuitterBouton))
-        canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",QuitterBouton))
+        self.canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
+        self.canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",QuitterBouton))
+        self.canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",QuitterBouton))
 
         
 
-        BoutonScore = canvas.create_image(
+        BoutonScore = self.canvas.create_image(
             1032, 
             821, 
             image=config.Config.image[3],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
-        canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
+        self.canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
+        self.canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
 
 
 
-        BoutonInfo = canvas.create_image(
+        BoutonInfo = self.canvas.create_image(
             334, 
             821, 
             image=config.Config.image[4],
             anchor=tkinter.NW
         )
-        canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
-        canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
+        self.canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
+        self.canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
+
+        self.RegleBlokus = self.canvas.create_image(
+            (config.Config.largueur/2)-config.Config.image[52].width()/2, 
+            config.Config.hauteur/2-config.Config.image[52].height()/2, 
+            image=config.Config.image[52],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
+        self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         if typ == "entre":
@@ -134,7 +148,21 @@ class Accueil(Frame):
         
         """
         self.window.destroy()
-    
+        
+
+        
+    def fermerRegle(self,event):
+        """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
+        
+        """
+        if not self.hidden: # fermer les règles
+            self.hidden = True
+            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
+        if self.scrollable_frame:
+            self.scrollable_frame.destroye()
+            self.scrollable_frame.destroy()
+            self.canvas.delete(self.windowRegle)
+
     def BoutonScore(self,event):
         """ Fonction qui permet le callback du bouton "Score"
         
@@ -146,6 +174,17 @@ class Accueil(Frame):
         
         """
         self.window.destroy()
+
+    def infoBouton(self,event):
+        """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll
+        """
+        if self.hidden: # afficher les règles
+            self.hidden = False
+            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.NORMAL)
+            self.scrollable_frame = ScrollableFrame(self.canvas,config.Config.image[53])
+            self.windowRegle = self.canvas.create_window(((config.Config.largueur/2)-1, 
+            (config.Config.hauteur/2)-4),window=self.scrollable_frame)
+            
     
     def HorsLigneBouton(self,event):
         """ Fonction qui permet le callback du bouton "Hors ligne"
