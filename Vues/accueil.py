@@ -39,7 +39,6 @@ class Accueil(Frame):
             512.0,
             image=config.Config.image[0]
         )
-        self.canvas.tag_bind(background, "<Button-1>", self.fermerRegle)
 
         HorsLigneBouton = self.canvas.create_image(
             510, 
@@ -94,6 +93,14 @@ class Accueil(Frame):
         self.canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
         self.canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
 
+        self.RegleFondBlokus = self.canvas.create_image(
+            (config.Config.largueur/2)-config.Config.image[54].width()/2, 
+            config.Config.hauteur/2-config.Config.image[54].height()/2, 
+            image=config.Config.image[54],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(self.RegleFondBlokus, "<Button-1>", self.fermerRegle)
+
         self.RegleBlokus = self.canvas.create_image(
             (config.Config.largueur/2)-config.Config.image[52].width()/2, 
             config.Config.hauteur/2-config.Config.image[52].height()/2, 
@@ -102,6 +109,8 @@ class Accueil(Frame):
         )
         self.canvas.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
         self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
+        
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         if typ == "entre":
@@ -158,6 +167,7 @@ class Accueil(Frame):
         if not self.hidden: # fermer les règles
             self.hidden = True
             self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
+            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
         if self.scrollable_frame:
             self.scrollable_frame.destroye()
             self.scrollable_frame.destroy()
@@ -181,6 +191,7 @@ class Accueil(Frame):
         if self.hidden: # afficher les règles
             self.hidden = False
             self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.NORMAL)
+            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.NORMAL)
             self.scrollable_frame = ScrollableFrame(self.canvas,config.Config.image[53])
             self.windowRegle = self.canvas.create_window(((config.Config.largueur/2)-1, 
             (config.Config.hauteur/2)-4),window=self.scrollable_frame)
