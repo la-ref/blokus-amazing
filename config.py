@@ -127,8 +127,18 @@ class config():
         self.image.append(PhotoImage(file="Images/Accueil/regle_fond.png")) # 52
         self.image.append(PhotoImage(file="Images/Accueil/regle_text.png")) # 53
         self.image.append(PhotoImage(file="Images/Accueil/voile.png")) # 54
-        
-        
+
+        #Plateau hover
+        self.image.append(PhotoImage(file="Images/LobbyLocal/info_hover.png")) # 55
+
+        # Modal
+        self.image.append(PhotoImage(file="Images/modal/no_valid.png")) # 56
+        self.image.append(PhotoImage(file="Images/modal/valid.png")) # 57
+
+        # Game hover
+        self.image.append(PhotoImage(file="Images/Plateau/button_info_hover.png")) # 58
+        self.image.append(PhotoImage(file="Images/Plateau/button_info.png")) # 59
+
 
          
 

@@ -13,6 +13,9 @@ class lobbyLocal(Frame):
     def __init__(self,window):
         super(lobbyLocal, self).__init__()
         self.window = window
+        self.hidden = True
+        self.scrollable_frame = None
+        self.windowRegle = None
 
 
     def initialize(self):
@@ -84,6 +87,57 @@ class lobbyLocal(Frame):
         self.canvas.tag_bind(self.namezone_bleu, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
         self.canvas.tag_bind(self.namezone_bleu_text, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
 
+        BoutonInfo = self.canvas.create_image(
+            (config.Config.largueur/2)-(config.Config.image[4].width()/2), 
+            821, 
+            image=config.Config.image[4],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
+        self.canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
+
+        self.RegleFondBlokus = self.canvas.create_image(
+            (config.Config.largueur/2)-config.Config.image[54].width()/2, 
+            config.Config.hauteur/2-config.Config.image[54].height()/2, 
+            image=config.Config.image[54],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(self.RegleFondBlokus, "<Button-1>", self.fermerRegle)
+
+        self.RegleBlokus = self.canvas.create_image(
+            (config.Config.largueur/2)-config.Config.image[52].width()/2, 
+            config.Config.hauteur/2-config.Config.image[52].height()/2, 
+            image=config.Config.image[52],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
+        self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
+        
+    def fermerRegle(self,event):
+        """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
+        
+        """
+        if not self.hidden: # fermer les règles
+            self.hidden = True
+            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
+            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
+        if self.scrollable_frame:
+            self.scrollable_frame.destroye()
+            self.scrollable_frame.destroy()
+            self.canvas.delete(self.windowRegle)
+    
+    def infoBouton(self,event):
+        """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll
+        """
+        if self.hidden: # afficher les règles
+            self.hidden = False
+            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.NORMAL)
+            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.NORMAL)
+            self.scrollable_frame = ScrollableFrame(self.canvas,config.Config.image[53])
+            self.windowRegle = self.canvas.create_window(((config.Config.largueur/2)-1, 
+            (config.Config.hauteur/2)-4),window=self.scrollable_frame)
+            
 
     def Boutonselect(self, typ):
         """ Méthode qui permet d'activer la saisie du clavier sur chacun des blocs d'utilisateur
@@ -165,12 +219,20 @@ class lobbyLocal(Frame):
             elif typ2 == "jouer":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[39])
                 self.canvas.config(cursor="hand2")
+            elif typ2 == "info":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[55])
+                self.canvas.moveto(idButton,(((config.Config.largueur/2)-(config.Config.image[55].width()/2))),815)
+                self.canvas.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "quitter":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[19])
                 self.canvas.config(cursor="")
             elif typ2 == "jouer":
                 self.canvas.itemconfigure(idButton, image=config.Config.image[17])
+                self.canvas.config(cursor="")
+            elif typ2 == "info":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[4])
+                self.canvas.moveto(idButton,((config.Config.largueur/2)-(config.Config.image[4].width()/2)),821)
                 self.canvas.config(cursor="")
 
 if __name__ == "__main__":

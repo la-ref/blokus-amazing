@@ -7,6 +7,8 @@ from Vues.Game.GridInterface import GridInterface
 from config import config
 from Elements.Board import Board
 import Vues.accueil as accueil 
+from Vues.ScrollableFrame import ScrollableFrame
+
 
 class GameInterface(tk.Frame):
     """Classe qui est une frame étant la page de jeu régroupant les joueurs et les pièces ainsi que la grille de jeu de manière graphique 
@@ -20,6 +22,9 @@ class GameInterface(tk.Frame):
         """
         super(GameInterface,self).__init__(window)
         self.window = window
+        self.hidden = True
+        self.scrollable_frame = None
+        self.windowRegle = None
         
         
     def initialize(self : GameInterface) -> None:
@@ -58,12 +63,13 @@ class GameInterface(tk.Frame):
             image=config.Config.image[6],
             anchor=tk.NW
         )
-        self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+        # self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
+        self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.modal_surrender())
         self.border.tag_bind(self.giveUp, "<Enter>",lambda *_: self.hoverSurrender("enter"))
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
         self.quitter = self.border.create_image(
-            (1440//2)-(config.Config.image[7].width()//2), 
+            577, 
             820, 
             image=config.Config.image[7],
             anchor=tk.NW
@@ -72,6 +78,57 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
+        BoutonInfo = self.border.create_image(
+            815, 
+            826, 
+            image=config.Config.image[59],
+            anchor=tk.NW
+        )
+        self.border.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
+        self.border.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
+
+        self.RegleFondBlokus = self.border.create_image(
+            (config.Config.largueur/2)-config.Config.image[54].width()/2, 
+            config.Config.hauteur/2-config.Config.image[54].height()/2, 
+            image=config.Config.image[54],
+            anchor=tk.NW
+        )
+        self.border.tag_bind(self.RegleFondBlokus, "<Button-1>", self.fermerRegle)
+
+        self.RegleBlokus = self.border.create_image(
+            (config.Config.largueur/2)-config.Config.image[52].width()/2, 
+            config.Config.hauteur/2-config.Config.image[52].height()/2, 
+            image=config.Config.image[52],
+            anchor=tk.NW
+        )
+        self.border.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
+        self.border.itemconfigure(self.RegleBlokus,state=tk.HIDDEN)
+        self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
+
+    def fermerRegle(self,event):
+        """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
+        
+        """
+        if not self.hidden: # fermer les règles
+            self.hidden = True
+            self.border.itemconfigure(self.RegleBlokus,state=tk.HIDDEN)
+            self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
+        if self.scrollable_frame:
+            self.scrollable_frame.destroye()
+            self.scrollable_frame.destroy()
+            self.border.delete(self.windowRegle)
+    
+    def infoBouton(self,event):
+        """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll
+        """
+        if self.hidden: # afficher les règles
+            self.hidden = False
+            self.border.itemconfigure(self.RegleBlokus,state=tk.NORMAL)
+            self.border.itemconfigure(self.RegleFondBlokus,state=tk.NORMAL)
+            self.scrollable_frame = ScrollableFrame(self.border,config.Config.image[53])
+            self.windowRegle = self.border.create_window(((config.Config.largueur/2)-1, 
+            (config.Config.hauteur/2)-4),window=self.scrollable_frame)
+            
 
     def callBackGiveUp(self : GameInterface) -> None:
         """Methode de callback qui a chaque joueur qui abandonne le controlleur sera prévenu pour faire enlever le joueur des joueurs non abandonnées
@@ -109,7 +166,26 @@ class GameInterface(tk.Frame):
         elif typ == "leave":
             self.border.itemconfigure(self.quitter, image=config.Config.image[7])
             self.border.config(cursor="")
+    
+    def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+        """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
 
+        Args:
+            typ (str): "entre" ou "sort"
+            typ2 (str): "jouer" ou "quitter"
+            idButton (int): l'identifiant du bouton cliqué
+        """
+        if typ == "entre":
+            if typ2 == "info":
+                self.border.itemconfigure(idButton, image=config.Config.image[58])
+                self.border.moveto(idButton,806,818)
+                self.border.config(cursor="hand2")
+        elif typ == "sort":
+            if typ2 == "info":
+                self.border.itemconfigure(idButton, image=config.Config.image[59])
+                self.border.moveto(idButton,815,826)
+                self.border.config(cursor="")
+            
     def surrender(self : GameInterface,player : int) -> None:
         """Méthode callback qui va être appeller par le controlleur pour permettre d'obtenir un joueur qui à abandonner
         et de graphiquement le modifier pour lui indiquer qu'il a abandonné
@@ -180,6 +256,37 @@ class GameInterface(tk.Frame):
             self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0],text=winStr+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[1]),anchor=tk.CENTER,justify='center')
         
         self.border.tag_raise(self.quitter)
+
+    def modal_surrender(self):
+        self.modal = self.border.create_image(
+            0, 
+            0, 
+            image=config.Config.image[46],
+            anchor=tk.NW
+        )
+
+        self.modal_no = self.border.create_image(
+            config.Config.largueur/2-372,
+            config.Config.hauteur/2-50,
+            image=config.Config.image[56],
+            anchor=tk.NW
+        )
+
+        self.modal_yes =self.border.create_image(
+            config.Config.largueur/2+100,
+            config.Config.hauteur/2-50,
+            image=config.Config.image[57],
+            anchor=tk.NW
+        )
+        
+        self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text="Êtes vous sûr de vouoir abandonner ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+        self.border.tag_bind(self.modal_no, "<Button-1>", self.remove_modal)
+        self.border.tag_bind(self.modal_yes, "<Button-1>", self.remove_modal)
+
+
+    def remove_modal(self):
+        self.border.delete(self.modal,self.modal_no,self.modal_yes)
+
 
 
 if __name__=="__main__":
