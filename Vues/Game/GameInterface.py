@@ -267,25 +267,25 @@ class GameInterface(tk.Frame):
 
         self.modal_no = self.border.create_image(
             config.Config.largueur/2-372,
-            config.Config.hauteur/2-50,
+            config.Config.hauteur/2+25,
             image=config.Config.image[56],
             anchor=tk.NW
         )
 
         self.modal_yes =self.border.create_image(
             config.Config.largueur/2+100,
-            config.Config.hauteur/2-50,
+            config.Config.hauteur/2+25,
             image=config.Config.image[57],
             anchor=tk.NW
         )
         
-        self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text="Êtes vous sûr de vouoir abandonner ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+        self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouoir abandonner ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         self.border.tag_bind(self.modal_no, "<Button-1>", self.remove_modal)
         self.border.tag_bind(self.modal_yes, "<Button-1>", self.remove_modal)
 
 
-    def remove_modal(self):
-        self.border.delete(self.modal,self.modal_no,self.modal_yes)
+    def remove_modal(self,event):
+        self.border.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
 
 
 
