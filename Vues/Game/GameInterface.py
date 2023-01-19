@@ -135,6 +135,10 @@ class GameInterface(tk.Frame):
         Args:
             self (GameInterface): GameInterface
         """
+        self.List1.remettrePiece_copy()
+        self.List2.remettrePiece_copy()
+        self.List3.remettrePiece_copy()
+        self.List4.remettrePiece_copy()
         config.Config.controller.changePage("Acceuil")
 
     def refreshBoard(self : GameInterface,plateau : Board) -> None:

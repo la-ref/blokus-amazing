@@ -81,6 +81,11 @@ class PiecesListGUI(tk.Frame):
         """
         self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
         
+    def remettrePiece_copy(self):
+        """ Fonction qui permet de remettre les pièces par défaut
+        """
+        for piece in self.tableau_piece_forme:
+            piece.remettrePiece_copy()
 
     def move(self, x : int, y : int):
         """ Déplacement de toute la zone du joueur

@@ -7,6 +7,7 @@ import numpy as np
 import Vues.Game.Block as b
 from config import config
 import platform
+import copy
 
 class Pieces_placement(tk.Frame):
 
@@ -43,6 +44,8 @@ class Pieces_placement(tk.Frame):
         self.tableau_piece_forme = []
         self.mon_state = 0
 
+        self.tableau_piece_copy=copy.copy(PD.LISTEPIECES[la_piece])
+
         # Initialisation de la pièce
         self.piece=PD.LISTEPIECES[la_piece]
 
@@ -67,7 +70,12 @@ class Pieces_placement(tk.Frame):
                     else:
                         self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
-                    
+
+    def remettrePiece_copy(self):
+        """ Fonction qui permet de remettre les pièces par défaut
+        """
+        PD.LISTEPIECES[self.la_piece] = self.tableau_piece_copy
+
     def getPieceBoardCoord(self):
         """Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
         

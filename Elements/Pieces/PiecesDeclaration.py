@@ -9,7 +9,7 @@ LISTEPIECES : dict[str,Pieces] = {
     "4" : Pieces(np.array([[1],[1],[1],[1]]),4),
     "5" : Pieces(np.array([[1],[1],[1],[1],[1]]),5),
     "6" : Pieces(np.array([[1,1],
-                           [1,1]]),6),
+                           [1,1]]),6),  
     "7" :Pieces(np.array([[1,1],
                           [1,0]]),7),
     "8" :Pieces(np.array([[1,1],
