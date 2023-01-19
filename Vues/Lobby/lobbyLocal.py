@@ -40,6 +40,7 @@ class lobbyLocal(Frame):
             relief = "ridge"
         )
 
+        self.modal_active = False
         self.canvas.place(x = 0, y = 0)
         self.canvas.bind("<Button-1>",self.clique)
         self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= config.Config.image[14])
@@ -51,7 +52,8 @@ class lobbyLocal(Frame):
 
 
         self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= config.Config.image[19])
-        self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
+        # self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>", self.QuitterBouton)
+        self.canvas.tag_bind(self.Bouton_Quitter, "<Button-1>",lambda *_: self.modal_quitter())
         self.canvas.tag_bind(self.Bouton_Quitter, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",self.Bouton_Quitter))
         self.canvas.tag_bind(self.Bouton_Quitter, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",self.Bouton_Quitter))
 
@@ -169,19 +171,20 @@ class lobbyLocal(Frame):
         Args:
             event (x,y): Les coordonnées en X et Y du clic du joueur
         """
-        actuelwidget = event.widget.find_withtag('current')[0]
-        if self.bouton_jaune.getActiveClavier() == True:
-            if (actuelwidget != 5) and (actuelwidget != 4):
-                self.bouton_jaune.setActiveClavier(False)
-        if self.bouton_vert.getActiveClavier() == True:
-            if (actuelwidget != 15) and (actuelwidget != 14):
-                self.bouton_vert.setActiveClavier(False)
-        if self.bouton_rouge.getActiveClavier() == True:
-            if (actuelwidget != 25) and (actuelwidget != 24):
-                self.bouton_rouge.setActiveClavier(False)
-        if self.bouton_bleu.getActiveClavier() == True:
-            if (actuelwidget != 35) and (actuelwidget != 34):
-                self.bouton_bleu.setActiveClavier(False)
+        if self.modal_active == False:
+            actuelwidget = event.widget.find_withtag('current')[0]
+            if self.bouton_jaune.getActiveClavier() == True:
+                if (actuelwidget != 5) and (actuelwidget != 4):
+                    self.bouton_jaune.setActiveClavier(False)
+            if self.bouton_vert.getActiveClavier() == True:
+                if (actuelwidget != 15) and (actuelwidget != 14):
+                    self.bouton_vert.setActiveClavier(False)
+            if self.bouton_rouge.getActiveClavier() == True:
+                if (actuelwidget != 25) and (actuelwidget != 24):
+                    self.bouton_rouge.setActiveClavier(False)
+            if self.bouton_bleu.getActiveClavier() == True:
+                if (actuelwidget != 35) and (actuelwidget != 34):
+                    self.bouton_bleu.setActiveClavier(False)
         
         
     def touches(self,event):
@@ -199,7 +202,7 @@ class lobbyLocal(Frame):
         config.Config.controller.game = Game(self.joueurs,None,20)
         config.Config.controller.changePage("GameInterface")
     
-    def QuitterBouton(self,event):
+    def QuitterBouton(self):
         """ Méthode permettant re venir à la page d'Accueil (initialisation de la page d'accueil)
         """
         config.Config.controller.changePage("Acceuil")
@@ -234,6 +237,48 @@ class lobbyLocal(Frame):
                 self.canvas.itemconfigure(idButton, image=config.Config.image[4])
                 self.canvas.moveto(idButton,((config.Config.largueur/2)-(config.Config.image[4].width()/2)),821)
                 self.canvas.config(cursor="")
+
+    def modal_quitter(self):
+        self.modal_active = True
+        self.modal = self.canvas.create_image(
+            0, 
+            0, 
+            image=config.Config.image[46],
+            anchor=tk.NW
+        )
+
+        self.modal_no = self.canvas.create_image(
+            config.Config.largueur/2-372,
+            config.Config.hauteur/2+25,
+            image=config.Config.image[56],
+            anchor=tk.NW
+        )
+
+        self.modal_yes =self.canvas.create_image(
+            config.Config.largueur/2+100,
+            config.Config.hauteur/2+25,
+            image=config.Config.image[57],
+            anchor=tk.NW
+        )
+
+        self.canvas.tag_bind(self.modal_yes, "<Button-1>",lambda *_: self.yes())
+        self.canvas.tag_bind(self.modal_no, "<Button-1>",lambda *_: self.no())
+        self.text_modal = self.canvas.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+    
+
+
+    def remove_modal(self):
+        self.modal_active = False
+        self.canvas.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
+        self.modal_active = False
+
+    def yes(self):
+        self.remove_modal()
+        self.QuitterBouton()
+    
+    def no(self):
+        self.remove_modal()
+
 
 if __name__ == "__main__":
     window = Tk()

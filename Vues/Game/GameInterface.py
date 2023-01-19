@@ -63,8 +63,8 @@ class GameInterface(tk.Frame):
             image=config.Config.image[6],
             anchor=tk.NW
         )
-        # self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.callBackGiveUp())
-        self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.modal_surrender())
+    
+        self.border.tag_bind(self.giveUp, "<Button-1>",lambda *_: self.ceate_modal("abandon"))
         self.border.tag_bind(self.giveUp, "<Enter>",lambda *_: self.hoverSurrender("enter"))
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
@@ -74,7 +74,7 @@ class GameInterface(tk.Frame):
             image=config.Config.image[7],
             anchor=tk.NW
         )
-        self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.leave())
+        self.border.tag_bind(self.quitter, "<Button-1>",lambda *_: self.ceate_modal("quitter"))
         self.border.tag_bind(self.quitter, "<Enter>",lambda *_: self.hoverLeave("enter"))
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
@@ -257,7 +257,7 @@ class GameInterface(tk.Frame):
         
         self.border.tag_raise(self.quitter)
 
-    def modal_surrender(self):
+    def ceate_modal(self,type):
         self.modal = self.border.create_image(
             0, 
             0, 
@@ -278,14 +278,32 @@ class GameInterface(tk.Frame):
             image=config.Config.image[57],
             anchor=tk.NW
         )
+
+        if type == "abandon":
+            self.border.tag_bind(self.modal_yes, "<Button-1>",lambda *_: self.yes("abandon"))
+            self.border.tag_bind(self.modal_no, "<Button-1>", self.no)
+            self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir abandonner ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         
-        self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouoir abandonner ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
-        self.border.tag_bind(self.modal_no, "<Button-1>", self.remove_modal)
-        self.border.tag_bind(self.modal_yes, "<Button-1>", self.remove_modal)
+        if type == "quitter":
+            self.border.tag_bind(self.modal_yes, "<Button-1>",lambda *_: self.yes("quitter"))
+            self.border.tag_bind(self.modal_no, "<Button-1>", self.no)
+            self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+        
 
 
-    def remove_modal(self,event):
+    def remove_modal(self):
         self.border.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
+
+    def yes(self,type):
+        self.remove_modal()
+        if type == "abandon":
+            self.callBackGiveUp()
+        if type == "quitter":
+            self.leave()
+    
+    def no(self,event):
+        self.remove_modal()
+        
 
 
 
