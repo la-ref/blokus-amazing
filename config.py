@@ -2,7 +2,6 @@ from __future__ import annotations
 from tkinter import PhotoImage
 from Controller import Controller
 
-
 class config():
     """ Classe de configuration de l'application
     """
@@ -19,7 +18,7 @@ class config():
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
         self.imagepiece : dict = {}
-        self.controller=controller
+        self.controller = controller
         
         import platform
         if platform.system() == "Darwin":

@@ -6,6 +6,8 @@ import Elements.Pieces.Pieces as p
 import numpy as np
 import Vues.Game.Block as b
 from config import config
+import platform
+
 class Pieces_placement(tk.Frame):
 
     """Classe de gestion de la pièce
@@ -60,7 +62,10 @@ class Pieces_placement(tk.Frame):
                 if (self.tableau_piece[v][i] == 3):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
                     self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
+                    if platform.system() == "Windows":
+                        self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
+                    else:
+                        self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
                     
     def getPieceBoardCoord(self):
@@ -92,7 +97,6 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
-        print("iughesugs")
         if self.mon_state == True:
             self.x,self.y=self.getPieceCoord()
             self.ancienx,self.ancieny=self.getPieceCoord()
@@ -158,7 +162,10 @@ class Pieces_placement(tk.Frame):
                 if (self.tableau_piece[i][v] == 3):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
                     self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
+                    if platform.system() == "Windows":
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
+                    else:
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
                     le_block.move(self.back_x-self.x,self.back_y-self.y)
                     le_block.state = 1
@@ -334,7 +341,10 @@ class Pieces_placement(tk.Frame):
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                    if platform.system() == "Windows":
+                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                    else:
+                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
         
         else:
@@ -363,7 +373,10 @@ class Pieces_placement(tk.Frame):
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
                     self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                    if platform.system() == "Windows":
+                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                    else:
+                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
 
         

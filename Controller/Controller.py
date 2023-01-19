@@ -50,8 +50,6 @@ class Controller(tk.Tk):
             players (list[Player]): liste des joueurs qui vont jouer
         """
         self.joueurs = players
-        self.game.setPlayers(self.joueurs)
-        
 
     def updateBoard(self: Controller) -> None:
         """Méthode callback permettant de mettre à jour le plateau avec les pièces et le joueur courant à afficher

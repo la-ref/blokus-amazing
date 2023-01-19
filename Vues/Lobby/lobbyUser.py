@@ -40,13 +40,13 @@ class lobbyUser(Frame):
         self.x=0
         self.y=0
         self.nb_player = nb_player
-        if nb_player == 16 :
+        if nb_player == 16:
             self.nb_player_hover = 35
-        if nb_player == 25 :
+        if nb_player == 25:
             self.nb_player_hover = 36
-        if nb_player == 22 :
+        if nb_player == 22:
             self.nb_player_hover = 37
-        if nb_player == 15 :
+        if nb_player == 15:
             self.nb_player_hover = 38
         self.nameZone = self.parent.create_image(15,10,image=images[nb_player])
         self.parent.tag_bind(self.nameZone, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
@@ -56,8 +56,8 @@ class lobbyUser(Frame):
 
         self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueurs.getName(),anchor=tk.CENTER)
         self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
-        self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.text))
-        self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.text))
+        self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
+        self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
         
 
         if self.hb == "haut":
