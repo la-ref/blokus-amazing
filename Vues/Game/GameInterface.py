@@ -261,6 +261,10 @@ class GameInterface(tk.Frame):
         
         self.border.tag_raise(self.quitter)
 
+
+    """ Fonction permettant de créer un modal en fonction du paramètre reçu :
+        paramètres valables : abandon, quitter.
+    """
     def ceate_modal(self,type):
         self.modal = self.border.create_image(
             0, 
@@ -294,10 +298,13 @@ class GameInterface(tk.Frame):
             self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         
 
-
+    """ Fonction permettant de détruire le modal actif
+    """
     def remove_modal(self):
         self.border.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
 
+    """ Fonction callback de confirmation des modaux
+    """
     def yes(self,type):
         self.remove_modal()
         if type == "abandon":
@@ -305,6 +312,8 @@ class GameInterface(tk.Frame):
         if type == "quitter":
             self.leave()
     
+    """ Fonction callback d' infirmation des modaux
+    """
     def no(self,event):
         self.remove_modal()
         

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-from Controller import Controller
+
 
 class config():
     """ Classe de configuration de l'application
@@ -115,7 +115,7 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/image_winner.png")) #46
         
         #Icone
-        self.image.append(PhotoImage(file="Images/Accueil/blokus-icone.png")) #47
+        self.image.append(PhotoImage(file="Images/logo.png")) #47
     
         #Piece
         self.image.append(PhotoImage(file="Images/Plateau/yellow.png")) #48

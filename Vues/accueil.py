@@ -11,7 +11,7 @@ class Accueil(Frame):
     def __init__(self,window):
         super(Accueil, self).__init__()
         self.window = window
-        self.window.title("Blockus")
+        self.window.title("Blokus")
         self.window.wm_iconphoto(True, config.Config.image[47])
         self.hidden = True
         self.scrollable_frame = None
@@ -151,12 +151,7 @@ class Accueil(Frame):
         
         """
         self.window.destroy()
-    
-    def BoutonInfo(self,event):
-        """ Fonction qui permet le callback du bouton "Info"
-        
-        """
-        self.window.destroy()
+        exit(1)
         
 
         
