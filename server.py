@@ -8,7 +8,7 @@ import time
 
 class Server:
     clients = []
-    PORT = 5000
+    PORT = 5005
 
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -60,22 +60,6 @@ class Server:
 
 s1 = Server()
 s1.condition()
-
-
-# def connect():
-#     t1 = threading.Thread(target=s1.connect)
-#     t1.start()
-
-
-# def send():
-#     t2 = threading.Thread(target=s1.send)
-#     t2.start()
-
-
-# def clear():
-#     text.delete("1.0", "end")
-
-
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ import time
 
 class Client:
 
-    PORT = 5000
+    PORT = 5005
     Compteur = 5
 
     def __init__(self):
@@ -51,18 +51,3 @@ class Client:
 c1 = Client()
 t1 = threading.Thread(target=c1.receive)
 t1.start()
-
-# def connect():
-#     t1 = threading.Thread(target=c1.receive)
-#     t1.start()
-
-
-# def send():
-#     t2 = threading.Thread(target=c1.send)
-#     t2.start()
-
-
-
-# if __name__ == "__main__":
-#     t0 = threading.Thread(target=root.mainloop)
-#     t0.run()

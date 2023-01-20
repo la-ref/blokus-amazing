@@ -158,8 +158,6 @@ class Accueil(Frame):
         """
         self.window.destroy()
         
-
-        
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
         
@@ -183,7 +181,8 @@ class Accueil(Frame):
         """ Fonction qui permet le callback du bouton "En ligne"
         
         """
-        self.window.destroy()
+        import Vues.PageConnexion as PageConnexion
+        config.Config.controller.changePage("PageConnexion")
 
     def infoBouton(self,event):
         """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll

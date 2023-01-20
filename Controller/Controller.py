@@ -5,6 +5,7 @@ import tkinter as tk
 import Elements.Pieces.PiecesListGUI as PG
 from PIL import ImageTk
 from Vues.accueil import Accueil
+from Vues.PageConnexion import PageConnexion
 from Elements.Player import Player
 from config import config
 from Elements.Pieces.Pieces import Pieces
@@ -24,7 +25,7 @@ class Controller(tk.Tk):
 
 
 
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
+        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self),"PageConnexion" : PageConnexion(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.changePage('Acceuil')
