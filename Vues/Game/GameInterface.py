@@ -125,6 +125,10 @@ class GameInterface(tk.Frame):
             self.hidden = False
             self.border.itemconfigure(self.RegleBlokus,state=tk.NORMAL)
             self.border.itemconfigure(self.RegleFondBlokus,state=tk.NORMAL)
+            self.border.tag_raise(self.RegleFondBlokus)
+            self.border.tag_raise(self.RegleBlokus)
+
+
             self.scrollable_frame = ScrollableFrame(self.border,config.Config.image[53])
             self.windowRegle = self.border.create_window(((config.Config.largueur/2)-1, 
             (config.Config.hauteur/2)-4),window=self.scrollable_frame)
