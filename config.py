@@ -145,7 +145,8 @@ class config():
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/entrer_pseudo.png")) # 61
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/port.png")) # 62
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter.png")) # 63
-
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance.png")) # 64
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie.png")) # 65
 
 
          
