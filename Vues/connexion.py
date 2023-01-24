@@ -5,11 +5,11 @@ import sys
 from config import *
 from Vues.ScrollableFrame import ScrollableFrame
 
-class Accueil(Frame):
+class Connexion(Frame):
     """ Classe étant une frame réprésentant la page d'acceuil
     """
     def __init__(self,window):
-        super(Accueil, self).__init__()
+        super(Connexion, self).__init__()
         self.window = window
         self.window.title("Blokus")
         self.window.wm_iconphoto(True, config.Config.image[47])
@@ -18,7 +18,7 @@ class Accueil(Frame):
         self.windowRegle = None
 
     def initialize(self):
-        """ Fonction qui initialise la page d'accueil
+        """ Fonction qui initialise la page de Connexion
         """
         for widgets in self.winfo_children():
             widgets.destroy()
@@ -47,71 +47,52 @@ class Accueil(Frame):
             image=config.Config.image[61],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.HorsLigneBouton)
-        self.canvas.tag_bind(entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",entrerPseudo_image))
-        self.canvas.tag_bind(entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",entrerPseudo_image))
+        self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.Entrerpseudo)
+        self.canvas.tag_bind(entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",entrerPseudo_image))
+        self.canvas.tag_bind(entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",entrerPseudo_image))
 
-
-        EnLigneBouton = self.canvas.create_image(
+        entrerip_image = self.canvas.create_image(
             510, 
-            488, 
-            image=config.Config.image[1],
+            344, 
+            image=config.Config.image[60],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
-        self.canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
+        self.canvas.tag_bind(entrerip_image, "<Button-1>", self.Entrerip)
+        self.canvas.tag_bind(entrerip_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",entrerip_image))
+        self.canvas.tag_bind(entrerip_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",entrerip_image))
 
+        entrerPort_image = self.canvas.create_image(
+            510, 
+            344, 
+            image=config.Config.image[62],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(entrerPort_image, "<Button-1>", self.Entrerport)
+        self.canvas.tag_bind(entrerPort_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",entrerPort_image))
+        self.canvas.tag_bind(entrerPort_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",entrerPort_image))
 
+        ConnecterBouton = self.canvas.create_image(
+            510, 
+            642, 
+            image=config.Config.image[63],
+            anchor=tkinter.NW
+        )
+        self.canvas.tag_bind(ConnecterBouton, "<Button-1>", self.ConnecterBouton)
+        self.canvas.tag_bind(ConnecterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","connecter",ConnecterBouton))
+        self.canvas.tag_bind(ConnecterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","connecter",ConnecterBouton))
+
+        
         QuitterBouton = self.canvas.create_image(
             510, 
             642, 
-            image=config.Config.image[2],
+            image=config.Config.image[7],
             anchor=tkinter.NW
         )
         self.canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
         self.canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",QuitterBouton))
         self.canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",QuitterBouton))
 
-        
 
-        BoutonScore = self.canvas.create_image(
-            1032, 
-            821, 
-            image=config.Config.image[3],
-            anchor=tkinter.NW
-        )
-        self.canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
-        self.canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
-
-
-
-        BoutonInfo = self.canvas.create_image(
-            334, 
-            821, 
-            image=config.Config.image[4],
-            anchor=tkinter.NW
-        )
-        self.canvas.tag_bind(BoutonInfo, "<Enter>",lambda *_: self.hoverBouton("entre","info",BoutonInfo))
-        self.canvas.tag_bind(BoutonInfo, "<Leave>",lambda *_: self.hoverBouton("sort","info",BoutonInfo))
-
-        self.RegleFondBlokus = self.canvas.create_image(
-            (config.Config.largueur/2)-config.Config.image[54].width()/2, 
-            config.Config.hauteur/2-config.Config.image[54].height()/2, 
-            image=config.Config.image[54],
-            anchor=tkinter.NW
-        )
-        self.canvas.tag_bind(self.RegleFondBlokus, "<Button-1>", self.fermerRegle)
-
-        self.RegleBlokus = self.canvas.create_image(
-            (config.Config.largueur/2)-config.Config.image[52].width()/2, 
-            config.Config.hauteur/2-config.Config.image[52].height()/2, 
-            image=config.Config.image[52],
-            anchor=tkinter.NW
-        )
-        self.canvas.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
-        self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
-        self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
-        
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         if typ == "entre":
@@ -207,7 +188,7 @@ class Accueil(Frame):
 if __name__ == "__main__":
     from config import config
     from Controller.Controller import Controller
-    window = Tk(className='Accueil')
+    window = Tk(className='Connexion')
 
     window.geometry("1440x1024")
     window.configure(bg = "#FFFFFF")
@@ -215,7 +196,7 @@ if __name__ == "__main__":
     config.initialisation(None)
     image = config.Config.image
 
-    MonAccueil = Accueil(window,image)
+    MonAccueil = Connexion(window,image)
     # MonAccueil.pack()
     window.resizable(False, False)
     window.mainloop()

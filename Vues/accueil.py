@@ -57,6 +57,7 @@ class Accueil(Frame):
             image=config.Config.image[1],
             anchor=tkinter.NW
         )
+        self.canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.EnLigneBouton)
         self.canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
         self.canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
 
@@ -198,6 +199,13 @@ class Accueil(Frame):
         """
         import Vues.Lobby.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
+    
+    def HorsLigneBouton(self,event):
+        """ Fonction qui permet le callback du bouton "Hors ligne"
+        
+        """
+        import Vues.connexion as connexion
+        config.Config.controller.changePage("connexion")
         
         
         
