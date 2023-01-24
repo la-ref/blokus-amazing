@@ -39,16 +39,17 @@ class Accueil(Frame):
             512.0,
             image=config.Config.image[0]
         )
-
-        HorsLigneBouton = self.canvas.create_image(
+        
+        
+        entrerPseudo_image = self.canvas.create_image(
             510, 
             344, 
-            image=config.Config.image[5],
+            image=config.Config.image[61],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
-        self.canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",HorsLigneBouton))
-        self.canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",HorsLigneBouton))
+        self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.HorsLigneBouton)
+        self.canvas.tag_bind(entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",entrerPseudo_image))
+        self.canvas.tag_bind(entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",entrerPseudo_image))
 
 
         EnLigneBouton = self.canvas.create_image(
