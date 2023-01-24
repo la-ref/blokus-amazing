@@ -18,6 +18,8 @@ class Pieces:
         self.__id : int = identifiant
         self.__forme : np.ndarray = forme
         self.__delimitation : np.ndarray = self.__findCorners() # matrice permettant de connaitre les coins de la pièces voir _findCorners()
+        self.__flip : bool = False
+        self.__rotation : int = 0
     
     def __findCorners(self : Pieces) -> np.ndarray:
         """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
@@ -97,6 +99,9 @@ class Pieces:
         """
         self.__delimitation : np.ndarray = np.rot90(self.__delimitation,1,axes=(1,0))
         self.__forme : np.ndarray = np.rot90(self.__forme,1,axes=(1,0))
+        self.__rotation += 90
+        if self.__rotation == 360:
+            self.__rotation = 0
 
     def flip(self : Pieces) -> None:
         """Méthode permettant de retourner horizontalement une piece et la delimitation
@@ -106,6 +111,10 @@ class Pieces:
         """
         self.__delimitation : np.ndarray = np.fliplr(self.__delimitation)
         self.__forme : np.ndarray = np.fliplr(self.__forme)
+        if self.__flip == False:
+            self._flip = True
+        else:
+            self.__flip = False
 
     def getNbCorners(self : Pieces) -> int:
         """Méthode permettant de connaître le nombre de coin d'une pièce
@@ -141,4 +150,25 @@ class Pieces:
             int: identifiant de la pièce
         """
         return self.__id
+    
+    def getRotation(self : Pieces) -> int:
+        """Méthoge getter permettant d'obtenir le degrès de rotation de la pièce
 
+        Args:
+            self (Pieces): pieces
+
+        Returns:
+            int: degrè de rotation
+        """
+        return self.__rotation
+    
+    def getFlip(self : Pieces) -> bool:
+        """Méthode getter pour obtenir si la pièces est flip ou non
+
+        Args:
+            self (Pieces): pieces
+
+        Returns:
+            bool: True si elle est flip, False si elle ne l'est pas
+        """
+        return self.__flip
