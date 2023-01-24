@@ -140,6 +140,14 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/button_info.png")) # 59
 
 
+        # Connexion
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/adresse_ip.png")) # 60
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/entrer_pseudo.png")) # 61
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/port.png")) # 62
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter.png")) # 63
+
+
+
          
 
         
