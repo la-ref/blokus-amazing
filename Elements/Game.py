@@ -5,6 +5,7 @@ from Elements.Player import Player
 from Elements.Board import Board
 from Vues.Game.GridInterface import GridInterface
 from config import config
+import json
 class Game:
 
     """Classe de gestion des parties de jeu blokus
@@ -158,10 +159,21 @@ class Game:
             for i in range(len(blockCount)):
                 if blockCount[i] == max(blockCount):
                     winners.append(self.__joueurs[i])
+                self.__json[0].update({"winners" : winners})
+                self.isJsonAjout()
             return winners
         return []
     
-    def isJsonUpdate(self):
+    def isJsonAjout(self):
+        fileObject = open("../Highscore/highscore.json", "r")
+        jsonContent = fileObject.read()
+        dict_python = json.loads(jsonContent)
+        val_test = "Game1"
+        existe = True
+        while existe == True:
+            if val_test not in dict_python:
+                existe = False
+        dict_python.update({val_test : self.__json})    
         
     
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int ) -> bool:
