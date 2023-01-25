@@ -44,14 +44,13 @@ class PiecesListGUI(tk.Frame):
         
         decalageX = 2
         decalageY = 100
-        self.tableau_piece = []
         self.tableau_piece_forme = []
 
         i1 = 0
         maxheight = 0
-        for valeur in PD.LISTEPIECES:
-            self.tableau_piece_forme.append([])
-            self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
+        for valeur in config.Config.controller.getGame().getPlayers()[nb_player].getPieces():
+            
+            self.tableau_piece_forme.append(PP.Pieces_placement(window,self.parent,nb_player,valeur,self))
 
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
@@ -64,6 +63,8 @@ class PiecesListGUI(tk.Frame):
                 decalageX= 2
                 decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
                 maxheight = 0
+                
+            self.nb_player=nb_player
 
 
 
@@ -81,11 +82,11 @@ class PiecesListGUI(tk.Frame):
         """
         self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
         
-    def remettrePiece_copy(self):
-        """ Fonction qui permet de remettre les pièces par défaut
-        """
-        for piece in self.tableau_piece_forme:
-            piece.remettrePiece_copy()
+    # def remettrePiece_copy(self):  #! inutilisée
+    #     """ Fonction qui permet de remettre les pièces par défaut
+    #     """
+    #     for piece in self.tableau_piece_forme:
+    #         piece.remettrePiece_copy()
 
     def move(self, x : int, y : int):
         """ Déplacement de toute la zone du joueur
@@ -112,6 +113,9 @@ class PiecesListGUI(tk.Frame):
     #     self.delta=event.x-x,event.y-y
     #     print(self.tableau_piece_forme)
         
+    def removePiece(self,piece : PP.Pieces_placement):
+        self.tableau_piece_forme.remove(piece)
+        config.Config.controller.game.getPlayers()[self.nb_player].removePiece(piece.la_piece)
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
 

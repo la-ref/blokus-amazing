@@ -46,16 +46,16 @@ class GameInterface(tk.Frame):
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
         self.Lists=[]
-        self.Lists[0] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0))
         self.Lists[0].move(x=70,y=80) # jaune
 
-        self.Lists[1] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1))
         self.Lists[1].move(x=1047,y=80) # vert
 
-        self.Lists[2] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2))
         self.Lists[2].move(x=1047,y=524) #  rouge
 
-        self.Lists[3] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3))
         self.Lists[3].move(x=70,y=524) #bleu
 
         self.giveUp = self.border.create_image(
@@ -216,10 +216,7 @@ class GameInterface(tk.Frame):
         Args:
             self (GameInterface): GameInterface
         """
-        self.Lists[0].remettrePiece_copy()
-        self.Lists[1].remettrePiece_copy()
-        self.Lists[2].remettrePiece_copy()
-        self.Lists[3].remettrePiece_copy()
+        
         config.Config.controller.changePage("Acceuil")
 
     def refreshBoard(self : GameInterface,plateau : Board) -> None:

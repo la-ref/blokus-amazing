@@ -13,7 +13,7 @@ class Pieces_placement(tk.Frame):
 
     """Classe de gestion de la pièce
     """
-    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
+    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str, list):
         """Constructeur créant une pièce du joueur
         Args:
             self (Game): game
@@ -21,6 +21,7 @@ class Pieces_placement(tk.Frame):
             parent (tk.Canvas): La fauille de dessin de la pièce
             nb_player (int): Identifiant du joueur
             la_piece (str) : Identifiant de la pièce
+            list (PiecesListGUI) : liste dans laquelle elle se trouve
         """
         super(Pieces_placement,self).__init__(parent)
 
@@ -31,6 +32,7 @@ class Pieces_placement(tk.Frame):
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
         self.nb_player = nb_player
+        self.list = list
         self.x = 0
         self.y = 0
         self.la_piece = la_piece
@@ -71,10 +73,10 @@ class Pieces_placement(tk.Frame):
                         self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
 
-    def remettrePiece_copy(self):
-        """ Fonction qui permet de remettre les pièces par défaut
-        """
-        PD.LISTEPIECES[self.la_piece] = self.tableau_piece_copy
+    # def remettrePiece_copy(self):    #! inutilisée
+    #     """ Fonction qui permet de remettre les pièces par défaut
+    #     """
+    #     PD.LISTEPIECES[self.la_piece] = self.tableau_piece_copy
 
     def getPieceBoardCoord(self):
         """Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
@@ -114,7 +116,7 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
             
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece = self.tableau_piece_copy
             self.piece.flip()
 
             # Re-création de la pièce
@@ -135,7 +137,7 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
 
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece = self.tableau_piece_copy
             self.piece.rotate90()
 
             # Re-création de la pièce
@@ -359,6 +361,8 @@ class Pieces_placement(tk.Frame):
                 for piece in self.tableau_piece_forme:
                     piece.delete()
                 self.tableau_piece_forme = []
+                self.list.removePiece(self) 
+                self.destroy()
             else:
                 # remet la piece à la position si non
                 for piece in self.tableau_piece_forme:

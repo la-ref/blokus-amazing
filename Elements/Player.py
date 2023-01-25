@@ -16,7 +16,7 @@ class Player:
         self.__name : str =  nom or ("Joueur"+str(Player.nbJoueur))
         self.__idCouleur : int = idJoueur+1
         self.__nbTour : int = 0 
-        self.__pieces : dict[str,Pieces] = LISTEPIECES.copy()
+        self.__pieces : dict[str,Pieces]
         Player.nbJoueur +=1
 
     def getName(self : Player) -> str:
@@ -84,6 +84,15 @@ class Player:
         """
         if id in self.__pieces.keys():
             return self.__pieces[id]
+        
+    def resetPiece(self : Player) -> None:
+        """Méthode qui remet à zero la liste des pièce du joueur
+
+        Args:
+            self (Player): joueur
+            id (str): id de la pièce à choisir
+        """
+        self.__pieces : dict[str,Pieces] = LISTEPIECES.copy()
 
     def removePiece(self : Player,id : str) -> None:
         """Méthode permettant de retirer une pièce choisie dans la liste des pièces d'un joueur
@@ -92,7 +101,8 @@ class Player:
             self (Player): joueur
             id (str):  id de la pièce choisie
         """
-        del self.__pieces[id]
+        print(self.__pieces)
+        self.__pieces.pop(id, None)
 
     def ajoutTour(self : Player) -> None:
         """Méthode permettant d'ajouter un tour à un joueur

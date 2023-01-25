@@ -22,6 +22,10 @@ class Game:
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
+        
+        for pj in self.__joueurs:
+            pj.resetPiece()
+        
     
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
