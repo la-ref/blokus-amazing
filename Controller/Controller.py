@@ -9,6 +9,7 @@ from Elements.Player import Player
 from config import config
 from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
+# from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
 from Vues.connexion import Connexion
 

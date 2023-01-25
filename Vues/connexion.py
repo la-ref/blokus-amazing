@@ -16,6 +16,12 @@ class Connexion(Frame):
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None
+        self.actuel_touche = ""
+        self.activeclavier = False
+        self.modal_active = False
+        self.ip = ""
+        self.port = ""
+        self.pseudo = ""
 
     def initialize(self):
         """ Fonction qui initialise la page de Connexion
@@ -37,6 +43,8 @@ class Connexion(Frame):
         )
 
         self.canvas.place(x = 0, y = 0)
+
+        self.canvas.bind("<Button-1>",self.clique)
         background = self.canvas.create_image(
             720.0,
             512.0,
@@ -44,245 +52,400 @@ class Connexion(Frame):
         )
         
         
-        entrerPseudo_image = self.canvas.create_image(
+        self.entrerPseudo_image = self.canvas.create_image(
             362, 
             333, 
             image=config.Config.image[61],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.Entrerpseudo)
-        self.canvas.tag_bind(entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",entrerPseudo_image))
-        self.canvas.tag_bind(entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",entrerPseudo_image))
+        # self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.Entrerpseudo)
+        self.canvas.tag_bind(self.entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
+        self.canvas.tag_bind(self.entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))
         
-        self.text_pseudo = self.canvas.create_text(362+(362/2),333,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="",anchor=tkinter.CENTER)
-        self.canvas.tag_bind(self.text_pseudo, "<Button-1>", self.boutonChangerText_pseudo)
+        self.text_pseudo = self.canvas.create_text(362+(config.Config.image[61].width()/2),333+(config.Config.image[61].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Entrez votre pseudo",anchor=tkinter.CENTER)
+        # self.canvas.tag_bind(self.text_pseudo, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.text_pseudo, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
         self.canvas.tag_bind(self.text_pseudo, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))
         
-        entrerip_image = self.canvas.create_image(
+        self.entrerip_image = self.canvas.create_image(
             360, 
             455, 
             image=config.Config.image[60],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(entrerip_image, "<Button-1>", self.Entrerip)
-        self.canvas.tag_bind(entrerip_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",entrerip_image))
-        self.canvas.tag_bind(entrerip_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",entrerip_image))
+        # self.canvas.tag_bind(entrerip_image, "<Button-1>", self.Entrerip)
+        self.canvas.tag_bind(self.entrerip_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",self.entrerip_image))
+        self.canvas.tag_bind(self.entrerip_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",self.entrerip_image))
 
-        entrerPort_image = self.canvas.create_image(
+        self.text_ip = self.canvas.create_text(360+(config.Config.image[60].width()/2),455+(config.Config.image[60].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Adresse",anchor=tkinter.CENTER)
+        # self.canvas.tag_bind(self.text_ip, "<Button-1>", self.Entrerport)
+        self.canvas.tag_bind(self.text_ip, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",self.entrerip_image))
+        self.canvas.tag_bind(self.text_ip, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",self.entrerip_image))
+        
+
+        self.entrerPort_image = self.canvas.create_image(
             810, 
             455, 
             image=config.Config.image[62],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(entrerPort_image, "<Button-1>", self.Entrerport)
-        self.canvas.tag_bind(entrerPort_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",entrerPort_image))
-        self.canvas.tag_bind(entrerPort_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",entrerPort_image))
+        # self.canvas.tag_bind(entrerPort_image, "<Button-1>", self.Entrerport)
+        self.canvas.tag_bind(self.entrerPort_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",self.entrerPort_image))
+        self.canvas.tag_bind(self.entrerPort_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",self.entrerPort_image))
+        
+        self.text_port = self.canvas.create_text(810+(config.Config.image[62].width()/2),455+(config.Config.image[62].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Port",anchor=tkinter.CENTER)
+        # self.canvas.tag_bind(self.text_port, "<Button-1>", self.Entrerport)
+        self.canvas.tag_bind(self.text_port, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",self.entrerPort_image))
+        self.canvas.tag_bind(self.text_port, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",self.entrerPort_image))
+        
 
-        Param_avance = self.canvas.create_image(
+        self.Param_avance = self.canvas.create_image(
             514, 
             473, 
             image=config.Config.image[64],
-            anchor=tkinter.NW
+            anchor=tkinter.NW,
+            state=tkinter.HIDDEN
         )
-        self.canvas.tag_bind(Param_avance, "<Button-1>", self.Entrerport)
-        self.canvas.tag_bind(Param_avance, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",Param_avance))
-        self.canvas.tag_bind(Param_avance, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",Param_avance))
+        self.canvas.tag_bind(self.Param_avance, "<Button-1>", self.EntreAvance)
+        self.canvas.tag_bind(self.Param_avance, "<Enter>",lambda *_: self.hoverBouton("entre","entreravance",self.Param_avance))
+        self.canvas.tag_bind(self.Param_avance, "<Leave>",lambda *_: self.hoverBouton("sort","entreravance",self.Param_avance))
 
-        Param_simplifie = self.canvas.create_image(
+        self.Param_simplifie_img = self.canvas.create_image(
             514, 
             577, 
             image=config.Config.image[65],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(Param_simplifie, "<Button-1>", self.Entrerport)
-        self.canvas.tag_bind(Param_simplifie, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",Param_simplifie))
-        self.canvas.tag_bind(Param_simplifie, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",Param_simplifie))
+        self.canvas.tag_bind(self.Param_simplifie_img, "<Button-1>", self.EntreSimplif)
+        self.canvas.tag_bind(self.Param_simplifie_img, "<Enter>",lambda *_: self.hoverBouton("entre","entrersimplifie",self.Param_simplifie_img))
+        self.canvas.tag_bind(self.Param_simplifie_img, "<Leave>",lambda *_: self.hoverBouton("sort","entrersimplifie",self.Param_simplifie_img))
 
 
-        ConnecterBouton = self.canvas.create_image(
+        self.ConnecterBouton_img = self.canvas.create_image(
             411,
             737,
             image=config.Config.image[63],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(ConnecterBouton, "<Button-1>", self.ConnecterBouton)
-        self.canvas.tag_bind(ConnecterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","connecter",ConnecterBouton))
-        self.canvas.tag_bind(ConnecterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","connecter",ConnecterBouton))
+        self.canvas.tag_bind(self.ConnecterBouton_img, "<Button-1>", self.ConnecterBouton)
+        self.canvas.tag_bind(self.ConnecterBouton_img, "<Enter>",lambda *_: self.hoverBouton("entre","connecter",self.ConnecterBouton_img))
+        self.canvas.tag_bind(self.ConnecterBouton_img, "<Leave>",lambda *_: self.hoverBouton("sort","connecter",self.ConnecterBouton_img))
 
         
-        QuitterBouton = self.canvas.create_image(
+        self.QuitterBouton_img = self.canvas.create_image(
             822, 
             769, 
             image=config.Config.image[7],
             anchor=tkinter.NW
         )
-        self.canvas.tag_bind(QuitterBouton, "<Button-1>", self.QuitterBouton)
-        self.canvas.tag_bind(QuitterBouton, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",QuitterBouton))
-        self.canvas.tag_bind(QuitterBouton, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",QuitterBouton))
-        self.actuel_touche = ""
-        self.activeclavier = False
-        self.ip = ""
-        self.port = ""
-        self.pseudo = ""
+        self.canvas.tag_bind(self.QuitterBouton_img, "<Button-1>", self.QuitterBouton)
+        self.canvas.tag_bind(self.QuitterBouton_img, "<Enter>",lambda *_: self.hoverBouton("entre","quitter",self.QuitterBouton_img))
+        self.canvas.tag_bind(self.QuitterBouton_img, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",self.QuitterBouton_img))
+
+        self.canvas.itemconfigure(self.Param_simplifie_img, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.Param_avance, state=tkinter.NORMAL)
+
+        self.canvas.itemconfigure(self.text_ip, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.text_port, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.entrerip_image, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.HIDDEN)
+        
     
-    def Entrerpseudo(self,event):
-        self.actuel_touche = "pseudo"
-        self.activeclavier = True
-        print("okkkkk pseudo")
+    def clique(self,event):
+        """ Méthode qui permet de vérifier le clic du joueur et d'activer la saisie ou non du clavier
+        si le widget cliqué est le bon
 
-    def Entrerip(self,event):
-        self.actuel_touche = "ip"
-        self.activeclavier = True
+        Args:
+            event (x,y): Les coordonnées en X et Y du clic du joueur
+        """
+        if self.modal_active == False:
+            if len(event.widget.find_withtag('current')) > 0:
+                actuelwidget = event.widget.find_withtag('current')[0]
+            if ((actuelwidget == 3) or (actuelwidget == 2)):
+                self.Entrerpseudo()
+            elif ((actuelwidget == 5) or (actuelwidget == 4)):
+                self.Entrerip()
+            elif ((actuelwidget == 7) or (actuelwidget == 6)):
+                self.Entrerport()
+            else:
+                self.desactiverAll()
 
-    def Entrerport(self,event):
-        self.actuel_touche = "port"
-        self.activeclavier = True
-
-    def ConnecterBouton(self,event):
-        pass
-
-
-    # def clique(self,event):
-    #     """ Méthode qui permet de vérifier le clic du joueur et d'activer la saisie ou non du clavier
-    #     si le widget cliqué est le bon
-
-    #     Args:
-    #         event (x,y): Les coordonnées en X et Y du clic du joueur
-    #     """
-    #     if self.modal_active == False:
-    #         if len(event.widget.find_withtag('current')) > 0:
-    #             actuelwidget = event.widget.find_withtag('current')[0]
-    #         if self.bouton_jaune.getActiveClavier() == True:
-    #             if (actuelwidget != 5) and (actuelwidget != 4):
-    #                 self.bouton_jaune.setActiveClavier(False)
-    #         if self.bouton_vert.getActiveClavier() == True:
-    #             if (actuelwidget != 15) and (actuelwidget != 14):
-    #                 self.bouton_vert.setActiveClavier(False)
-    #         if self.bouton_rouge.getActiveClavier() == True:
-    #             if (actuelwidget != 25) and (actuelwidget != 24):
-    #                 self.bouton_rouge.setActiveClavier(False)
-    #         if self.bouton_bleu.getActiveClavier() == True:
-    #             if (actuelwidget != 35) and (actuelwidget != 34):
-    #                 self.bouton_bleu.setActiveClavier(False)
-    def boutonChangerText_pseudo(self,event):
-        """Méthode qui est relié au bouton et qui permet d'activer ou non la saisie pour cette utilisateur
-
+    def desactiverAll(self):
+        """Méthode qui permet de réinitialiser la saisie du clavier (plus rien n'est sélectionné)
+        
         Args:
             self: l'utilisateur tout entier
         """
-        if self.activeclavier == True:
+        self.activeclavier = False
+        self.actuel_touche = ""
+        if self.port == "":
+            self.canvas.itemconfigure(self.text_port, text="Port", font=('Lilita One', config.Config.taillePolice[0]))
+        if self.ip == "":
+            self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', config.Config.taillePolice[0]))
+        if self.pseudo == "":
+            self.canvas.itemconfigure(self.text_pseudo, text="Entrez votre pseudo", font=('Lilita One', config.Config.taillePolice[0]))
+        self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[61])
+        self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[60])
+        self.canvas.itemconfigure(self.entrerPort_image, image=config.Config.image[62])
+
+    def EntreAvance(self,event):
+        """Méthode qui permet de se mettre en mode "avancé"
+        
+        Args:
+            self: l'utilisateur tout entier
+        """
+        self.canvas.itemconfigure(self.Param_simplifie_img, state=tkinter.NORMAL)
+        self.canvas.itemconfigure(self.Param_avance, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.text_ip, state=tkinter.NORMAL)
+        self.canvas.itemconfigure(self.text_port, state=tkinter.NORMAL)
+
+        self.canvas.itemconfigure(self.entrerip_image, state=tkinter.NORMAL)
+        self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.NORMAL)
+        self.desactiverAll()
+
+    def EntreSimplif(self,event):
+        """Méthode qui permet de se mettre en mode "simplifié"
+        
+        Args:
+            self: l'utilisateur tout entier
+        """
+        self.canvas.itemconfigure(self.Param_simplifie_img, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.Param_avance, state=tkinter.NORMAL)
+
+        self.canvas.itemconfigure(self.text_ip, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.text_port, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.entrerip_image, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.HIDDEN)
+        self.desactiverAll()
+
+    def Entrerpseudo(self):
+        """Méthode qui permet d'activer ou non la saisie du clavier sur le pseudo du joueur
+        
+        Args:
+            self: l'utilisateur tout entier
+        """
+        if self.actuel_touche == "pseudo":
+            if self.pseudo == "":
+                self.canvas.itemconfigure(self.text_pseudo, text="Entrez votre pseudo", font=('Lilita One', config.Config.taillePolice[0]))
             self.activeclavier = False
-            # self.canvas.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
+            self.actuel_touche = ""
+            self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[61])
         else:
-            self.activeclavier = True  
-            # self.canvas.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
+            self.canvas.itemconfigure(self.text_pseudo, text=self.pseudo, font=('Lilita One', config.Config.taillePolice[0]))
+            if self.port == "":
+                self.canvas.itemconfigure(self.text_port, text="Port", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerPort_image, image=config.Config.image[62])
+            if self.ip == "":
+                self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[60])
+            self.actuel_touche = "pseudo"
+            self.activeclavier = True
+            self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[67])
+
+    def Entrerip(self):
+        """Méthode qui permet d'activer ou non la saisie du clavier sur l'ip
+        
+        Args:
+            self: l'utilisateur tout entier
+        """
+        if self.actuel_touche == "ip":
+            if self.ip == "":
+                self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', config.Config.taillePolice[0]))
+            self.activeclavier = False
+            self.actuel_touche = ""
+            self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[60])
+        else:
+            self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+            if self.pseudo == "":
+                self.canvas.itemconfigure(self.text_pseudo, text="Entrez votre pseudo", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[61])
+            if self.port == "":
+                self.canvas.itemconfigure(self.text_port, text="Port", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerPort_image, image=config.Config.image[62])
+            self.actuel_touche = "ip"
+            self.activeclavier = True
+            self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[66])
+
+
+    def Entrerport(self):
+        """Méthode qui permet d'activer ou non la saisie du clavier sur le port
+        
+        Args:
+            self: l'utilisateur tout entier
+        """
+        if self.actuel_touche == "port":
+            if self.port == "":
+                self.canvas.itemconfigure(self.text_port, text="Port", font=('Lilita One', config.Config.taillePolice[0]))
+            self.activeclavier = False
+            self.actuel_touche = ""
+            self.canvas.itemconfigure(self.entrerPort_image, image=config.Config.image[62])
+        else:
+            self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
+            if self.pseudo == "":
+                self.canvas.itemconfigure(self.text_pseudo, text="Entrez votre pseudo", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[61])
+            if self.ip == "":
+                self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[60])
+            self.actuel_touche = "port"
+            self.activeclavier = True
+            self.canvas.itemconfigure(self.entrerPort_image, image=config.Config.image[68])
+
+    def ConnecterBouton(self,event):
+        """Méthode qui permet d'accéder au lobby en ligne
+        
+        Args:
+            self: l'utilisateur tout entier
+            event: évènement du clique
+        """
+        pass
     
     def touches(self,event):
-        """Méthode qui actualise le pseudo du joueur à chaque touche appuyé de l'ordinateur
+        """Méthode qui actualise le pseudo, l'ip ou le port à chaque touche appuyé de l'ordinateur
         
         Args:
             self: l'utilisateur tout entier
             event: évènement du clique
         """
         self.touche = str(event.keysym)
-        print(self.touche)
         if self.activeclavier == True:
+            if self.actuel_touche == "ip":
+                if len(self.touche) == 1:
+                    if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
+                        if (len(self.ip) < 3):
+                            self.ip = self.ip + "" + self.touche 
+                        elif (len(self.ip) == 1):
+                            if self.ip != ".":
+                                self.ip = self.ip + "" + self.touche 
+                        elif (self.ip[-1] == "."):
+                            self.ip = self.ip + "" + self.touche 
+                        elif ((self.ip[-1] == ".") or (self.ip[-2] == ".") or (self.ip[-3] == ".")):
+                            self.ip = self.ip + "" + self.touche
+                elif "shift" in self.touche.lower():
+                    pass
+                elif "period" in self.touche:
+                    if (self.ip[-1] != "."):
+                        if self.ip.count(".") < 3:
+                            if len(self.ip) >= 3:
+                                if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
+                                    if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
+                                        self.ip = self.ip + "."
+                                    elif int(self.ip[-3]) < 2:
+                                        self.ip = self.ip + "."
+                                    elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
+                                        self.ip = self.ip + "."
+                                    else:
+                                        self.ip = self.ip[:-3]
+                                else:
+                                    self.ip = self.ip + "."
+                            else:
+                                self.ip = self.ip + "."
+                else:
+                    if len(self.ip) > 0:
+                        self.ip = self.ip[:-1]
+                self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+                if len(self.ip) >= 3:
+                    if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
+                        if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
+                            pass
+                        elif int(self.ip[-3]) < 2:
+                            pass
+                        elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
+                            pass
+                        else:
+                            self.ip = self.ip[:-3]
+                            self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+                    if len(self.ip) > 0:
+                        if (self.ip[-1] == "0"):
+                            if (self.ip[-2] == "."):
+                                self.ip = self.ip[:-1]
+                                self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+            if self.actuel_touche == "port":
+                if len(self.touche) == 1:
+                    if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
+                        if len(self.port) < 5:
+                            self.port = self.port + "" + self.touche
+                            self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
             if self.actuel_touche == "pseudo":
-                if len(self.pseudo) < 14:
-                    if len(self.touche) == 1:
-                        if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
-                            if ((self.pseudo[:-1] != ".") and (self.pseudo[:-2] != ".") and (self.pseudo[:-3] != ".") and (self.pseudo[:-4] == ".")):
-                                self.pseudo = self.pseudo + "" + self.touche
-                            elif ((self.pseudo[:-1] != ".") and (self.pseudo[:-2] != ".") and (self.pseudo[:-3] == ".")):
-                                self.pseudo = self.pseudo + "" + self.touche
-                            elif ((self.pseudo[:-1] != ".") and (self.pseudo[:-2] == ".")):
-                                self.pseudo = self.pseudo + "" + self.touche
-                            elif ((self.pseudo[:-1] != ".") and (self.pseudo[:-2] == "")):
-                                self.pseudo = self.pseudo + "" + self.touche
-                            elif (len(self.pseudo) < 1):
-                                self.pseudo = self.pseudo + "" + self.touche 
-                            elif (len(self.pseudo) == 1):
-                                if self.pseudo != ".":
-                                    self.pseudo = self.pseudo + "" + self.touche 
-                            elif (self.pseudo[:-1] == "."):
-                                self.pseudo = self.pseudo + "" + self.touche 
-                    elif self.touche == "space":
+                if len(self.touche) == 1:
+                    if len(self.pseudo) < 10:
+                        self.pseudo = self.pseudo + "" +self.touche
+                elif self.touche == "space":
+                    if len(self.pseudo) < 10:
                         self.pseudo = self.pseudo + " "
-                    elif "shift" in self.touche.lower():
-                        pass
-                    elif "period" in self.touche:
-                        if (self.pseudo[:-1] != "."):
-                            self.pseudo = self.pseudo + "."
-                    else:
-                        if len(self.pseudo) > 0:
-                            self.pseudo = self.pseudo[:-1]
-                    self.canvas.itemconfigure(self.text_pseudo, text=self.pseudo, font=('Lilita One', config.Config.taillePolice[0]))
-            #     if len(self.joueurs.getName()) < 10:
-            #         self.joueurs.setName(str(self.joueurs.getName()+self.touche))
-            # elif self.touche == "space":
-            #     if len(self.joueurs.getName()) < 10:
-            #         self.joueurs.setName(str(self.joueurs.getName())+" ")
-            # else:
-            #     if len(self.joueurs.getName()) > 0:
-            #         self.joueurs.setName(str(self.joueurs.getName())[:-1])
-
-
-            # tailles = self.parent.bbox(self.text)
-            # width = tailles[2] - tailles[0]
-            # if width > 300:
-            #     self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
-
-            # else:
-            #     self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[0]))
-            #     tailles = self.parent.bbox(self.text)
-            #     width = tailles[2] - tailles[0]
-            #     if width > 300:
-            #         self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
-
-            # config.Config.controller.changePlayer(self.joueurs)
+                else:
+                    if len(self.pseudo) > 0:
+                        self.pseudo = self.pseudo[:-1]
+                self.canvas.itemconfigure(self.text_pseudo, text=self.pseudo, font=('Lilita One', config.Config.taillePolice[0]))
 
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+        """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
+
+        Args:
+            typ (str): "entre" ou "sort"
+            typ2 (str): "jouer" ou "quitter"
+            idButton (int): l'identifiant du bouton cliqué
+        """
         if typ == "entre":
-            if typ2 == "quitter":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[31])
+            if typ2 == "entrerpseudo":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[67])
                 self.canvas.config(cursor="hand2")
-            elif typ2 == "horsligne":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[29])
+            elif typ2 == "entrerip":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[66])
                 self.canvas.config(cursor="hand2")
-            elif typ2 == "enligne":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[30])
+            elif typ2 == "entrerport":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[68])
                 self.canvas.config(cursor="hand2")
-            elif typ2 == "leader":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[33])
+            elif typ2 == "entreravance":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[70])
                 self.canvas.config(cursor="hand2")
-            elif typ2 == "info":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[34])
+            elif typ2 == "entrersimplifie":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[71])
+                self.canvas.config(cursor="hand2")
+            elif typ2 == "connecter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[69])
+                self.canvas.config(cursor="hand2")
+            elif typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[72])
                 self.canvas.config(cursor="hand2")
         elif typ == "sort":
-            if typ2 == "quitter":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[2])
+            if typ2 == "entrerpseudo":
                 self.canvas.config(cursor="")
-            elif typ2 == "horsligne":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[5])
+                if self.actuel_touche != "pseudo":
+                    self.canvas.itemconfigure(idButton, image=config.Config.image[61])
+                    self.canvas.config(cursor="")
+            elif typ2 == "entrerip":
                 self.canvas.config(cursor="")
-            elif typ2 == "enligne":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[1])
+                if self.actuel_touche != "ip":
+                    self.canvas.itemconfigure(idButton, image=config.Config.image[60])
+                    self.canvas.config(cursor="")
+            elif typ2 == "entrerport":
                 self.canvas.config(cursor="")
-            elif typ2 == "leader":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[3])
+                if self.actuel_touche != "port":
+                    self.canvas.itemconfigure(idButton, image=config.Config.image[62])
+                    self.canvas.config(cursor="")
+            elif typ2 == "entreravance":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[64])
                 self.canvas.config(cursor="")
-            elif typ2 == "info":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[4])
+            elif typ2 == "entrersimplifie":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[65])
+                self.canvas.config(cursor="")
+            elif typ2 == "connecter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[63])
+                self.canvas.config(cursor="")
+            elif typ2 == "quitter":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[7])
                 self.canvas.config(cursor="")
 
     def QuitterBouton(self,event):
         """ Fonction qui permet le callback du bouton "Quitter"
         
         """
-        self.window.destroy()
-        exit(1)
+        config.Config.controller.changePage("Acceuil")
         
 
         

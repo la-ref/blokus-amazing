@@ -147,6 +147,13 @@ class config():
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter.png")) # 63
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance.png")) # 64
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie.png")) # 65
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/adresse_ip_hover.png")) # 66
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/entrer_pseudo_hover.png")) # 67
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/port_hover.png")) # 68
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter_hover.png")) # 69
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance_hover.png")) # 70
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie_hover.png")) # 71
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/quitter_hover.png")) # 72
 
 
          
