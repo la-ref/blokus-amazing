@@ -6,7 +6,7 @@ from config import *
 from Vues.ScrollableFrame import ScrollableFrame
 
 class Connexion(Frame):
-    """ Classe étant une frame réprésentant la page d'acceuil
+    """ Classe étant une frame réprésentant la page de connexion pour le lobby en ligne
     """
     def __init__(self,window):
         super(Connexion, self).__init__()
