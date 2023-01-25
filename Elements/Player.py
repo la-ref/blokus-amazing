@@ -5,7 +5,7 @@ class Player:
     """Classe représentant un joueur du jeu blokus
     """
     nbJoueur : int = 1
-    def __init__(self : Player, idCouleur : int,nom: str|None):
+    def __init__(self : Player, idJoueur : int,nom: str|None):
         """Constructeur permettant de créer un joueur avec une couleur et un nom
 
         Args:
@@ -14,7 +14,7 @@ class Player:
             nom (str | None): nom du joueur
         """
         self.__name : str =  nom or ("Joueur"+str(Player.nbJoueur))
-        self.__idCouleur : int = idCouleur+1
+        self.__idCouleur : int = idJoueur+1
         self.__nbTour : int = 0 
         self.__pieces : dict[str,Pieces] = LISTEPIECES.copy()
         Player.nbJoueur +=1

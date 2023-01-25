@@ -185,6 +185,7 @@ class Game:
                     self.addSurrenderedPlayer()
                 else:
                     self.__nextPlayer()
+                    self.getBoard().findCorners(self.getCurrentPlayer())
                 config.Config.controller.updateBoard()
                 # prep tour suivant
                 

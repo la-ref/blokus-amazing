@@ -102,14 +102,15 @@ class PiecesListGUI(tk.Frame):
 
 
 
-    def on_click(self,event):
-        """ Gestion du clic d'un joueur
+    # def on_click(self,event):
+    #     """ Gestion du clic d'un joueur
 
-        Args:
-            event (Tkinter): Coordonnées X et Y du clic
-        """
-        x,y=self.parent.coords(self.list)
-        self.delta=event.x-x,event.y-y
+    #     Args:
+    #         event (Tkinter): Coordonnées X et Y du clic
+    #     """
+    #     x,y=self.parent.coords(self.list)
+    #     self.delta=event.x-x,event.y-y
+    #     print(self.tableau_piece_forme)
         
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
@@ -121,6 +122,7 @@ class PiecesListGUI(tk.Frame):
         self.parent.tag_bind(self.list,event_tag,call)
         self.parent.tag_bind(self.nameZone,event_tag,call)
         self.parent.tag_bind(self.text,event_tag,call)
+        
 
 if __name__=="__main__":
     from tkinter import PhotoImage

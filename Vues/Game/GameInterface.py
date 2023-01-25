@@ -45,17 +45,18 @@ class GameInterface(tk.Frame):
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
-        self.List1.move(x=70,y=80) # jaune
+        self.Lists=[]
+        self.Lists[0] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
+        self.Lists[0].move(x=70,y=80) # jaune
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
-        self.List2.move(x=1047,y=80) # vert
+        self.Lists[1] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
+        self.Lists[1].move(x=1047,y=80) # vert
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
-        self.List3.move(x=1047,y=524) #  rouge
+        self.Lists[2] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
+        self.Lists[2].move(x=1047,y=524) #  rouge
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
-        self.List4.move(x=70,y=524) #bleu
+        self.Lists[3] = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
+        self.Lists[3].move(x=70,y=524) #bleu
 
         self.giveUp = self.border.create_image(
             (1440//2)-(config.Config.image[6].width()//2), 
@@ -200,13 +201,13 @@ class GameInterface(tk.Frame):
         """
         match player:
             case 0:
-                self.List1.surrender()
+                self.Lists[0].surrender()
             case 1:
-                self.List2.surrender()
+                self.Lists[1].surrender()
             case 2:
-                self.List3.surrender()
+                self.Lists[2].surrender()
             case 3:
-                self.List4.surrender()
+                self.Lists[3].surrender()
 
     def leave(self : GameInterface) -> None:
         """Méthode callback qui permet quand on click sur le bouton de leave de quitter la page de jeu en informant le controlleur
@@ -215,10 +216,10 @@ class GameInterface(tk.Frame):
         Args:
             self (GameInterface): GameInterface
         """
-        self.List1.remettrePiece_copy()
-        self.List2.remettrePiece_copy()
-        self.List3.remettrePiece_copy()
-        self.List4.remettrePiece_copy()
+        self.Lists[0].remettrePiece_copy()
+        self.Lists[1].remettrePiece_copy()
+        self.Lists[2].remettrePiece_copy()
+        self.Lists[3].remettrePiece_copy()
         config.Config.controller.changePage("Acceuil")
 
     def refreshBoard(self : GameInterface,plateau : Board) -> None:
