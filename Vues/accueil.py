@@ -11,7 +11,7 @@ class Accueil(Frame):
     def __init__(self,window):
         super(Accueil, self).__init__()
         self.window = window
-        self.window.title("Blockus")
+        self.window.title("Blokus")
         self.window.wm_iconphoto(True, config.Config.image[47])
         self.hidden = True
         self.scrollable_frame = None
@@ -57,6 +57,7 @@ class Accueil(Frame):
             image=config.Config.image[1],
             anchor=tkinter.NW
         )
+        self.canvas.tag_bind(EnLigneBouton, "<Button-1>", self.EnLigneBouton)
         self.canvas.tag_bind(EnLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","enligne",EnLigneBouton))
         self.canvas.tag_bind(EnLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","enligne",EnLigneBouton))
 
@@ -151,12 +152,9 @@ class Accueil(Frame):
         
         """
         self.window.destroy()
-    
-    def BoutonInfo(self,event):
-        """ Fonction qui permet le callback du bouton "Info"
+        exit(1)
         
-        """
-        self.window.destroy()
+
         
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
@@ -181,8 +179,7 @@ class Accueil(Frame):
         """ Fonction qui permet le callback du bouton "En ligne"
         
         """
-        import Vues.PageConnexion as PageConnexion
-        config.Config.controller.changePage("PageConnexion")
+        self.window.destroy()
 
     def infoBouton(self,event):
         """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll
@@ -202,6 +199,13 @@ class Accueil(Frame):
         """
         import Vues.Lobby.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
+    
+    def EnLigneBouton(self,event):
+        """ Fonction qui permet le callback du bouton "Hors ligne"
+        
+        """
+        import Vues.connexion as connexion
+        config.Config.controller.changePage("connexion")
         
         
         

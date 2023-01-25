@@ -5,68 +5,59 @@ from datetime import datetime
 import socket
 import threading
 import time
+from Vues.connexion import Connexion 
 
 class Client:
-
-    PORT = 5006
     Compteur = 5
 
-    def __init__(self):
+    def __init__(self, adresse, port):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.nom = input("Ton pseudo : \n")
         print("\x1B[F\x1B[2K", end="")
         Client.Compteur = Client.Compteur+ 1
         now = str(datetime.now())[:-7]
-        self.error = False
         try:
-            self.s.connect(("localhost", Client.PORT))
+            self.s.connect((adresse, port))
             print("connect", "({}) : Connected.\n".format(now))
             self.send(self.nom)
         except ConnectionRefusedError:
-            self.error = True
             print("error connect", "({}) : The server is not online.\n".format(now))
 
     def receive(self):
-        while not self.error:
-            try:
-                data = str(self.s.recv(8192))
-                now = str(datetime.now())[:-7]
-                if len(data) == 0:
-                    self.error = True
-                    self.s.close()
-                    break
-                else:
-                    print("{}\n".format(data.decode()))
-            except:
-                self.error = True
-                print(("error receive", "({}) : Server has been disconnected.\n".format(now)))
-                self.s.close()
-                break
-                
+        while True:
+            data = str(self.s.recv(1024).decode())
+            now = str(datetime.now())[:-7]
+            if len(data) == 0:
+                pass
+            else:
+                self.message = format(data)
+                print("{}\n".format(data))
+                self.checkJeu()
+
     def send(self,msg = None):
         now = str(datetime.now())[:-7]
-        sended = False
         try:
             self.s.send(bytes(msg, 'utf-8'))
             print("Moi - {}".format(msg))
-            sended = True
-        except:
-            self.error = True
+        except BrokenPipeError:
             print(("error send", "({}) : Server has been disconnected.\n".format(now)))
             self.s.close()
-        return sended
             
     def inp(self):
-        while not self.error:
+        while True:
             msg = input("\n")
             print("\x1B[F\x1B[2K", end="")
-            if not self.send(msg):
-                break
+            self.send(msg)
+
+    def checkJeu(self):
+        if "MESSAGE" in self.message:
+            pass
             
 
-c1 = Client()
-t1 = threading.Thread(target=c1.receive)
-t1.start()
+if __name__ == "__main__":
+    c1 = Client("lcoalhost",6000)
+    t1 = threading.Thread(target=c1.receive)
+    t1.start()
 
-t23 = threading.Thread(target=c1.inp)
-t23.start()
+    t23 = threading.Thread(target=c1.inp)
+    t23.start()
