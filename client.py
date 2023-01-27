@@ -29,17 +29,16 @@ class Client:
     def receive(self):
         while not self.error:
             try:
-                data = str(self.s.recv(8192))
-                now = str(datetime.now())[:-7]
+                data = self.s.recv(8192)
                 if len(data) == 0:
                     self.error = True
                     self.s.close()
                     break
                 else:
-                    print("{}\n".format(data.decode()))
+                    print("{}\n".format(str(data.decode())))
             except:
                 self.error = True
-                print(("error receive", "({}) : Server has been disconnected.\n".format(now)))
+                print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
                 self.s.close()
                 break
                 
