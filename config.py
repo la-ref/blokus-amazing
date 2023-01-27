@@ -154,7 +154,8 @@ class config():
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance_hover.png")) # 70
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie_hover.png")) # 71
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/quitter_hover.png")) # 72
-
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/recherche_partie.png")) # 73
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/loader.gif")) # 74
 
          
 

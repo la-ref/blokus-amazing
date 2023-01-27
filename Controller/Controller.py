@@ -12,6 +12,7 @@ from Vues.Lobby.lobbyLocal import lobbyLocal
 # from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
 from Vues.connexion import Connexion
+from client import Client
 
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
@@ -28,6 +29,7 @@ class Controller(tk.Tk):
 
         self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "connexion" : Connexion(self)}
         self.game : Game
+        self.client = None
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.changePage('Acceuil')
         self.mainloop()
@@ -98,6 +100,21 @@ class Controller(tk.Tk):
             Game: game en cours
         """
         return self.game
+    
+    def connectClient(self : Controller, ip, port, pseudo):
+        self.client = Client(ip,int(port),pseudo)
+
+    def getClient(self):
+        return self.client
+
+    def receiveClient(self : Controller, message):
+        if message == "Connect":
+            self.changePage("lobbyLocal")
+            self.client.send("Bonjour")
+        elif message == "noConnect":
+            self.changePage("connexion")
+
+
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
         """Fonction de liaison entre le placement d'une piece graphique et moteur

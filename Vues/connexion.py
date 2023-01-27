@@ -150,8 +150,41 @@ class Connexion(Frame):
 
         self.canvas.itemconfigure(self.entrerip_image, state=tkinter.HIDDEN)
         self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.HIDDEN)
+
+        self.recherche_partie_img = self.canvas.create_image(
+            390, 
+            398, 
+            image=config.Config.image[73],
+            anchor=tkinter.NW,
+            state=tkinter.HIDDEN
+        )
+        self.loader_img = self.canvas.create_image(
+            664, 
+            530, 
+            image=config.Config.image[74],
+            anchor=tkinter.NW,
+            state=tkinter.HIDDEN
+        )
         
-    
+    def recherche_partie_bouton(self):
+        self.canvas.itemconfigure(self.Param_simplifie_img, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.Param_avance, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.text_ip, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.text_port, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.entrerip_image, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.Param_avance, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.text_pseudo, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.entrerPseudo_image, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.ConnecterBouton_img, state=tkinter.HIDDEN)
+        self.canvas.itemconfigure(self.QuitterBouton_img, state=tkinter.HIDDEN)
+
+        self.canvas.itemconfigure(self.recherche_partie_img, state=tkinter.NORMAL)
+        self.canvas.itemconfigure(self.loader_img, state=tkinter.NORMAL)
+
     def clique(self,event):
         """ Méthode qui permet de vérifier le clic du joueur et d'activer la saisie ou non du clavier
         si le widget cliqué est le bon
@@ -301,7 +334,10 @@ class Connexion(Frame):
             self: l'utilisateur tout entier
             event: évènement du clique
         """
-        pass
+        self.recherche_partie_bouton()
+        self.client = config.Config.controller.connectClient(self.ip,int(self.port),self)
+
+
     
     def touches(self,event):
         """Méthode qui actualise le pseudo, l'ip ou le port à chaque touche appuyé de l'ordinateur
@@ -320,10 +356,8 @@ class Connexion(Frame):
                         elif (len(self.ip) == 1):
                             if self.ip != ".":
                                 self.ip = self.ip + "" + self.touche 
-                        elif (self.ip[-1] == "."):
-                            self.ip = self.ip + "" + self.touche 
                         elif ((self.ip[-1] == ".") or (self.ip[-2] == ".") or (self.ip[-3] == ".")):
-                            self.ip = self.ip + "" + self.touche
+                            self.ip = self.ip + "" + self.touche 
                 elif "shift" in self.touche.lower():
                     pass
                 elif "period" in self.touche:
@@ -331,11 +365,7 @@ class Connexion(Frame):
                         if self.ip.count(".") < 3:
                             if len(self.ip) >= 3:
                                 if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
-                                    if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
-                                        self.ip = self.ip + "."
-                                    elif int(self.ip[-3]) < 2:
-                                        self.ip = self.ip + "."
-                                    elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
+                                    if (((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)) or (int(self.ip[-3]) < 2) or (int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5) or (int(self.ip[-1]) <= 9 and int(self.ip[-3]) <= 2 and int(self.ip[-2]) < 5)):
                                         self.ip = self.ip + "."
                                     else:
                                         self.ip = self.ip[:-3]
@@ -349,26 +379,25 @@ class Connexion(Frame):
                 self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
                 if len(self.ip) >= 3:
                     if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
-                        if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
-                            pass
-                        elif int(self.ip[-3]) < 2:
-                            pass
-                        elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
+                        if (((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)) or (int(self.ip[-3]) < 2) or (int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5) or (int(self.ip[-1]) <= 9 and int(self.ip[-3]) <= 2 and int(self.ip[-2]) < 5)):
                             pass
                         else:
                             self.ip = self.ip[:-3]
                             self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
-                    if len(self.ip) > 0:
-                        if (self.ip[-1] == "0"):
-                            if (self.ip[-2] == "."):
-                                self.ip = self.ip[:-1]
-                                self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+
+
             if self.actuel_touche == "port":
                 if len(self.touche) == 1:
                     if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
                         if len(self.port) < 5:
                             self.port = self.port + "" + self.touche
                             self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
+                else:
+                    if len(self.port) > 0:
+                        self.port = self.port[:-1]
+                        self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
+
+
             if self.actuel_touche == "pseudo":
                 if len(self.touche) == 1:
                     if len(self.pseudo) < 10:
@@ -448,7 +477,12 @@ class Connexion(Frame):
         config.Config.controller.changePage("Acceuil")
         
 
-        
+    def changementFenetre(self,text):
+        if text == "lobby":
+            self.EntreAvance()
+        if text == "accueil":
+            config.Config.controller.changePage("Acceuil")
+
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
         
@@ -461,37 +495,6 @@ class Connexion(Frame):
             self.scrollable_frame.destroye()
             self.scrollable_frame.destroy()
             self.canvas.delete(self.windowRegle)
-
-    def BoutonScore(self,event):
-        """ Fonction qui permet le callback du bouton "Score"
-        
-        """
-        self.window.destroy()
-    
-    def EnLigneBouton(self,event):
-        """ Fonction qui permet le callback du bouton "En ligne"
-        
-        """
-        self.window.destroy()
-
-    def infoBouton(self,event):
-        """Méthode pour permettre d'afficher les règles du jeu blokus et de crée une frame de scroll
-        """
-        if self.hidden: # afficher les règles
-            self.hidden = False
-            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.NORMAL)
-            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.NORMAL)
-            self.scrollable_frame = ScrollableFrame(self.canvas,config.Config.image[53])
-            self.windowRegle = self.canvas.create_window(((config.Config.largueur/2)-1, 
-            (config.Config.hauteur/2)-4),window=self.scrollable_frame)
-            
-    
-    def HorsLigneBouton(self,event):
-        """ Fonction qui permet le callback du bouton "Hors ligne"
-        
-        """
-        import Vues.Lobby.lobbyLocal as lobbyLocal
-        config.Config.controller.changePage("lobbyLocal")
         
         
         
