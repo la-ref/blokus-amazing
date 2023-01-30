@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 from datetime import datetime
 import socket
 import threading
@@ -46,7 +43,7 @@ class Server:
             clientId = self.getClientId(client,lobbyId)
             del Server.lobbies[lobbyId]["clients"][clientId]
             if username:
-                self.send(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
+                self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
                 del Server.lobbies[lobbyId]["players"][clientId]
                 
     def addLobby(self,connection):
@@ -88,7 +85,7 @@ class Server:
         else:
             data = str(data.decode())
             Server.lobbies[lob]["players"][cli]=data
-            self.send(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
+            self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
             print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
         
     def f(self, client, nbLobby):
@@ -104,7 +101,9 @@ class Server:
             self.removeClient(client,nbLobby,True)
             return
         if data :
-            self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
+            if data == "getid":
+                self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
+            #self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
 
     def receive(self):
         for nbLobby in range(len(Server.lobbies)): 
@@ -124,13 +123,19 @@ class Server:
             t1_2.join(1)
             
 
-    def send(self,msg, client, lobby):
+    def sendToOther(self,msg, client, lobby):
         for k, v in Server.lobbies[lobby]["clients"].items():
             if v != client:
                 try:
                     v.sendall(bytes(msg, "utf-8"))
                 except :
-                    self.removeClient(client,lobby,True)                   
+                    self.removeClient(client,lobby,True)
+    
+    def sendToClient(self,msg, client, lobby):
+        try:
+            client.sendall(bytes(msg, "utf-8"))
+        except :
+            self.removeClient(client,lobby,True)                  
 
 
 s1 = Server()

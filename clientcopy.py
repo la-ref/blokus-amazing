@@ -2,26 +2,37 @@ from datetime import datetime
 import socket
 import threading
 import time
+from config import config
 
 class Client:
 
     PORT = 5005
-    Compteur = 5
 
-    def __init__(self):
+    def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.nom = input("Ton pseudo : \n")
-        print("\x1B[F\x1B[2K", end="")
-        Client.Compteur = Client.Compteur+ 1
+        # self.nom = input("Ton pseudo : \n")
+        # print("\x1B[F\x1B[2K", end="")
+        self.nom = nom
+        self.id = 2
         now = str(datetime.now())[:-7]
         self.error = False
         try:
             self.s.connect(("localhost", Client.PORT))
-            print("connect", "({}) : Connected.\n".format(now))
             self.send(self.nom)
         except ConnectionRefusedError:
             self.error = True
+            print("hihi")
+            config.Config.controller.changePage("connexion")
             print("error connect", "({}) : The server is not online.\n".format(now))
+            
+    def getId(self):
+        self.send(self.nom)
+        self.id = str(self.oneReceive())
+        print(self.id, "fhdifidh")
+        if not self.id:
+            # envoi page d'erreur au client..
+            return
+        return self.id
 
     def receive(self):
         while not self.error:
@@ -38,6 +49,20 @@ class Client:
                 print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
                 self.s.close()
                 break
+            
+    def oneReceive(self):
+        try:
+            data = self.s.recv(8192)
+            if len(data) == 0:
+                self.error = True
+                self.s.close()
+            else:
+                return data.decode()
+        except:
+            self.error = True
+            print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
+            self.s.close()
+            return None
                 
     def send(self,msg = None):
         now = str(datetime.now())[:-7]
@@ -60,9 +85,9 @@ class Client:
                 break
             
 
-c1 = Client()
-t1 = threading.Thread(target=c1.receive)
-t1.start()
+# c1 = Client()
+# t1 = threading.Thread(target=c1.receive)
+# t1.start()
 
-t23 = threading.Thread(target=c1.inp)
-t23.start()
+# t23 = threading.Thread(target=c1.inp)
+# t23.start()

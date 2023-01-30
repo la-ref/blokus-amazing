@@ -301,7 +301,8 @@ class Connexion(Frame):
             self: l'utilisateur tout entier
             event: évènement du clique
         """
-        pass
+        config.Config.controller.changeUserName(self.pseudo)
+        config.Config.controller.changePage("lobbyOnline")
     
     def touches(self,event):
         """Méthode qui actualise le pseudo, l'ip ou le port à chaque touche appuyé de l'ordinateur

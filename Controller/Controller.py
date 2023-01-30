@@ -5,13 +5,15 @@ import tkinter as tk
 import Elements.Pieces.PiecesListGUI as PG
 from PIL import ImageTk
 from Vues.accueil import Accueil
-from Vues.PageConnexion import PageConnexion
 from Elements.Player import Player
 from config import config
 from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
+from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
 from Vues.connexion import Connexion
+from clientcopy import Client
+import threading
 
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
@@ -22,42 +24,75 @@ class Controller(tk.Tk):
         tk.Tk.__init__(self)
         
         config.initialisation(self)
-        
 
-
-
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "connexion" : Connexion(self)}
+        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
+        self.connection = None
+        self.userName = None
         self.changePage('Acceuil')
         self.mainloop()
-
-     
-    def changePage(self : Controller, nomFrame : str):
+            
+    def changePage(self : Controller, nomFrame : str, online = False):
         """Méthode permettant de changer la page qui va être afficher sur l'application
 
         Args:
-            self (Controller): Contorller
+            self (Controller): Controller
             nomFrame (str): nom de la page
         """
-        self.vueJeu = self.frames[nomFrame]
-        self.vueJeu.initialize()
-        self.vueJeu.tkraise()
+        if self.connection == None and nomFrame == "lobbyOnline":
+            self.connectLobby(self.userName)
+            print("hi")
+        elif self.connection and not online:
+            self.connection.error = True
+            print("okkk")
+            self.connection = None
+        if nomFrame != "lobbyOnline" or online:
+            self.vueJeu = self.frames[nomFrame]
+            self.vueJeu.initialize()
+            self.vueJeu.tkraise()
+            
+    def changeUserName(self,name):
+        self.userName = name       
+            
     
     def changePlayer(self : Controller, players : list[Player]) -> None:
         """Méthode permettant de changer les joueurs de la partie
 
         Args:
-            self (Controller): Contorller
+            self (Controller): Controller
             players (list[Player]): liste des joueurs qui vont jouer
         """
         self.joueurs = players
+        
+    def connectLobby(self,name):
+        self.connection = Client(name)
+        #if self.connection and self.connection.error == False:
+        id = self.connection.getId()
+        self.changePage("lobbyOnline",True)
+        self.changeCurrentPlayer(id)
+        self.frames["lobbyOnline"].changeUserName(id,self.userName)
+        # self.t1 = threading.Thread(target=self.connection.receive)
+        # self.t1.daemon = True
+        # self.t1.start()
+
+        # self.t23 = threading.Thread(target=self.connection.inp)
+        # self.t23.daemon = True
+        # self.t23.start()
+        pass
+        
+    def changeCurrentPlayer(self,nb):
+        self.frames["lobbyOnline"].changeCurrentPlayer(nb)
+        
+
+
+    
 
     def updateBoard(self: Controller) -> None:
         """Méthode callback permettant de mettre à jour le plateau avec les pièces et le joueur courant à afficher
 
         Args:
-            self (Controller): Contorller
+            self (Controller): Controller
         """
         self.vueJeu.refreshBoard(self.game.getBoard())
         self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
@@ -67,7 +102,7 @@ class Controller(tk.Tk):
         et sur l'affichage de la page
 
         Args:
-            self (Controller): Contorller
+            self (Controller): Controller
         """
         if not self.game.isPlayerSurrendered():
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
