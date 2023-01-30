@@ -115,7 +115,8 @@ class Board:
         Returns:
             bool: vrai si la pièce peut être posé,sinon faux
         """
-        if not (self.__checkBoardLimit(row, column)): return False
+        if not (self.__checkBoardLimit(row, column)): 
+            return False
         x : int = column-declageX
         y : int = row-declageY
         delimitation : np.ndarray = piece.getDelimitation()
@@ -140,9 +141,12 @@ class Board:
                         cornerReduction+=1
 
         if self.__verifyApplicationStart(y,x,player,delimitation): #self.__verifyApplicationStart(y+declageY,x+declageX,player): # Vérification si le joueur 
+            print("3C'est vrai !!!!!!!!!")
             return True
         if ((nbCorners-cornerReduction) == countCorners): # Vérification si la pièce est rattaché à un coin
+            print("2C'est faux !!!!!!!!!")
             return False
+        print("1C'est vrai !!!!!!!!!")
         return True
     
     def ajouterPiece(self: Board,piece : Pieces,column:int,row:int,player : Player,declageX : int,declageY : int) -> bool:

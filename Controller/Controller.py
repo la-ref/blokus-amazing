@@ -112,6 +112,7 @@ class Controller(tk.Tk):
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
         if joueur == self.game.getCurrentPlayerId():
+            print(piece, colonne, ligne, dc, dl)
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
             win = self.game.getWinners()
             

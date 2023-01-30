@@ -11,11 +11,12 @@ class Player:
 
         Args:
             self (Player): joueur
-            idCouleur (int): id de la couleur du joueur
+            idJoueur (int): id du joueur
             nom (str | None): nom du joueur
         """
         self.__name : str =  nom or ("Joueur"+str(Player.nbJoueur))
         self.__idCouleur : int = idJoueur+1
+        self.__id : int = idJoueur
         self.__nbTour : int = 0 
         self.__pieces : dict[str,Pieces]
         self.__ai : None | ia.ai = None
@@ -46,7 +47,10 @@ class Player:
             nom (str): nom à remplacer
         """
         self.__name = nom.upper()
-
+        
+    def getID(self : Player) -> int:
+        return self.__id
+    
     def getColor(self : Player) -> int:
         """Méthode getter permettant d'avoir la couleur d'un joueur
 
