@@ -254,8 +254,6 @@ class Pieces_placement(tk.Frame):
             piece.move(x,y)
             piece.base_x += x
             piece.base_y += y
-            piece.base_xoff2 = piece.base_x
-            piece.base_yoff2 = piece.base_y
     
     def move_init2(self, x : int, y : int):
         """Méthode qui permet la téléportation de la pièce dans la liste du joueur

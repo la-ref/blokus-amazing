@@ -28,14 +28,8 @@ class Block(tk.Frame):
 
         self.piece = piece
 
-
-
-        
         self.base_xoff = base_x
         self.base_yoff = base_y
-
-        self.base_xoff2 = base_x
-        self.base_yoff2 = base_y
 
         self.base_xoff3 = base_x
         self.base_yoff3 = base_y

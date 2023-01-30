@@ -5,6 +5,7 @@ import sys
 from config import config
 import tkinter as tk
 import Elements.Player as Player
+import AI.ai as ia
 class lobbyUser(Frame):
     def __init__(self, window, parent : tk.Canvas, images : list, joueurs : Player.Player, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite"):
         """Méthode qui permet d'initialiser tout l'objet lobbyUser
@@ -23,12 +24,14 @@ class lobbyUser(Frame):
         
         """
         super(lobbyUser,self).__init__(parent)
+        self.joueur = joueurs
+        self.joueur.setIA(None)
+
         self.parent = parent
         self.window = window
         self.iatype = "facile"
         self.joueurType = "joueur"
         self.stateactuel = 0
-        self.joueurs = joueurs
         self.activeclavier = False
         self.boutonUser = "noir"
         self.width = width
@@ -54,7 +57,7 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
 
 
-        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueurs.getName(),anchor=tk.CENTER)
+        self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueur.getName(),anchor=tk.CENTER)
         self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
         self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
         self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
@@ -267,29 +270,29 @@ class lobbyUser(Frame):
         self.touche = str(event.keysym)
         if self.activeclavier == True:
             if len(self.touche) == 1:
-                if len(self.joueurs.getName()) < 10:
-                    self.joueurs.setName(str(self.joueurs.getName()+self.touche))
+                if len(self.joueur.getName()) < 10:
+                    self.joueur.setName(str(self.joueur.getName()+self.touche))
             elif self.touche == "space":
-                if len(self.joueurs.getName()) < 10:
-                    self.joueurs.setName(str(self.joueurs.getName())+" ")
+                if len(self.joueur.getName()) < 10:
+                    self.joueur.setName(str(self.joueur.getName())+" ")
             else:
-                if len(self.joueurs.getName()) > 0:
-                    self.joueurs.setName(str(self.joueurs.getName())[:-1])
+                if len(self.joueur.getName()) > 0:
+                    self.joueur.setName(str(self.joueur.getName())[:-1])
 
 
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[2]))
 
             else:
-                self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[0]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[0]))
                 tailles = self.parent.bbox(self.text)
                 width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueurs.getName(), font=('Lilita One', config.Config.taillePolice[2]))
+                    self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[2]))
 
-            config.Config.controller.changePlayer(self.joueurs)
+            config.Config.controller.changePlayer(self.joueur)
 
     def boutonSwitchIA(self,event):
         """Méthode qui permet de faire apparaitre les types de l'ia du joueur
@@ -311,6 +314,7 @@ class lobbyUser(Frame):
             else:
                 self.hiddenAll()
                 self.stateactuel = 0
+
         
         else:
             self.BoutonIA(event)
@@ -364,6 +368,7 @@ class lobbyUser(Frame):
             event: évènement du clique
         """
         self.iatype = "facile"
+        self.joueur.getAI().setDifficulty("Facile")
         self.parent.itemconfigure(self.text_facile, fill="#bbbbbb")
 
         self.parent.itemconfigure(self.text_moyen, fill="#ffffff")
@@ -377,6 +382,7 @@ class lobbyUser(Frame):
             event: évènement du clique
         """
         self.iatype = "moyen"
+        self.joueur.getAI().setDifficulty("Moyen")
         self.parent.itemconfigure(self.text_moyen, fill="#bbbbbb")
 
         self.parent.itemconfigure(self.text_facile, fill="#ffffff")
@@ -390,6 +396,7 @@ class lobbyUser(Frame):
             event: évènement du clique
         """
         self.iatype = "expert"
+        self.joueur.getAI().setDifficulty("Expert")
         self.parent.itemconfigure(self.text_expert, fill="#bbbbbb")
 
         self.parent.itemconfigure(self.text_moyen, fill="#ffffff")
@@ -428,6 +435,7 @@ class lobbyUser(Frame):
             self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "noir"
             self.joueurType = "joueur"
+            self.joueur.setIA(None)
         else:
             self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[23])
             self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
@@ -438,6 +446,9 @@ class lobbyUser(Frame):
             self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
             self.boutonUser = "gris"
             self.joueurType = "ia"
+            self.joueur.setIA(ia.ai("Facile", self.joueur))
+            self.facile(event)
+            # print("Lobbyuser switch ia :", self.joueur.getAI())
         self.moverobot(self.x,self.y)
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)

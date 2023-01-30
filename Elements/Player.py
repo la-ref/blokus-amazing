@@ -1,6 +1,7 @@
 from __future__ import annotations
 from Elements.Pieces.PiecesDeclaration import LISTEPIECES
 from Elements.Pieces.Pieces import Pieces
+import AI.ai as ia
 class Player:
     """Classe représentant un joueur du jeu blokus
     """
@@ -17,7 +18,14 @@ class Player:
         self.__idCouleur : int = idJoueur+1
         self.__nbTour : int = 0 
         self.__pieces : dict[str,Pieces]
+        self.__ai : None | ia.ai = None
         Player.nbJoueur +=1
+    
+    def setIA(self : Player, ai : ia.ai):
+        self.__ai = ai
+    
+    def getAI(self : Player):
+        return self.__ai
 
     def getName(self : Player) -> str:
         """Méthode getter permettant d'avoir le nom d'un joueur
@@ -101,7 +109,6 @@ class Player:
             self (Player): joueur
             id (str):  id de la pièce choisie
         """
-        print(self.__pieces)
         self.__pieces.pop(id, None)
 
     def ajoutTour(self : Player) -> None:

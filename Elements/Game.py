@@ -192,7 +192,10 @@ class Game:
                     self.getBoard().findCorners(self.getCurrentPlayer())
                 config.Config.controller.updateBoard()
                 # prep tour suivant
-                
+                print("ai :",self.getCurrentPlayer().getAI())
+                if self.getCurrentPlayer().getAI():
+                    self.getCurrentPlayer().getAI().play()
+                    config.Config.controller.updateBoard()
                 # config.Config.controller.updatePlayers(self.getCurrentPlayer())
                 
                 return True
