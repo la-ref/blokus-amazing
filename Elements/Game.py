@@ -196,6 +196,7 @@ class Game:
                 if self.getCurrentPlayer().getAI():
                     self.getCurrentPlayer().getAI().play()
                     config.Config.controller.updateBoard()
+
                 # config.Config.controller.updatePlayers(self.getCurrentPlayer())
                 
                 return True
