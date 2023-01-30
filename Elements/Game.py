@@ -5,6 +5,9 @@ from Elements.Player import Player
 from Elements.Board import Board
 from Vues.Game.GridInterface import GridInterface
 from config import config
+import time
+import threading
+
 class Game:
 
     """Classe de gestion des parties de jeu blokus
@@ -194,8 +197,10 @@ class Game:
                 # prep tour suivant
                 print("ai :",self.getCurrentPlayer().getAI())
                 if self.getCurrentPlayer().getAI():
-                    self.getCurrentPlayer().getAI().play()
+                    threading.Timer(1.0,self.getCurrentPlayer().getAI().play).start()
                     config.Config.controller.updateBoard()
+                    
+                    
 
                 # config.Config.controller.updatePlayers(self.getCurrentPlayer())
                 
