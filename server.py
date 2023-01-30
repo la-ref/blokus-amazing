@@ -8,7 +8,7 @@ import time
 
 class Server:
     lobbies = []
-    PORT = 5006
+    PORT = 5005
 
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -46,6 +46,7 @@ class Server:
             clientId = self.getClientId(client,lobbyId)
             del Server.lobbies[lobbyId]["clients"][clientId]
             if username:
+                self.send(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
                 del Server.lobbies[lobbyId]["players"][clientId]
                 
     def addLobby(self,connection):
@@ -53,7 +54,6 @@ class Server:
         if len(Server.lobbies) > 0:
             for lobbyId in range(len(Server.lobbies)): 
                 # if 1er joueur de la liste c'est lui l'admin
-                
                 if Server.lobbies[lobbyId]["game"] == None and len(Server.lobbies[lobbyId]["clients"]) < 4:
                     cli = self.chooseANumber(lobbyId)
                     lob = lobbyId
@@ -96,7 +96,6 @@ class Server:
         try:
             data = client.recv(8192)
             if len(data) == 0:
-                print("client déconnecter : {}".format(str(self.getClientUserName(client,nbLobby))))
                 self.removeClient(client,nbLobby,True)
                 return
             data = str(data.decode())
@@ -112,14 +111,15 @@ class Server:
             for k,v in Server.lobbies[nbLobby]["clients"].items():
                 t1_2_1 = threading.Thread(target=self.f,args=(v,nbLobby))
                 t1_2_1.start()
-                #t1_2_1.join(1)
 
     def condition(self):
         while True:
             t1_1 = threading.Thread(target=self.accept)
+            t1_1.daemon = True
             t1_1.start()
             t1_1.join(1)
             t1_2 = threading.Thread(target=self.receive)
+            t1_2.daemon = True
             t1_2.start()
             t1_2.join(1)
             
