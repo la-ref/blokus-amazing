@@ -19,8 +19,8 @@ class Connexion(Frame):
         self.actuel_touche = ""
         self.activeclavier = False
         self.modal_active = False
-        self.ip = ""
-        self.port = ""
+        self.ip = "127.0.0.1"
+        self.port = "5000"
         self.pseudo = ""
 
     def initialize(self):
@@ -236,6 +236,8 @@ class Connexion(Frame):
 
         self.canvas.itemconfigure(self.entrerip_image, state=tkinter.NORMAL)
         self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.NORMAL)
+        self.ip = ""
+        self.port = ""
         self.desactiverAll()
 
     def EntreSimplif(self,event):
@@ -252,6 +254,8 @@ class Connexion(Frame):
 
         self.canvas.itemconfigure(self.entrerip_image, state=tkinter.HIDDEN)
         self.canvas.itemconfigure(self.entrerPort_image, state=tkinter.HIDDEN)
+        self.ip = "127.0.0.1"
+        self.port = "5000"
         self.desactiverAll()
 
     def Entrerpseudo(self):
