@@ -58,12 +58,10 @@ class Connexion(Frame):
             image=config.Config.image[61],
             anchor=tkinter.NW
         )
-        # self.canvas.tag_bind(entrerPseudo_image, "<Button-1>", self.Entrerpseudo)
         self.canvas.tag_bind(self.entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
         self.canvas.tag_bind(self.entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))
         
         self.text_pseudo = self.canvas.create_text(362+(config.Config.image[61].width()/2),333+(config.Config.image[61].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Entrez votre pseudo",anchor=tkinter.CENTER)
-        # self.canvas.tag_bind(self.text_pseudo, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.text_pseudo, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
         self.canvas.tag_bind(self.text_pseudo, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))
         
@@ -73,12 +71,10 @@ class Connexion(Frame):
             image=config.Config.image[60],
             anchor=tkinter.NW
         )
-        # self.canvas.tag_bind(entrerip_image, "<Button-1>", self.Entrerip)
         self.canvas.tag_bind(self.entrerip_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",self.entrerip_image))
         self.canvas.tag_bind(self.entrerip_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",self.entrerip_image))
 
         self.text_ip = self.canvas.create_text(360+(config.Config.image[60].width()/2),455+(config.Config.image[60].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Adresse",anchor=tkinter.CENTER)
-        # self.canvas.tag_bind(self.text_ip, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.text_ip, "<Enter>",lambda *_: self.hoverBouton("entre","entrerip",self.entrerip_image))
         self.canvas.tag_bind(self.text_ip, "<Leave>",lambda *_: self.hoverBouton("sort","entrerip",self.entrerip_image))
         
@@ -89,12 +85,10 @@ class Connexion(Frame):
             image=config.Config.image[62],
             anchor=tkinter.NW
         )
-        # self.canvas.tag_bind(entrerPort_image, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.entrerPort_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",self.entrerPort_image))
         self.canvas.tag_bind(self.entrerPort_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",self.entrerPort_image))
         
         self.text_port = self.canvas.create_text(810+(config.Config.image[62].width()/2),455+(config.Config.image[62].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Port",anchor=tkinter.CENTER)
-        # self.canvas.tag_bind(self.text_port, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.text_port, "<Enter>",lambda *_: self.hoverBouton("entre","entrerport",self.entrerPort_image))
         self.canvas.tag_bind(self.text_port, "<Leave>",lambda *_: self.hoverBouton("sort","entrerport",self.entrerPort_image))
         
@@ -486,19 +480,6 @@ class Connexion(Frame):
             self.EntreAvance()
         if text == "accueil":
             config.Config.controller.changePage("Acceuil")
-
-    def fermerRegle(self,event):
-        """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
-        
-        """
-        if not self.hidden: # fermer les règles
-            self.hidden = True
-            self.canvas.itemconfigure(self.RegleBlokus,state=tkinter.HIDDEN)
-            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
-        if self.scrollable_frame:
-            self.scrollable_frame.destroye()
-            self.scrollable_frame.destroy()
-            self.canvas.delete(self.windowRegle)
         
         
         
