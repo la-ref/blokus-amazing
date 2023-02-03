@@ -270,6 +270,7 @@ class lobbyUser(Frame):
         """
         self.touche = str(event.keysym)
         if self.activeclavier == True:
+            print("YUFDGSGFDSGUFIGDSIUFGDSIG")
             if len(self.touche) == 1:
                 if len(self.nomJoueur) < 10:
                     self.nomJoueur = self.nomJoueur+str(self.touche)

@@ -37,14 +37,27 @@ class Server:
                 return v
         return None
     
+    def changeAdmin(self,lobbyId):
+        if len(Server.lobbies[lobbyId]["clients"]) > 0 and len(Server.lobbies[lobbyId]["players"]) > 0:
+            Server.lobbies[lobbyId]["admin"] = Server.lobbies[lobbyId]["clients"][0]
+        else:
+            Server.lobbies[lobbyId]["admin"] = 0
+            
+                
+    
     def removeClient(self,client,lobbyId, username = False):
         if client in Server.lobbies[lobbyId]["clients"].values():
             # Server.lobbies[lobbyId]["clients"][client].close()
             clientId = self.getClientId(client,lobbyId)
             del Server.lobbies[lobbyId]["clients"][clientId]
             if username:
-                self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
+                #self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
                 del Server.lobbies[lobbyId]["players"][clientId]
+                self.sendToOther("userNames."+str(Server.lobbies[lobbyId]["players"]), client, lobbyId)
+            if clientId == Server.lobbies[lobbyId]["admin"]:
+                self.changeAdmin(lobbyId)   
+
+
                 
     def addLobby(self,connection):
         lob,cli,added = 0,0,False
@@ -63,6 +76,7 @@ class Server:
             Server.lobbies.append( {
                 "clients" : {},
                 "players" : {},
+                "admin" : 0,
                 "game": None
             })
             lob = len(Server.lobbies)-1
@@ -85,7 +99,9 @@ class Server:
         else:
             data = str(data.decode())
             Server.lobbies[lob]["players"][cli]=data
-            self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
+            #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
+            self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
+            self.sendToOther("userNames."+str(Server.lobbies[lob]["players"]), self.getClientFromId(cli,lob), lob)
             print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
         
     def f(self, client, nbLobby):
@@ -103,6 +119,8 @@ class Server:
         if data :
             if data == "getid":
                 self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
+            if data == "getUserNames":
+                self.sendToClient("userNames."+str(Server.lobbies[nbLobby]["players"]), client, nbLobby)
             #self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
 
     def receive(self):

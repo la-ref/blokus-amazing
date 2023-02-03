@@ -13,6 +13,7 @@ from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
 from Vues.connexion import Connexion
 from clientcopy import Client
+import time
 import threading
 
 class Controller(tk.Tk):
@@ -30,6 +31,8 @@ class Controller(tk.Tk):
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.connection = None
         self.userName = None
+        self.t1 = None
+        self.currentPage = ""
         self.changePage('Acceuil')
         self.mainloop()
             
@@ -42,15 +45,16 @@ class Controller(tk.Tk):
         """
         if self.connection == None and nomFrame == "lobbyOnline":
             self.connectLobby(self.userName)
-            print("hi")
         elif self.connection and not online:
             self.connection.error = True
-            print("okkk")
+            self.connection.stopSock()
             self.connection = None
+            self.changePage("Acceuil")
         if nomFrame != "lobbyOnline" or online:
             self.vueJeu = self.frames[nomFrame]
             self.vueJeu.initialize()
             self.vueJeu.tkraise()
+        self.currentPage = nomFrame
             
     def changeUserName(self,name):
         self.userName = name       
@@ -67,11 +71,21 @@ class Controller(tk.Tk):
         
     def connectLobby(self,name):
         self.connection = Client(name)
-        #if self.connection and self.connection.error == False:
-        id = self.connection.getId()
-        self.changePage("lobbyOnline",True)
-        self.changeCurrentPlayer(id)
-        self.frames["lobbyOnline"].changeUserName(id,self.userName)
+        if self.connection and self.connection.error == False:
+            self.changePage("lobbyOnline",True)
+            id = self.connection.getId()
+            self.changeCurrentPlayer(id)
+            self.frames["lobbyOnline"].changeUserName(id,self.userName)
+            time.sleep(1)
+            self.t1 = threading.Thread(target=self.connection.receive)
+            self.t1.daemon = True
+            self.t1.start()
+            self.connection.send("getUserNames")
+            #players = self.connection.getUserNames()
+            #self.changeUserNames(players)
+        else:
+            self.changePage("connexion")
+            self.frames["connexion"].showError("Aucun serveur disponible")
         # self.t1 = threading.Thread(target=self.connection.receive)
         # self.t1.daemon = True
         # self.t1.start()
@@ -83,6 +97,9 @@ class Controller(tk.Tk):
         
     def changeCurrentPlayer(self,nb):
         self.frames["lobbyOnline"].changeCurrentPlayer(nb)
+        
+    def changeUserNames(self,players):
+        self.frames["lobbyOnline"].changeUserNames(players)
         
 
 

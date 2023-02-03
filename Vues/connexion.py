@@ -62,7 +62,7 @@ class Connexion(Frame):
         self.canvas.tag_bind(self.entrerPseudo_image, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
         self.canvas.tag_bind(self.entrerPseudo_image, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))
         
-        self.text_pseudo = self.canvas.create_text(362+(config.Config.image[61].width()/2),333+(config.Config.image[61].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Entrez votre pseudo",anchor=tkinter.CENTER)
+        self.text_pseudo = self.canvas.create_text(362+(config.Config.image[61].width()/2),333+(config.Config.image[61].height()/2),fill="black",font=('Lilita One', config.Config.taillePolice[0]),text= (lambda : self.pseudo if self.pseudo else "Entrez votre pseudo")() ,anchor=tkinter.CENTER)
         # self.canvas.tag_bind(self.text_pseudo, "<Button-1>", self.Entrerport)
         self.canvas.tag_bind(self.text_pseudo, "<Enter>",lambda *_: self.hoverBouton("entre","entrerpseudo",self.entrerPseudo_image))
         self.canvas.tag_bind(self.text_pseudo, "<Leave>",lambda *_: self.hoverBouton("sort","entrerpseudo",self.entrerPseudo_image))

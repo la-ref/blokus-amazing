@@ -3,6 +3,7 @@ import socket
 import threading
 import time
 from config import config
+import ast
 
 class Client:
 
@@ -18,21 +19,30 @@ class Client:
         self.error = False
         try:
             self.s.connect(("localhost", Client.PORT))
-            self.send(self.nom)
         except ConnectionRefusedError:
             self.error = True
-            print("hihi")
             config.Config.controller.changePage("connexion")
             print("error connect", "({}) : The server is not online.\n".format(now))
             
     def getId(self):
         self.send(self.nom)
-        self.id = str(self.oneReceive())
-        print(self.id, "fhdifidh")
-        if not self.id:
-            # envoi page d'erreur au client..
-            return
+        self.id = int(self.oneReceive())
+        # if not self.id:
+        #     # envoi page d'erreur au client..
+        #     return
         return self.id
+    
+    def stopSock(self):
+        try:
+            self.s.shutdown(socket.SHUT_WR)
+        except:
+            config.Config.controller.changePage("Accueil")
+            
+    
+    def convertJson(self,msg):
+        #self.send("getUserNames")
+        #return ast.literal_eval(str(self.oneReceive()))
+        return ast.literal_eval(str(msg))
 
     def receive(self):
         while not self.error:
@@ -43,7 +53,12 @@ class Client:
                     self.s.close()
                     break
                 else:
-                    print("{}\n".format(str(data.decode())))
+                    val = str(data.decode())
+                    if config.Config.controller.currentPage == "lobbyOnline":
+                        if "userNames." in val:
+                            val = val.replace("userNames.", '')
+                            config.Config.controller.changeUserNames(self.convertJson(val))
+                    print("{}\n".format(val))
             except:
                 self.error = True
                 print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
@@ -52,7 +67,10 @@ class Client:
             
     def oneReceive(self):
         try:
+            self.s.settimeout(10.0)
             data = self.s.recv(8192)
+            self.s.settimeout(None)
+            print("MY DATA ", data)
             if len(data) == 0:
                 self.error = True
                 self.s.close()

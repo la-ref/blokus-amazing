@@ -54,7 +54,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.Bouton_Quitter, "<Leave>",lambda *_: self.hoverBouton("sort","quitter",self.Bouton_Quitter))
 
 
-        self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[0],16,hb="haut",droiteg="gauche",edit= lambda: True if self.currentPlayerID == 0 else False)
+        self.bouton_jaune = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[0],16,hb="haut",droiteg="gauche",edit= (lambda: True if self.currentPlayerID == 0 else False)())
         self.bouton_jaune.move(279,147)
         self.namezone_jaune = self.bouton_jaune.getNameZone()
         self.namezone_jaune_text = self.bouton_jaune.getNameZone_Text()
@@ -62,7 +62,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_jaune_text, "<Button-1>",lambda *_: self.Boutonselect(0))
 
 
-        self.bouton_vert = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[1],25,hb="haut",droiteg="droite",edit= lambda: True if self.currentPlayerID == 1 else False)
+        self.bouton_vert = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[1],25,hb="haut",droiteg="droite",edit= (lambda: True if self.currentPlayerID == 1 else False)())
         self.bouton_vert.move(1156,147)
         self.namezone_vert = self.bouton_vert.getNameZone()
         self.namezone_vert_text = self.bouton_vert.getNameZone_Text()
@@ -70,7 +70,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_vert_text, "<Button-1>",lambda *_: self.Boutonselect(1))
 
 
-        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],22,hb="bas",droiteg="gauche",edit= lambda: True if self.currentPlayerID == 2 else False)
+        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],22,hb="bas",droiteg="gauche",edit= (lambda: True if self.currentPlayerID == 2 else False)())
         self.bouton_rouge.move(279,883)
         self.namezone_rouge = self.bouton_rouge.getNameZone()
         self.namezone_rouge_text = self.bouton_rouge.getNameZone_Text()
@@ -78,7 +78,7 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_rouge_text, "<Button-1>",lambda *_: self.Boutonselect(2))
 
 
-        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],15,hb="bas",droiteg="droite",edit= lambda: True if self.currentPlayerID == 3 else False)
+        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],15,hb="bas",droiteg="droite",edit= (lambda: True if self.currentPlayerID == 3 else False)())
         self.bouton_bleu.move(1156,883)
         self.namezone_bleu = self.bouton_bleu.getNameZone()
         self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()
@@ -96,6 +96,13 @@ class lobbyOnline(Frame):
             self.bouton_rouge.changeName(name)
         elif id == 3:
             self.bouton_bleu.changeName(name)
+            
+    def changeUserNames(self,userList):
+        for i in range(4):
+            self.changeUserName(i,"")
+        for k,v in userList.items():
+            self.changeUserName(k,v)
+        
             
     def changeCurrentPlayer(self ,id):
         if id >= 0 and id < 4:
@@ -136,10 +143,14 @@ class lobbyOnline(Frame):
         
         
     def touches(self,event):
-        self.bouton_bleu.touches(event)
-        self.bouton_rouge.touches(event)
-        self.bouton_jaune.touches(event)
-        self.bouton_vert.touches(event)
+        if self.currentPlayerID == 3:
+            self.bouton_bleu.touches(event)
+        if self.currentPlayerID == 0:
+            self.bouton_rouge.touches(event)
+        if self.currentPlayerID == 2:
+            self.bouton_jaune.touches(event)
+        if self.currentPlayerID == 1:
+            self.bouton_vert.touches(event)
 
     def jouer(self,event):
         from Elements.Game import Game
