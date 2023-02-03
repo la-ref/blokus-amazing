@@ -143,6 +143,13 @@ class Pieces_placement(tk.Frame):
             # Re-création de la pièce
             self.changement_piece(self.piece)
     
+    def enlever_piece(self):
+        # supprime si oui
+        for piece in self.tableau_piece_forme:
+            piece.delete()
+        self.tableau_piece_forme = []
+        self.list.removePiece_placement(self)
+
     def changement_piece(self,piece):
         """Méthode qui permet de créer la pièce une fois quelle est supprimée
         Args:
@@ -359,7 +366,7 @@ class Pieces_placement(tk.Frame):
                 for piece in self.tableau_piece_forme:
                     piece.delete()
                 self.tableau_piece_forme = []
-                self.list.removePiece(self) 
+                self.list.removePiece_placement(self) 
                 self.destroy()
             else:
                 # remet la piece à la position si non

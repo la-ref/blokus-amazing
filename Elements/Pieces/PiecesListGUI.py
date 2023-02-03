@@ -112,10 +112,17 @@ class PiecesListGUI(tk.Frame):
     #     x,y=self.parent.coords(self.list)
     #     self.delta=event.x-x,event.y-y
     #     print(self.tableau_piece_forme)
-        
-    def removePiece(self,piece : PP.Pieces_placement):
+
+    def removePiece_placement(self,piece : int):
         self.tableau_piece_forme.remove(piece)
         config.Config.controller.game.getPlayers()[self.nb_player].removePiece(piece.la_piece)
+
+    def removePiece(self,piece : int):
+        tablePiece = 21-len(self.tableau_piece_forme)+1
+        numero = piece-tablePiece
+        print("eiushghsuhg", numero)
+        self.tableau_piece_forme[numero].enlever_piece()
+
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
 

@@ -259,7 +259,9 @@ class GameInterface(tk.Frame):
         
         self.border.tag_raise(self.quitter)
 
-
+    def removePiece(self,nbPlayer,nbPiece):
+        self.Lists[nbPlayer].removePiece(nbPiece)
+    
     """ Fonction permettant de créer un modal en fonction du paramètre reçu :
         paramètres valables : abandon, quitter.
     """

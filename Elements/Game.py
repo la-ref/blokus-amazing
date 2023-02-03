@@ -184,6 +184,7 @@ class Game:
             ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
             if ajout: # si une pièce peut être ajouter
                 self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                config.Config.controller.vueJeu.removePiece(self.__currentPlayerPos,piece.getIdentifiant())
                 self.getCurrentPlayer().ajoutTour()
 
 
