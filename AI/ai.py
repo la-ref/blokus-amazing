@@ -13,6 +13,12 @@ class ai():
     
     def getDifficulty(self, diff : str):
         return self.__difficulty
+
+    def getFirst(self,piece):
+        for i in range(len(piece.getDelimitation())):
+            for y in range(len(piece.getDelimitation()[i])):
+                if piece.getDelimitation()[i][y] == 3:
+                    return (i,y)
     
     def verifPlay(self):
         coins = config.Config.controller.game.getBoard().findCorners(self.player)
@@ -23,15 +29,21 @@ class ai():
             return False
         
         else:
-            print(coins)
+            print("\n---------------------------\n",self.player.getName())
             for coin in coins:
+                print("\n-----------\n",coin)
                 for piece in self.player.getPieces().values():
+                    print("\n-----")
+                    print(piece.getIdentifiant())
                     for rot in range(4):
                         for flip in range(2):
-                            for dec in np.argwhere(piece.getDelimitation()==3):
-                                if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[0],dec[1]): #todo (parcours piece pour vérif si posable)
-                                    listePossib.append([piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[0],dec[1],rot,flip])
-                    
+                            #dec = np.argwhere(piece.getDelimitation()==3)[0]
+                            dec = self.getFirst(piece)
+                            if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1],coin[0],self.player,dec[0],dec[1]): 
+                                listePossib.append([piece,coin[1],coin[0],self.player,dec[0],dec[1],rot,flip])
+                            # elif config.Config.controller.game.getBoard().verifyApplication(piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0]): 
+                            #    listePossib.append([piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0],rot,flip])
+                            
                             piece.flip()
                         piece.rotate90()
             print("listePossib :",len(listePossib))

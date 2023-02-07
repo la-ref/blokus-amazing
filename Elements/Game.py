@@ -196,8 +196,9 @@ class Game:
                 # prep tour suivant
                 print("ai :",self.getCurrentPlayer().getAI())
                 if self.getCurrentPlayer().getAI():
-                    threading.Timer(1.0,self.getCurrentPlayer().getAI().play).start()
+                    threading.Timer(1.0,self.getCurrentPlayer().getAI().play).start() #delai l'appel
                     config.Config.controller.updateBoard()
+                
                     
                     
 

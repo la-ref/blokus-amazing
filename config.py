@@ -1,6 +1,6 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-
+import random
 
 class config():
     """ Classe de configuration de l'application
@@ -13,7 +13,7 @@ class config():
         Args:
             Controller: Controller qui gère le jeu
         """
-        
+        random.seed()
         self.largueur : int = 1440
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
