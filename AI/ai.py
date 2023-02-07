@@ -37,9 +37,9 @@ class ai():
                     print(piece.getIdentifiant())
                     for rot in range(4):
                         for flip in range(2):
-                            for y,i in np.argwhere(piece.getDelimitation()==3):
-                                if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1],coin[0],self.player,y,i): 
-                                    listePossib.append([piece,coin[1],coin[0],self.player,y,i,rot,flip])
+                            for dec in np.argwhere(piece.getDelimitation()==3):
+                                if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1],coin[0],self.player,dec[1],dec[0]): 
+                                    listePossib.append([piece,coin[1],coin[0],self.player,dec[1],dec[0],rot,flip])
                             # elif config.Config.controller.game.getBoard().verifyApplication(piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0]): 
                             #    listePossib.append([piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0],rot,flip])
                             
