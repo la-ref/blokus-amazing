@@ -173,8 +173,11 @@ class Game:
             while existe == True:
                 if val_test not in data:
                     existe = False
-            data.update({val_test : self.__json})
+            dictio = data + {val_test : self.__json}
+            print(val_test)
             print(data)
+            print(dictio)
+            
         with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "w") as mon_fichier:  
             json.dump(data, mon_fichier)  
         
