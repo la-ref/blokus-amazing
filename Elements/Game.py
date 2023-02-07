@@ -166,7 +166,7 @@ class Game:
     
     def isJsonAjout(self):
         #changer et le mettre dans HighScore
-        fileObject = open("../HighScore/highscore.json", "r")
+        fileObject = open("highscore.json", "r")
         jsonContent = fileObject.read()
         dict_python = json.loads(jsonContent)
         val_test = "Game1"

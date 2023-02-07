@@ -20,9 +20,6 @@ class Controller(tk.Tk):
         tk.Tk.__init__(self)
         
         config.initialisation(self)
-        
-
-
 
         self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
         self.game : Game

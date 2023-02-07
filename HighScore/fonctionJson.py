@@ -5,14 +5,15 @@ from Elements.Player import Player
 
 # Exemple de fonction pour gérer les Json
 
-# class fonctionJson():
-#     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
-#     donc de la communication entre les différents élèments de l'application
-#     """
+class fonctionJson():
+    """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
+    donc de la communication entre les différents élèments de l'application
+    """
 
-#     def __init__(self: fonctionJson) -> None:
-#         self.__plateau = [[]]
-#         self.__winners = [Player(11,"PERSONNE 1")]
+    def __init__(self: fonctionJson) -> None:
+        self.__plateau = [[]]
+        self.__winners = [Player(11,"PERSONNE 1")]
+        
 #     def __repr__(self) -> str:
 #         res = ""
 #         if self.__genre == g.Genre.M : res += "M. "
@@ -42,4 +43,16 @@ from Elements.Player import Player
 #         self.
 
 #         return fonctionJson(prenom, nom, genre,dateNaissance,dateMort, bio)
+
+    def isJsonAjout(self):
+        
+        fileObject = open("highscore.json", "r")
+        jsonContent = fileObject.read()
+        dict_python = json.loads(jsonContent)
+        val_test = "Game1"
+        existe = True
+        while existe == True:
+            if val_test not in dict_python:
+                existe = False
+        dict_python.update({val_test : self.__plateau})  
 
