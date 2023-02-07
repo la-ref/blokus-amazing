@@ -43,16 +43,3 @@ class fonctionJson():
 #         self.
 
 #         return fonctionJson(prenom, nom, genre,dateNaissance,dateMort, bio)
-
-    def isJsonAjout(self):
-        
-        fileObject = open("highscore.json", "r")
-        jsonContent = fileObject.read()
-        dict_python = json.loads(jsonContent)
-        val_test = "Game1"
-        existe = True
-        while existe == True:
-            if val_test not in dict_python:
-                existe = False
-        dict_python.update({val_test : self.__plateau})  
-
