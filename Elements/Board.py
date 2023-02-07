@@ -116,7 +116,6 @@ class Board:
             bool: vrai si la pièce peut être posé,sinon faux
         """
         if not (self.__checkBoardLimit(row, column)): 
-            print("dehors")
             return False
         x : int = column-declageX
         y : int = row-declageY
@@ -124,7 +123,6 @@ class Board:
         nbCorners : int = piece.getNbCorners()
         countCorners : int = 0
         cornerReduction : int = 0
-        print(piece.getForme())
         for i in range(len(delimitation)):
             for v in range(len(delimitation[0])):
                 # vérfication du positionnement de la pièce en fonction de sa délimitation sur le plateau
