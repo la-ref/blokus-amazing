@@ -158,23 +158,25 @@ class Game:
                 blockCount.append(self.countBlocks(joueur))
             for i in range(len(blockCount)):
                 if blockCount[i] == max(blockCount):
-                    winners.append(self.__joueurs[i])
+                    winners.append(self.__joueurs[i].getName())
                 self.__json[0].update({"winners" : winners})
+                print(self.__json)
                 self.isJsonAjout()
             return winners
         return []
     
     def isJsonAjout(self):
-        #changer et le mettre dans HighScore
-        fileObject = open("highscore.json", "r")
-        jsonContent = fileObject.read()
-        dict_python = json.loads(jsonContent)
-        val_test = "Game1"
-        existe = True
-        while existe == True:
-            if val_test not in dict_python:
-                existe = False
-        dict_python.update({val_test : self.__json})    
+        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json") as mon_fichier:
+            data = json.load(mon_fichier)
+            val_test = "Game1"
+            existe = True
+            while existe == True:
+                if val_test not in data:
+                    existe = False
+            data.update({val_test : self.__json})
+            print(data)
+        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "w") as mon_fichier:  
+            json.dump(data, mon_fichier)  
         
     
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int ) -> bool:
@@ -202,13 +204,12 @@ class Game:
                 rota = piece.getRotation()
                 flip = piece.getFlip()
                 self.__json.append({"num_tour" : self.__tour,
-                "joueur" : self.getCurrentPlayer(),
-                "num_piece" : piece,
+                "joueur" : self.getCurrentPlayer().getName(),
+                "num_piece" : piece.getIdentifiant(),
                 "position_plateau" : [colonne,ligne],
                 "rotation" : rota,
                 "flip" : flip})
-
-
+                self.__tour += 1
             
                 if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
                     self.addSurrenderedPlayer()
