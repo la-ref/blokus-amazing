@@ -1,11 +1,9 @@
 from __future__ import annotations
-from typing import Callable
 from Elements.Pieces.Pieces import Pieces
 from Elements.Player import Player
 from Elements.Board import Board
 from Vues.Game.GridInterface import GridInterface
 from config import config
-import time
 import threading
 
 class Game:

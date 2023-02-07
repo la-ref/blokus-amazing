@@ -148,7 +148,7 @@ class Pieces_placement(tk.Frame):
         for piece in self.tableau_piece_forme:
             piece.delete()
         self.tableau_piece_forme = []
-        self.list.removePiece_placement(self)
+        self.list.removePiece_placement(self.la_piece)
 
     def changement_piece(self,piece):
         """Méthode qui permet de créer la pièce une fois quelle est supprimée

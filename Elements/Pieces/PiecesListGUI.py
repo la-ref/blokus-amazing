@@ -101,27 +101,11 @@ class PiecesListGUI(tk.Frame):
         for piece in self.tableau_piece_forme:
             piece.move_init2(x,y)
 
-
-
-    # def on_click(self,event):
-    #     """ Gestion du clic d'un joueur
-
-    #     Args:
-    #         event (Tkinter): Coordonnées X et Y du clic
-    #     """
-    #     x,y=self.parent.coords(self.list)
-    #     self.delta=event.x-x,event.y-y
-    #     print(self.tableau_piece_forme)
-
     def removePiece_placement(self,piece : int):
-        self.tableau_piece_forme.remove(piece)
-        config.Config.controller.game.getPlayers()[self.nb_player].removePiece(piece.la_piece)
+        config.Config.controller.game.getPlayers()[self.nb_player].removePiece(piece)
 
     def removePiece(self,piece : int):
-        tablePiece = 21-len(self.tableau_piece_forme)+1
-        numero = piece-tablePiece
-        print("eiushghsuhg", numero)
-        self.tableau_piece_forme[numero].enlever_piece()
+        self.tableau_piece_forme[piece-1].enlever_piece()
 
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
