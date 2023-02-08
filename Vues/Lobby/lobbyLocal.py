@@ -205,6 +205,7 @@ class lobbyLocal(Frame):
         """ Méthode permettant de lancer la partie au clic du bouton "joueur"
         """
         from Elements.Game import Game
+        
         config.Config.controller.game = Game(self.joueurs,None,20)
         config.Config.controller.changePage("GameInterface")
         config.Config.controller.game.start()

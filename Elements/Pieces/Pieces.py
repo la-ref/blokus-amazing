@@ -4,7 +4,7 @@ class Pieces:
     """Classe représentant une pièce du jeu blokus
     """
 
-    def __init__(self: Pieces, forme : np.ndarray, identifiant: int) -> None:
+    def __init__(self: Pieces, forme : np.ndarray, identifiant: int, nbRot : int, nbFlip: int) -> None:
         """Constructeur créant une pièce identifié par un entier est étant sous forme d'un tableau 2d
 
         Args:
@@ -20,6 +20,10 @@ class Pieces:
         self.__delimitation : np.ndarray = self.__findCorners() # matrice permettant de connaitre les coins de la pièces voir _findCorners()
         self.__rotation = 0
         self.__flipped = 0
+        self.nbFlip = nbFlip # pour parcours ia
+        self.nbRot = nbRot   # pour parcours ia
+        self.__flip : bool = False # pour parcours ia
+        self.__rotation : int = 0 # pour parcours ia
     
     def __findCorners(self : Pieces) -> np.ndarray:
         """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
@@ -121,8 +125,7 @@ class Pieces:
             int: nombre de coin de la pièce
         """
         return np.count_nonzero(self.__delimitation == 2)
-    def getRotation(self):
-        return self.__rotation
+
     def getForme(self : Pieces) -> np.ndarray:
         """Méthode getter permettant de récupérer une pièce sous forme de tableau 2d
 
@@ -147,3 +150,20 @@ class Pieces:
         """
         return self.__id
 
+    def getRotation(self : Pieces) -> int:
+        """Méthoge getter permettant d'obtenir le degrès de rotation de la pièce
+        Args:
+            self (Pieces): pieces
+        Returns:
+            int: degrè de rotation
+        """
+        return self.__rotation
+    
+    def getFlip(self : Pieces) -> bool:
+        """Méthode getter pour obtenir si la pièces est flip ou non
+        Args:
+            self (Pieces): pieces
+        Returns:
+            bool: True si elle est flip, False si elle ne l'est pas
+        """
+        return self.__flip

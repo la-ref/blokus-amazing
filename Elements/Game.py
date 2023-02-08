@@ -4,6 +4,8 @@ from Elements.Player import Player
 from Elements.Board import Board
 from Vues.Game.GridInterface import GridInterface
 from config import config
+from time import sleep
+from HighScore.fonctionJson import fonctionJson
 import threading
 
 class Game:
@@ -29,7 +31,7 @@ class Game:
             
         
     def start(self):
-        self.__nextPlayer()
+        threading.Timer(0.5,self.__nextPlayer).start()
     
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -77,6 +79,39 @@ class Game:
             int: l'id du joueur courant
         """
         return self.__currentPlayerPos
+    
+    def getCurrentPlayers(self : Game) -> list[Player]:
+        """Méthode getter petmettant d'obtenir la liste des joueurs
+        encore actuellement dans la partie.
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            list: La liste des joueurs encore dans la partie
+        """
+        tableau = []
+        for joueur in self.getPlayers():
+            if joueur not in self.__joueursAbandon:
+                tableau.append(joueur)
+        return tableau
+    
+    def getCurrent(self : Game) -> list[Player]:
+        """Méthode getter petmettant d'obtenir la liste des joueurs
+        encore actuellement dans la partie.
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            list: La liste des joueurs encore dans la partie
+        """
+        tableau = []
+        for joueur in self.getPlayers():
+            if joueur not in self.__joueursAbandon:
+                tableau.append(joueur)
+        return tableau
+
 
     def addSurrenderedPlayer(self : Game) -> bool|list[Player]:
         """Méthode qui permet d'ajouter un joueur dans la liste des joueurs qui ont abandonné et de donne le status de la partie
@@ -125,9 +160,28 @@ class Game:
             if self.getCurrentPlayer().getAI():
                 threading.Timer(.5,self.getCurrentPlayer().getAI().play).start() #delai l'appel
                 config.Config.controller.updateBoard()
+                sleep(0.5)
             return True
         else:
             return False
+        
+    def getNextPlayer(self : Game, nbPlayer : int) -> int:
+        """Méthode qui permet de récuperer l'id du joueur suivant
+
+        Args:
+            self (Game): Game
+            nbPlayer : id du joueur current
+            
+        Returns:
+            int: id du joueur suivant
+        """
+        pos = (nbPlayer+1)%len(self.__joueurs)
+        while self.__joueurs[pos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
+            pos = (nbPlayer+1)%len(self.__joueurs)
+        if len(self.__joueursAbandon) != len(self.__joueurs):
+            return pos
+        else:
+            return -1
 
     def isGameFinished(self : Game) -> bool:
         """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau

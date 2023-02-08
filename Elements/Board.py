@@ -2,6 +2,7 @@ from __future__ import annotations
 import numpy as np
 from Elements.Player import Player 
 from Elements.Pieces.Pieces import Pieces
+from copy import deepcopy
 class Board:
     """Classe représentant le plateau de jeu du jeu blokus
     """
@@ -29,6 +30,13 @@ class Board:
             bool: vrai si les coordonnées sont dans le plateau,sinon faux
         """
         return ((row < self.__size and row >= 0) and (column < self.__size and column >= 0))
+
+    def copy(self):
+        """ Copie de la class Board
+        """
+        cp = Board(self.__size)
+        cp.__board = np.copy(self.__board)
+        return cp
 
     def getColorAt(self : Board, row : int, column : int) -> int|None:
         """Méthode getter retournant la couleur d'une pièce / un joueur à une coordonnée du plateau choisie
