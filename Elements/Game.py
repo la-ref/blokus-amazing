@@ -5,6 +5,7 @@ from Elements.Player import Player
 from Elements.Board import Board
 from Vues.Game.GridInterface import GridInterface
 from config import config
+from HighScore.fonctionJson import fonctionJson
 import json
 class Game:
 
@@ -23,8 +24,7 @@ class Game:
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
-        self.__json = []
-        self.__tour = 1
+
         
     
     def getPlayers(self : Game) -> list[Player]:
@@ -73,6 +73,7 @@ class Game:
             int: l'id du joueur courant
         """
         return self.__currentPlayerPos
+
 
     def addSurrenderedPlayer(self : Game) -> bool|list[Player]:
         """Méthode qui permet d'ajouter un joueur dans la liste des joueurs qui ont abandonné et de donne le status de la partie
@@ -153,7 +154,6 @@ class Game:
         """
 
         if (len(self.__joueursAbandon) == len(self.__joueurs)):
-            print("Gagne")
             blockCount = []
             winners = []
             tab = []
@@ -162,32 +162,9 @@ class Game:
             for i in range(len(blockCount)):
                 if blockCount[i] == max(blockCount):
                     winners.append(self.__joueurs[i])
-                for k in winners:
-                    tab.append(k.getName())
-            self.__json[0].update({"winners" : tab})
-            self.isJsonAjout()
             return winners
         return []
     
-    def isJsonAjout(self):
-        print("AJOUT")
-        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "r") as mon_fichier:
-            data = json.load(mon_fichier)
-            val_test = "Game1"
-            num = 1
-            existe = True
-            while existe == True:
-                if val_test not in data:
-                    existe = False
-                else:
-                    num += 1
-                    val_test = val_test[:4] + str(num)
-            data[val_test] = self.__json
-            print(val_test)
-            print(data)
-            
-        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "w") as mon_fichier:  
-            json.dump(data, mon_fichier)  
         
     
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int ) -> bool:
@@ -212,15 +189,7 @@ class Game:
             if ajout: # si une pièce peut être ajouter
                 self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
                 self.getCurrentPlayer().ajoutTour()
-                rota = piece.getRotation()
-                flip = piece.getFlip()
-                self.__json.append({"num_tour" : self.__tour,
-                "joueur" : self.getCurrentPlayer().getName(),
-                "num_piece" : piece.getIdentifiant(),
-                "position_plateau" : [colonne,ligne],
-                "rotation" : rota,
-                "flip" : flip})
-                self.__tour += 1
+                
             
                 if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
                     self.addSurrenderedPlayer()
