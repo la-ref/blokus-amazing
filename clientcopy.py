@@ -1,5 +1,5 @@
 from datetime import datetime
-import socket
+import socket,pickle
 import threading
 import time
 from config import config
@@ -7,7 +7,7 @@ import ast
 
 class Client:
 
-    PORT = 5005
+    PORT = 5006
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,7 +21,8 @@ class Client:
             self.s.connect(("localhost", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
-            config.Config.controller.changePage("connexion")
+            self.sendToMenu()
+            self.s.close()
             print("error connect", "({}) : The server is not online.\n".format(now))
             
     def getId(self):
@@ -31,6 +32,9 @@ class Client:
         #     # envoi page d'erreur au client..
         #     return
         return self.id
+    
+    def sendToMenu(self):
+        config.Config.controller.changePage("connexion")
     
     def stopSock(self):
         try:
@@ -47,9 +51,10 @@ class Client:
     def receive(self):
         while not self.error:
             try:
-                data = self.s.recv(8192)
+                data = self.s.recv(8192*2)
                 if len(data) == 0:
                     self.error = True
+                    self.sendToMenu()
                     self.s.close()
                     break
                 else:
@@ -58,7 +63,17 @@ class Client:
                         if "userNames." in val:
                             val = val.replace("userNames.", '')
                             config.Config.controller.changeUserNames(self.convertJson(val))
-                    print("{}\n".format(val))
+                        elif "admin." in val:
+                            val = val.replace("admin.", '')
+                            config.Config.controller.setAdmin(int(val))
+                        elif "launchGame." in val:
+                            val = val.replace("launchGame.", '')
+                            config.Config.controller.launchGame(self.convertJson(val))
+                        elif "placement." in val:
+                            val = val.replace("placement.", '')
+                            config.Config.controller.placePiece(val)
+                            
+                    #print("{}\n".format(val))
             except:
                 self.error = True
                 print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
@@ -73,6 +88,7 @@ class Client:
             print("MY DATA ", data)
             if len(data) == 0:
                 self.error = True
+                self.sendToMenu()
                 self.s.close()
             else:
                 return data.decode()
@@ -92,6 +108,7 @@ class Client:
         except:
             self.error = True
             print(("error send", "({}) : Server has been disconnected.\n".format(now)))
+            self.sendToMenu()
             self.s.close()
         return sended
             

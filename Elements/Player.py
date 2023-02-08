@@ -18,6 +18,9 @@ class Player:
         self.__nbTour : int = 0 
         self.__pieces : dict[str,Pieces] = LISTEPIECES.copy()
         Player.nbJoueur +=1
+        
+    def toJson(self):
+        return {"name": self.__name, "idCouleur": self.__idCouleur,"nbTour":self.__nbTour,"pieces":self.__pieces}
 
     def getName(self : Player) -> str:
         """Méthode getter permettant d'avoir le nom d'un joueur

@@ -11,6 +11,7 @@ from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
 from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
+from Vues.Game.GameInterfaceOnline import GameInterfaceOnline
 from Vues.connexion import Connexion
 from clientcopy import Client
 import time
@@ -26,13 +27,15 @@ class Controller(tk.Tk):
         
         config.initialisation(self)
 
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
+        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.connection = None
         self.userName = None
-        self.t1 = None
+        self.id = None
         self.currentPage = ""
+        self.onOnlineGame = False
+        self.onlineBoard = None
         self.changePage('Acceuil')
         self.mainloop()
             
@@ -53,7 +56,11 @@ class Controller(tk.Tk):
         if nomFrame != "lobbyOnline" or online:
             self.vueJeu = self.frames[nomFrame]
             self.vueJeu.initialize()
-            self.vueJeu.tkraise()
+            if nomFrame == "GameInterface":
+                print("dusghfgds")
+                threading.Timer(3,self.vueJeu.tkraise)
+            else:
+                self.vueJeu.tkraise()
         self.currentPage = nomFrame
             
     def changeUserName(self,name):
@@ -73,13 +80,13 @@ class Controller(tk.Tk):
         self.connection = Client(name)
         if self.connection and self.connection.error == False:
             self.changePage("lobbyOnline",True)
-            id = self.connection.getId()
-            self.changeCurrentPlayer(id)
+            self.id = self.connection.getId()
+            self.changeCurrentPlayer(self.id)
             self.frames["lobbyOnline"].changeUserName(id,self.userName)
             time.sleep(1)
-            self.t1 = threading.Thread(target=self.connection.receive)
-            self.t1.daemon = True
-            self.t1.start()
+            t1 = threading.Thread(target=self.connection.receive)
+            t1.daemon = True
+            t1.start()
             self.connection.send("getUserNames")
             #players = self.connection.getUserNames()
             #self.changeUserNames(players)
@@ -96,10 +103,31 @@ class Controller(tk.Tk):
         pass
         
     def changeCurrentPlayer(self,nb):
-        self.frames["lobbyOnline"].changeCurrentPlayer(nb)
+        if self.currentPage == "lobbyOnline":
+            print("NB",nb)
+            self.frames["lobbyOnline"].changeCurrentPlayer(int(nb))
         
     def changeUserNames(self,players):
-        self.frames["lobbyOnline"].changeUserNames(players)
+        if self.currentPage == "lobbyOnline":
+            self.frames["lobbyOnline"].changeUserNames(players)
+        
+    def setAdmin(self,id):
+        if self.currentPage == "lobbyOnline":
+            if self.id == id:
+                self.frames["lobbyOnline"].giveAdmin(id)
+    
+    def launchOnlineGame(self):
+        self.connection.send("play")
+        
+    def launchGame(self,joueurs):
+        joue = []
+        for k,player in joueurs.items():
+            joue.append(Player(k,player))
+        self.game = Game(joue,None,20)
+        self.changePage("GameInterface")
+        self.onOnlineGame = True
+        # config.Config.controller.changePage("GameInterface")
+            
         
 
 
@@ -140,6 +168,9 @@ class Controller(tk.Tk):
         """
         return self.game.getBoard()
     
+    def getOnlineBoard(self):
+        return self.onlineBoard
+    
     def getGame(self : Controller) -> Game:
         """Méthode getter qui permet d'obtenir la game en cours
 
@@ -150,6 +181,7 @@ class Controller(tk.Tk):
             Game: game en cours
         """
         return self.game
+    
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
         """Fonction de liaison entre le placement d'une piece graphique et moteur
@@ -165,15 +197,18 @@ class Controller(tk.Tk):
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        if joueur == self.game.getCurrentPlayerId():
-            play = self.game.playTurn(piece, colonne, ligne, dc, dl)
-            win = self.game.getWinners()
-            
-            if (win):
-                self.vueJeu.partieTermine(win)
-            return play
-        else:
-            return False
+        if self.onOnlineGame :
+            if joueur.get
+        else :
+            if joueur == self.game.getCurrentPlayerId():
+                play = self.game.playTurn(piece, colonne, ligne, dc, dl)
+                win = self.game.getWinners()
+                
+                if (win):
+                    self.vueJeu.partieTermine(win)
+                return play
+            else:
+                return False
 
 if __name__ == "__main__":
     global CT

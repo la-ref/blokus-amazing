@@ -23,10 +23,10 @@ class lobbyOnline(Frame):
             widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False
-
+        self.admin = False
         self.touche = None
         self.currentPlayerID = 0
-        self.joueurs = ["PERSONNE 1","PERSONNE 2","PERSONNE 3","PERSONNE 4"]
+        self.joueurs = ["","","",""]
         self.window.bind("<Key>", self.touches)
         self.canvas = Canvas(
             self.window,
@@ -42,10 +42,12 @@ class lobbyOnline(Frame):
         self.canvas.bind("<Button-1>",self.clique)
         self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= config.Config.image[14])
 
+        
         self.Bouton_Jouer = self.canvas.create_image(719.0, 464.0,image= config.Config.image[17])
         self.canvas.tag_bind(self.Bouton_Jouer, "<Button-1>", self.jouer)
         self.canvas.tag_bind(self.Bouton_Jouer, "<Enter>",lambda *_: self.hoverBouton("entre","jouer",self.Bouton_Jouer))
         self.canvas.tag_bind(self.Bouton_Jouer, "<Leave>",lambda *_: self.hoverBouton("sort","jouer",self.Bouton_Jouer))
+        self.refreshAdmin()
 
 
         self.Bouton_Quitter = self.canvas.create_image(717.0,577.0,image= config.Config.image[19])
@@ -107,6 +109,19 @@ class lobbyOnline(Frame):
     def changeCurrentPlayer(self ,id):
         if id >= 0 and id < 4:
             self.currentPlayerID = id
+            
+    def refreshAdmin(self):
+        if self.admin:
+            self.canvas.itemconfigure(self.Bouton_Jouer,state=tk.NORMAL)
+        else:
+            self.canvas.itemconfigure(self.Bouton_Jouer,state=tk.HIDDEN)
+            
+    def giveAdmin(self,id):
+        if self.currentPlayerID == id:
+            self.admin = True
+        self.refreshAdmin()
+            
+    
 
     def Boutonselect(self, typ):
         if typ == 3 and self.currentPlayerID == 3:
@@ -153,10 +168,12 @@ class lobbyOnline(Frame):
             self.bouton_vert.touches(event)
 
     def jouer(self,event):
-        from Elements.Game import Game
-        config.Config.controller.game = Game(self.joueurs,None,20)
-        # self.window = GameInterface(self.window)
-        config.Config.controller.changePage("GameInterface")
+        if self.admin:
+            config.Config.controller.launchOnlineGame()
+        #from Elements.Game import Game
+        # config.Config.controller.game = Game(self.joueurs,None,20)
+        # # self.window = GameInterface(self.window)
+        # config.Config.controller.changePage("GameInterface")
     
     def QuitterBouton(self,event):
         config.Config.controller.changePage("Acceuil")
