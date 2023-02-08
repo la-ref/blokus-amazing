@@ -158,8 +158,8 @@ class Game:
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if len(self.__joueursAbandon) != len(self.__joueurs):
             if self.getCurrentPlayer().getAI():
-                threading.Timer(.5,self.getCurrentPlayer().getAI().play).start() #delai l'appel
-                config.Config.controller.updateBoard()
+                threading.Timer(.5,config.Config.controller.updateBoard).start() #delai l'appel
+                self.getCurrentPlayer().getAI().play()
                 sleep(0.5)
             return True
         else:
