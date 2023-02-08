@@ -151,32 +151,40 @@ class Game:
         Returns:
             bool|list[Player]: false si il la game n'est pas terminée sinon retourne la liste des joueurs gagnant
         """
+
         if (len(self.__joueursAbandon) == len(self.__joueurs)):
+            print("Gagne")
             blockCount = []
             winners = []
+            tab = []
             for joueur in self.__joueurs:
                 blockCount.append(self.countBlocks(joueur))
             for i in range(len(blockCount)):
                 if blockCount[i] == max(blockCount):
-                    winners.append(self.__joueurs[i].getName())
-                self.__json[0].update({"winners" : winners})
-                print(self.__json)
-                self.isJsonAjout()
+                    winners.append(self.__joueurs[i])
+                for k in winners:
+                    tab.append(k.getName())
+            self.__json[0].update({"winners" : tab})
+            self.isJsonAjout()
             return winners
         return []
     
     def isJsonAjout(self):
-        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json") as mon_fichier:
+        print("AJOUT")
+        with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "r") as mon_fichier:
             data = json.load(mon_fichier)
             val_test = "Game1"
+            num = 1
             existe = True
             while existe == True:
                 if val_test not in data:
                     existe = False
-            dictio = data + {val_test : self.__json}
+                else:
+                    num += 1
+                    val_test = val_test[:4] + str(num)
+            data[val_test] = self.__json
             print(val_test)
             print(data)
-            print(dictio)
             
         with open("C://Users//leand//OneDrive//Dokumente//GitHub//blokus-amazing//Elements//highscore.json", "w") as mon_fichier:  
             json.dump(data, mon_fichier)  
