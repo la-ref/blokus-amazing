@@ -41,7 +41,7 @@ class ai():
         # print("listePossib :",len(listePossib))
         if len(listePossib)==0:
             print(self.player.getName()+" abandonne !")
-            config.Config.controller.game.addSurrenderedPlayer()
+            config.Config.controller.surrender()
         return listePossib
         # listePossib.append([piece,coin[0]-len(piece.getForme())+1,coin[1]-len(piece.getForme())+1,self.player,dec[0],dec[1],rot,flip])
         
