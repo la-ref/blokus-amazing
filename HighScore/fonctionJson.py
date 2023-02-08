@@ -10,8 +10,7 @@ class fonctionJson:
     donc de la communication entre les différents élèments de l'application
     """
     def __init__(self: fonctionJson) -> None:
-        self.__plateau = [[]]
-        self.__winners = [Player(11,"PERSONNE 1")]
+        self.val : int
 
     def JsonAjout(self, donne):
         print("AJOUT")
@@ -35,20 +34,3 @@ class fonctionJson:
 
 
 
-
-         
-
-#     def toJSON(self) -> str:
-#         dictP = {
-#             'plateau'  : [[]] ,
-#             'winners' : self.__winners,
-#         }
-#         return json.dumps(dictP,ensure_ascii=False)
-
-#     @staticmethod
-#     def buildFromJSon(d: dict):
-#         # genre
-#         self.__plateau : str = d['plateau'] 
-#         self.
-
-#         return fonctionJson(prenom, nom, genre,dateNaissance,dateMort, bio)
