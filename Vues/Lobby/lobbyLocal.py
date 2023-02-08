@@ -207,6 +207,7 @@ class lobbyLocal(Frame):
         from Elements.Game import Game
         config.Config.controller.game = Game(self.joueurs,None,20)
         config.Config.controller.changePage("GameInterface")
+        config.Config.controller.game.start()
     
     def QuitterBouton(self):
         """ Méthode permettant re venir à la page d'Accueil (initialisation de la page d'accueil)
