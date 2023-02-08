@@ -14,7 +14,6 @@ class PiecesListGUI(tk.Frame):
         avec notamment l'arrière plan de sa zone, le pseudo du joueur et ses pièces.
 
         Args:
-            self (Game): game
             window: La fenêtre de jeu
             parent (tk.Canvas): La fauille de dessin de la pièce
             playerName (str): Nom du joueur
