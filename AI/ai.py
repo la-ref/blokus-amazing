@@ -23,30 +23,26 @@ class ai():
     def verifPlay(self):
         coins = config.Config.controller.game.getBoard().findCorners(self.player)
         listePossib = []
-        if coins == []:
-            ##abandonne
-            print("pas de coins  !")
-            return False
-        
-        else:
-            print("\n---------------------------\n",self.player.getName())
-            for coin in coins:
-                print("\n-----------\n",coin)
-                for piece in self.player.getPieces().values():
-                    print("\n-----")
-                    print(piece.getIdentifiant())
-                    for rot in range(4):
-                        for flip in range(2):
-                            for dec in np.argwhere(piece.getDelimitation()==3):
-                                if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1],coin[0],self.player,dec[1],dec[0]): 
-                                    listePossib.append([piece,coin[1],coin[0],self.player,dec[1],dec[0],rot,flip])
-                            # elif config.Config.controller.game.getBoard().verifyApplication(piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0]): 
-                            #    listePossib.append([piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0],rot,flip])
-                            
-                            piece.flip()
-                        piece.rotate90()
-            print("listePossib :",len(listePossib))
-            return listePossib
+
+        for coin in coins:
+
+            for piece in self.player.getPieces().values():
+
+                for rot in range(4):
+                    for flip in range(2):
+                        for dec in np.argwhere(piece.getDelimitation()==3):
+                            if config.Config.controller.game.getBoard().verifyApplication(piece,coin[1],coin[0],self.player,dec[1],dec[0]): 
+                                listePossib.append([piece,coin[1],coin[0],self.player,dec[1],dec[0],rot,flip])
+                        # elif config.Config.controller.game.getBoard().verifyApplication(piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0]): 
+                        #    listePossib.append([piece,coin[1]-len(piece.getForme())+1,coin[0]-len(piece.getForme()[0])+1,self.player,dec[1],dec[0],rot,flip])
+                        
+                        piece.flip()
+                    piece.rotate90()
+        # print("listePossib :",len(listePossib))
+        if len(listePossib)==0:
+            print(self.player.getName()+" abandonne !")
+            config.Config.controller.game.addSurrenderedPlayer()
+        return listePossib
         # listePossib.append([piece,coin[0]-len(piece.getForme())+1,coin[1]-len(piece.getForme())+1,self.player,dec[0],dec[1],rot,flip])
         
     def play(self):

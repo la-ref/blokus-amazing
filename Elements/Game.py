@@ -88,9 +88,11 @@ class Game:
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
         self.__nextPlayer()
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
-        if self.getWinners():
+        win = self.getWinners()
+        if win:
             config.Config.controller.vueJeu.partieTermine
-        return self.getWinners()
+            print(win)
+        return win
 
     def isPlayerSurrendered(self : Game) -> bool:
         """Méthode permettant de savoir si le joueur courant a abandonné
@@ -103,16 +105,26 @@ class Game:
         """
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
 
-    def __nextPlayer(self : Game) -> None:
+    def __nextPlayer(self : Game) -> bool:
         """Méthode qui permet de sélectionné le prochain joueur pour être le joueur courant
 
         Args:
             self (Game): Game
+            
+        Returns:
+            bool: faux si tous les joueurs ont abandonnés
         """
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        if len(self.__joueursAbandon) != len(self.__joueurs):
+            if self.getCurrentPlayer().getAI():
+                threading.Timer(.5,self.getCurrentPlayer().getAI().play).start() #delai l'appel
+                config.Config.controller.updateBoard()
+            return True
+        else:
+            return False
 
     def isGameFinished(self : Game) -> bool:
         """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau
@@ -191,13 +203,12 @@ class Game:
                     self.addSurrenderedPlayer()
                 else:
                     self.__nextPlayer()
-                    self.getBoard().findCorners(self.getCurrentPlayer())
+                    # self.getBoard().findCorners(self.getCurrentPlayer())
                 config.Config.controller.updateBoard()
                 # prep tour suivant
-                print("ai :",self.getCurrentPlayer().getAI())
-                if self.getCurrentPlayer().getAI():
-                    threading.Timer(1.0,self.getCurrentPlayer().getAI().play).start() #delai l'appel
-                    config.Config.controller.updateBoard()
+                # if self.getCurrentPlayer().getAI():
+                #     threading.Timer(1.0,self.getCurrentPlayer().getAI().play).start() #delai l'appel
+                #     config.Config.controller.updateBoard()
                 
                     
                     
