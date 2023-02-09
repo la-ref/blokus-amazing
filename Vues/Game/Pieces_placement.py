@@ -64,11 +64,13 @@ class Pieces_placement(tk.Frame):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
 
     def remettrePiece_copy(self):
@@ -169,11 +171,12 @@ class Pieces_placement(tk.Frame):
                 self.y+=self.image.width()
                 if (self.tableau_piece[i][v] == 3):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
-                    self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
                     le_block.move(self.back_x-self.x,self.back_y-self.y)
                     le_block.state = 1
@@ -299,6 +302,7 @@ class Pieces_placement(tk.Frame):
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
 
+
         # Condition si la pièce est sur le plateau
         if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
             self.image = config.Config.image[self.nb_player+48]
@@ -348,44 +352,49 @@ class Pieces_placement(tk.Frame):
                 # Re-création de la pièce à l'endroit d'initialisation
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
         
         else:
             ## teste si peut placer
-            col,lig,dc,dl = self.getPieceBoardCoord()
-            if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
-                # supprime si oui
-                for piece in self.tableau_piece_forme:
-                    piece.delete()
-                self.tableau_piece_forme = []
-            else:
-                # remet la piece à la position si non
-                for piece in self.tableau_piece_forme:
-                    objet = self.parent.find_withtag(piece.bl)
-                    ma_piece = objet[0]
-                    self.parent.delete(ma_piece)
-                
-                # Met le tableau sur la sauvegarde du tableau d'initialisation
-                self.tableau_piece_forme = self.saveliste
+            print("ok ",config.Config.controller.currentlyPlaying(),self.nb_player)
+            if ((not config.Config.controller.onlineGame) or (config.Config.controller.onlineGame and config.Config.controller.currentlyPlaying())):
+                col,lig,dc,dl = self.getPieceBoardCoord()
+                print("okidoki")
+                if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
+                    # supprime si oui
+                    for piece in self.tableau_piece_forme:
+                        piece.delete()
+                    self.tableau_piece_forme = []
+                else:
+                    # remet la piece à la position si non
+                    for piece in self.tableau_piece_forme:
+                        objet = self.parent.find_withtag(piece.bl)
+                        ma_piece = objet[0]
+                        self.parent.delete(ma_piece)
+                    
+                    # Met le tableau sur la sauvegarde du tableau d'initialisation
+                    self.tableau_piece_forme = self.saveliste
 
-                # Changement de la taille de l'image à une taille pour la liste
-                self.image = config.Config.image[self.nb_player+48]
-                self.image = self.image.subsample(2)
+                    # Changement de la taille de l'image à une taille pour la liste
+                    self.image = config.Config.image[self.nb_player+48]
+                    self.image = self.image.subsample(2)
 
-                # Re-création de la pièce à l'endroit d'initialisation
-                for block in self.tableau_piece_forme:
-                    block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
-                    block.state = 0
+                    # Re-création de la pièce à l'endroit d'initialisation
+                    for block in self.tableau_piece_forme:
+                        block.recreate(block.save_x,block.save_y,self.image)
+                        if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                            self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                            if platform.system() == "Windows":
+                                self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                            else:
+                                self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                        block.state = 0
 
         
         # Changement de l'état 0 ou 1

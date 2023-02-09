@@ -1,5 +1,6 @@
 from __future__ import annotations
 from Elements.Game import Game
+from Controller.OnlineGame import OnlineGame
 from tkinter import PhotoImage
 import tkinter as tk
 import Elements.Pieces.PiecesListGUI as PG
@@ -14,7 +15,9 @@ from Vues.Game.GameInterface import GameInterface
 from Vues.Game.GameInterfaceOnline import GameInterfaceOnline
 from Vues.connexion import Connexion
 from clientcopy import Client
+
 import time
+import icecream
 import threading
 
 class Controller(tk.Tk):
@@ -31,11 +34,8 @@ class Controller(tk.Tk):
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.connection = None
-        self.userName = None
-        self.id = None
         self.currentPage = ""
-        self.onOnlineGame = False
-        self.onlineBoard = None
+        self.onlineGame = None
         self.changePage('Acceuil')
         self.mainloop()
             
@@ -46,8 +46,8 @@ class Controller(tk.Tk):
             self (Controller): Controller
             nomFrame (str): nom de la page
         """
-        if self.connection == None and nomFrame == "lobbyOnline":
-            self.connectLobby(self.userName)
+        if self.connection == None and nomFrame == "lobbyOnline" and self.onlineGame:
+            self.connectLobby(self.onlineGame.userName)
         elif self.connection and not online:
             self.connection.error = True
             self.connection.stopSock()
@@ -56,15 +56,11 @@ class Controller(tk.Tk):
         if nomFrame != "lobbyOnline" or online:
             self.vueJeu = self.frames[nomFrame]
             self.vueJeu.initialize()
-            if nomFrame == "GameInterface":
-                print("dusghfgds")
-                threading.Timer(3,self.vueJeu.tkraise)
-            else:
-                self.vueJeu.tkraise()
+            self.vueJeu.tkraise()
         self.currentPage = nomFrame
             
     def changeUserName(self,name):
-        self.userName = name       
+        self.onlineGame = OnlineGame(userName=name)      
             
     
     def changePlayer(self : Controller, players : list[Player]) -> None:
@@ -80,9 +76,9 @@ class Controller(tk.Tk):
         self.connection = Client(name)
         if self.connection and self.connection.error == False:
             self.changePage("lobbyOnline",True)
-            self.id = self.connection.getId()
-            self.changeCurrentPlayer(self.id)
-            self.frames["lobbyOnline"].changeUserName(id,self.userName)
+            self.onlineGame.id = int(self.connection.getId())
+            self.changeCurrentPlayer(self.onlineGame.id)
+            self.frames["lobbyOnline"].changeUserName(self.onlineGame.id,self.onlineGame.userName)
             time.sleep(1)
             t1 = threading.Thread(target=self.connection.receive)
             t1.daemon = True
@@ -104,7 +100,6 @@ class Controller(tk.Tk):
         
     def changeCurrentPlayer(self,nb):
         if self.currentPage == "lobbyOnline":
-            print("NB",nb)
             self.frames["lobbyOnline"].changeCurrentPlayer(int(nb))
         
     def changeUserNames(self,players):
@@ -113,22 +108,37 @@ class Controller(tk.Tk):
         
     def setAdmin(self,id):
         if self.currentPage == "lobbyOnline":
-            if self.id == id:
+            if self.onlineGame.id == id:
                 self.frames["lobbyOnline"].giveAdmin(id)
     
     def launchOnlineGame(self):
         self.connection.send("play")
         
-    def launchGame(self,joueurs):
-        joue = []
-        for k,player in joueurs.items():
-            joue.append(Player(k,player))
-        self.game = Game(joue,None,20)
-        self.changePage("GameInterface")
-        self.onOnlineGame = True
+    def launchGame(self,info):
+        if self.onlineGame:
+            self.onlineGame.refreshInfo(info)
+            self.changePage("GameInterfaceOnline",True)
+            self.refreshGame(info)
+        else:
+            pass
+            ###################################
+            #### ENVOI PAGE ERREUR ACCEUIL ####
+            ###################################
+        # joue = []
+        # for k,player in joueurs.items():
+        #     joue.append(Player(k,player))
+        # self.onlineGame.setBoard(Game(joue,None,20)) ##############
+        # self.changePage("GameInterface")
         # config.Config.controller.changePage("GameInterface")
             
-        
+    def refreshGame(self,info):
+        print("je passe")
+        self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
+        self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),True)
+    
+    
+    def currentlyPlaying(self):
+        return self.onlineGame.isPlaying()
 
 
     
@@ -169,7 +179,16 @@ class Controller(tk.Tk):
         return self.game.getBoard()
     
     def getOnlineBoard(self):
-        return self.onlineBoard
+        return self.onlineGame.board
+    
+    def getOnlinePlayerName(self,id):
+        if id > 0 and id <= 3:
+            return self.onlineGame.players[id]
+        return None
+    
+    def getOnlineId(self):
+        return self.onlineGame.id
+        
     
     def getGame(self : Controller) -> Game:
         """Méthode getter qui permet d'obtenir la game en cours
@@ -181,6 +200,17 @@ class Controller(tk.Tk):
             Game: game en cours
         """
         return self.game
+    
+    
+    def placement(self,info):
+        if info["playing"] == "Nope":
+            print("vaffanculo")
+            return
+        else:
+            self.onlineGame.refreshInfo(info)
+            
+            
+        
     
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
@@ -197,8 +227,18 @@ class Controller(tk.Tk):
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        if self.onOnlineGame :
-            if joueur.get
+        print("yes super")
+        if self.onlineGame and self.onlineGame.isPlaying():
+            pId = piece.getIdentifiant()
+            info = {
+                "pieceId":pId,
+                "colonne":colonne,
+                "ligne":ligne,
+                "dc":dc,
+                "dl":dl
+            }
+            print("je vais send",self.connection)
+            self.connection.send("placePiece."+str(info))
         else :
             if joueur == self.game.getCurrentPlayerId():
                 play = self.game.playTurn(piece, colonne, ligne, dc, dl)

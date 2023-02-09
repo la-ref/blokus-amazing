@@ -7,7 +7,7 @@ import ast
 
 class Client:
 
-    PORT = 5006
+    PORT = 5005
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -59,6 +59,7 @@ class Client:
                     break
                 else:
                     val = str(data.decode())
+                    print(val,"§§§§§§§§§§§§§§§")
                     if config.Config.controller.currentPage == "lobbyOnline":
                         if "userNames." in val:
                             val = val.replace("userNames.", '')
@@ -69,9 +70,10 @@ class Client:
                         elif "launchGame." in val:
                             val = val.replace("launchGame.", '')
                             config.Config.controller.launchGame(self.convertJson(val))
-                        elif "placement." in val:
+                    if config.Config.controller.currentPage == "GameInterfaceOnline":
+                        if "placement." in val:
                             val = val.replace("placement.", '')
-                            config.Config.controller.placePiece(val)
+                            config.Config.controller.placement(self.convertJson(val))
                             
                     #print("{}\n".format(val))
             except:

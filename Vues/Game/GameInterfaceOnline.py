@@ -43,18 +43,21 @@ class GameInterfaceOnline(tk.Frame):
 
         self.border.config(bg="white")
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-        self.board = GridInterfaceOnline(self.border,config.Config.controller.getOnlineBoard())
+        self.board = GridInterfaceOnline(self.border)
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
+        
+        self.myId = config.Config.controller.getOnlineId()
+        
+        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(0),0)
         self.List1.move(x=70,y=80) # jaune
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
+        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(1),1)
         self.List2.move(x=1047,y=80) # vert
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
+        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(2),2)
         self.List3.move(x=1047,y=524) #  rouge
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
+        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(3),3)
         self.List4.move(x=70,y=524) #bleu
 
         self.giveUp = self.border.create_image(
@@ -217,7 +220,7 @@ class GameInterfaceOnline(tk.Frame):
         self.List4.remettrePiece_copy()
         config.Config.controller.changePage("Acceuil")
 
-    def refreshBoard(self : GameInterfaceOnline,plateau : Board) -> None:
+    def refreshBoard(self : GameInterfaceOnline,plateau) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
         d'afficher l'ensemble des pièces présentes sur un plateau directement graphiquement sur la grille
 
@@ -226,6 +229,7 @@ class GameInterfaceOnline(tk.Frame):
             plateau (Board): plateau de jeu à afficher
         """
         self.board.refreshBoard(plateau)
+        return None
 
     def refreshPlayer(self : GameInterfaceOnline,couleur : int,affiche : bool) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
@@ -236,6 +240,7 @@ class GameInterfaceOnline(tk.Frame):
             couleur (int): couleur du joueur courant
             affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
         """
+        
         self.board.refreshPlayer(couleur,affiche)
 
     

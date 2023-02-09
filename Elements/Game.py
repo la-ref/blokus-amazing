@@ -97,6 +97,9 @@ class Game:
             bool: vrai s'il a abandonné sinon faux
         """
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
+    
+    def getSurrenderedPlayer(self):
+        return self.__joueursAbandon
 
     def __nextPlayer(self : Game) -> None:
         """Méthode qui permet de sélectionné le prochain joueur pour être le joueur courant

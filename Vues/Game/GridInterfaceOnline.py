@@ -9,7 +9,7 @@ from config import config
 class GridInterfaceOnline(tk.Frame):
     """Classe qui est une frame étant le plateau de jeu de manière graphique ainsi que le joueur courant
     """
-    def __init__(self: GridInterfaceOnline, parent : tk.Canvas,board : Board):
+    def __init__(self: GridInterfaceOnline, parent : tk.Canvas,board = []):
         """Constructeur par paramètre qui créer GridInterfaceOnline en fonction d'une fenêtre parent et du plateau de jeu
 
         Args:
