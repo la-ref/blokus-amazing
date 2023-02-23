@@ -101,7 +101,7 @@ class lobbyOnline(Frame):
             
     def changeUserNames(self,userList):
         for i in range(4):
-            self.changeUserName(i,"")
+            self.changeUserName(i,"IA-"+str(i))
         for k,v in userList.items():
             self.changeUserName(k,v)
         
@@ -119,6 +119,13 @@ class lobbyOnline(Frame):
     def giveAdmin(self,id):
         if self.currentPlayerID == id:
             self.admin = True
+        else:
+            self.admin = False
+            
+        self.bouton_jaune.showIAButtons(self.currentPlayerID == 0,self.admin)
+        self.bouton_vert.showIAButtons(self.currentPlayerID == 1,self.admin)
+        self.bouton_bleu.showIAButtons(self.currentPlayerID == 2,self.admin)
+        self.bouton_rouge.showIAButtons(self.currentPlayerID == 3,self.admin)
         self.refreshAdmin()
             
     

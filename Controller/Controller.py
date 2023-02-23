@@ -109,6 +109,7 @@ class Controller(tk.Tk):
     def setAdmin(self,id):
         if self.currentPage == "lobbyOnline":
             if self.onlineGame.id == id:
+                print("VAL = ",id)
                 self.frames["lobbyOnline"].giveAdmin(id)
     
     def launchOnlineGame(self):

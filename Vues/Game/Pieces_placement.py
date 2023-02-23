@@ -362,10 +362,8 @@ class Pieces_placement(tk.Frame):
         
         else:
             ## teste si peut placer
-            print("ok ",config.Config.controller.currentlyPlaying(),self.nb_player)
             if ((not config.Config.controller.onlineGame) or (config.Config.controller.onlineGame and config.Config.controller.currentlyPlaying())):
                 col,lig,dc,dl = self.getPieceBoardCoord()
-                print("okidoki")
                 if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
                     # supprime si oui
                     for piece in self.tableau_piece_forme:

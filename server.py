@@ -12,7 +12,7 @@ class Server:
 
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print(socket.gethostbyname(socket.gethostname()))
+        #print(socket.gethostbyname(socket.gethostname()))
         self.s.bind(('localhost', Server.PORT)) # n'importe quelle adresse
         self.s.listen(40)
         
