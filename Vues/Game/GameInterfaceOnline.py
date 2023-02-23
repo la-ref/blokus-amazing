@@ -229,7 +229,6 @@ class GameInterfaceOnline(tk.Frame):
             plateau (Board): plateau de jeu à afficher
         """
         self.board.refreshBoard(plateau)
-        return None
 
     def refreshPlayer(self : GameInterfaceOnline,couleur : int,affiche : bool) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
