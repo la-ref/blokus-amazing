@@ -82,6 +82,7 @@ class Server:
             Server.lobbies.append( {
                 "clients" : {},
                 "players" : {},
+                "iaLevels" : {0:"facile",1:"facile",2:"facile",3:"facile"},
                 "admin" : 0,
                 "game": None
             })
@@ -131,6 +132,7 @@ class Server:
         else:
             sendDict["playing"] = "Nope"
         return sendDict
+    
     def createGame(self,nbLobby):
         from random import randint
         
@@ -140,7 +142,7 @@ class Server:
                 for i in range(len(Server.lobbies[nbLobby]["players"])):
                     joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
                 while len(joueurs) != 4:
-                    joueurs.append(Player.Player(len(joueurs),"IA"+str(len(joueurs)+1)))
+                    joueurs.append(Player.Player(len(joueurs),"IA-"+str(len(joueurs)+1)))
                 game = Game(joueurs,None,20)
                 Server.lobbies[nbLobby]["game"] = game
                 sendDict = self.constructCall(nbLobby,True)
@@ -176,7 +178,14 @@ class Server:
                         self.sendToAll("launchGame."+str(game), client, nbLobby)
                 elif "placePiece." in data:
                     data = data.replace("placePiece.", '')
-                    self.placePiece(client,nbLobby,self.convertJson(data))
+                    self.placePiece(client,nbLobby,self.convertJson(data))            
+                elif "changeIA." in data:
+                    if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
+                        data = data.replace("changeIA.", '')
+                        info : list = data.split("-")
+                        if info and len(info) > 1 and int(info[1]) >= 0 and int(info[1]) <= 3:
+                            Server.lobbies[nbLobby]["iaLevels"][int(info[1])] = info[0]
+                            print(Server.lobbies[nbLobby])
                     
                 #self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
 
@@ -251,6 +260,7 @@ class Server:
                 #     self.vueJeu.partieTermine(win)
                 info = self.constructCall(nbLobby,play)
                 print(info,"ODOODSDJFKSDJFSDFHDS")
+                info["piece"] = piece
                 self.sendToAll("placement."+str(info), client, nbLobby)
                 print("j'ai send !!!")
                 return play

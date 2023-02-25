@@ -210,7 +210,10 @@ class Controller(tk.Tk):
         else:
             self.onlineGame.refreshInfo(info)
             
-            
+    def changeIALevel(self,IaNb,lvl):
+        if self.connection:
+            info = "changeIA."+str(IaNb)+"-"+str(lvl)
+            self.connection.send(info)
         
     
 

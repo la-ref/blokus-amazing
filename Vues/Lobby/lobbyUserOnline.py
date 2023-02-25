@@ -6,7 +6,7 @@ from config import config
 import tkinter as tk
 import Elements.Player as Player
 class lobbyUser(Frame):
-    def __init__(self, window, parent : tk.Canvas, images : list, nom : str, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite",edit = False):
+    def __init__(self, window, parent : tk.Canvas, images : list, nom : str, nb,nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite",edit = False):
         """Méthode qui permet d'initialiser tout l'objet lobbyUser
 
         Args:
@@ -30,6 +30,7 @@ class lobbyUser(Frame):
         self.edit = edit
         self.stateactuel = 0
         self.nomJoueur = nom
+        self.idActuel = nb
         self.activeclavier = False
         self.boutonUser = "noir"
         self.width = width
@@ -376,6 +377,7 @@ class lobbyUser(Frame):
 
         self.parent.itemconfigure(self.text_moyen, fill="#ffffff")
         self.parent.itemconfigure(self.text_expert, fill="#ffffff")
+        config.Config.controller.changeIALevel(self.iatype,self.idActuel)
 
     def moyen(self,event):
         """Méthode qui permet de changer le type de l'ia et la couleur du text
@@ -389,6 +391,7 @@ class lobbyUser(Frame):
 
         self.parent.itemconfigure(self.text_facile, fill="#ffffff")
         self.parent.itemconfigure(self.text_expert, fill="#ffffff")
+        config.Config.controller.changeIALevel(self.iatype,self.idActuel)
 
     def expert(self,event):
         """Méthode qui permet de changer le type de l'ia et la couleur du text
@@ -402,6 +405,7 @@ class lobbyUser(Frame):
 
         self.parent.itemconfigure(self.text_moyen, fill="#ffffff")
         self.parent.itemconfigure(self.text_facile, fill="#ffffff")
+        config.Config.controller.changeIALevel(self.iatype,self.idActuel)
     
     def getIAType(self):
         """Fonction qui permet de retourner sous forme d'STR le type de l'ia que le joueur a selectionné
