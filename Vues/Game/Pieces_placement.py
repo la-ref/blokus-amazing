@@ -362,41 +362,46 @@ class Pieces_placement(tk.Frame):
         
         else:
             ## teste si peut placer
-            if ((not config.Config.controller.onlineGame) or (config.Config.controller.onlineGame and config.Config.controller.currentlyPlaying())):
-                col,lig,dc,dl = self.getPieceBoardCoord()
-                if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
-                    # supprime si oui
-                    for piece in self.tableau_piece_forme:
-                        piece.delete()
-                    self.tableau_piece_forme = []
-                else:
-                    # remet la piece à la position si non
-                    for piece in self.tableau_piece_forme:
-                        objet = self.parent.find_withtag(piece.bl)
-                        ma_piece = objet[0]
-                        self.parent.delete(ma_piece)
-                    
-                    # Met le tableau sur la sauvegarde du tableau d'initialisation
-                    self.tableau_piece_forme = self.saveliste
+            col,lig,dc,dl = self.getPieceBoardCoord()
+            if (((not config.Config.controller.onlineGame) or (config.Config.controller.onlineGame and config.Config.controller.currentlyPlaying())) and config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl)):
+                # supprime si oui
+                for piece in self.tableau_piece_forme:
+                    piece.delete()
+                self.tableau_piece_forme = []
+            else:
+                # remet la piece à la position si non
+                for piece in self.tableau_piece_forme:
+                    objet = self.parent.find_withtag(piece.bl)
+                    ma_piece = objet[0]
+                    self.parent.delete(ma_piece)
+                
+                # Met le tableau sur la sauvegarde du tableau d'initialisation
+                self.tableau_piece_forme = self.saveliste
 
-                    # Changement de la taille de l'image à une taille pour la liste
-                    self.image = config.Config.image[self.nb_player+48]
-                    self.image = self.image.subsample(2)
+                # Changement de la taille de l'image à une taille pour la liste
+                self.image = config.Config.image[self.nb_player+48]
+                self.image = self.image.subsample(2)
 
-                    # Re-création de la pièce à l'endroit d'initialisation
-                    for block in self.tableau_piece_forme:
-                        block.recreate(block.save_x,block.save_y,self.image)
-                        if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
-                            self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                            if platform.system() == "Windows":
-                                self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
-                            else:
-                                self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
-                        block.state = 0
+                # Re-création de la pièce à l'endroit d'initialisation
+                for block in self.tableau_piece_forme:
+                    block.recreate(block.save_x,block.save_y,self.image)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    block.state = 0
 
         
         # Changement de l'état 0 ou 1
         self.mon_state=(self.mon_state+1)%2
+        
+    
+    def deletePieceOnline(self):
+        for piece in self.tableau_piece_forme:
+            piece.delete()
+        self.tableau_piece_forme = []
 
 
     def on_drag(self, event):

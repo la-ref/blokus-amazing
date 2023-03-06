@@ -53,6 +53,13 @@ class Server:
         if client in Server.lobbies[lobbyId]["clients"].values():
             # Server.lobbies[lobbyId]["clients"][client].close()
             clientId = self.getClientId(client,lobbyId)
+            game = Server.lobbies[lobbyId]["game"]
+            if game:
+                if (Server.lobbies[lobbyId]["game"].addSurrenderedPlayerOnline(game.getPlayers()[clientId])):
+                    self.sendToOther("winners."+game.getWinners(), client, lobbyId)
+                else: 
+                    info = self.constructCall(lobbyId,True)
+                    self.sendToOther("placement."+str(info), client, lobbyId)
             del Server.lobbies[lobbyId]["clients"][clientId]
             if username:
                 #self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
@@ -62,6 +69,7 @@ class Server:
                 t.start()
             if clientId == Server.lobbies[lobbyId]["admin"]:
                 self.changeAdmin(lobbyId)
+                
 
 
                 
@@ -129,6 +137,7 @@ class Server:
             sendDict["surrendered"] = playerSurrender
             sendDict["board"] = Server.lobbies[nbLobby]["game"].getBoard().getBoard().tolist()
             sendDict["playing"] = Server.lobbies[nbLobby]["game"].getCurrentPlayer().getID()
+            sendDict["winner"] = False
         else:
             sendDict["playing"] = "Nope"
         return sendDict
@@ -136,20 +145,19 @@ class Server:
     def createGame(self,nbLobby):
         from random import randint
         
-        while True:
-            try:
-                joueurs = []
-                for i in range(len(Server.lobbies[nbLobby]["players"])):
-                    joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
-                while len(joueurs) != 4:
-                    joueurs.append(Player.Player(len(joueurs),"IA-"+str(len(joueurs)+1)))
-                game = Game(joueurs,None,20)
-                Server.lobbies[nbLobby]["game"] = game
-                sendDict = self.constructCall(nbLobby,True)
-                print(sendDict)
-                return str(sendDict)
-            except:
-                print("hudhshd")
+        try:
+            joueurs = []
+            for i in range(len(Server.lobbies[nbLobby]["players"])):
+                joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
+            while len(joueurs) != 4:
+                joueurs.append(Player.Player(len(joueurs),"IA-"+str(len(joueurs))))
+            game = Game(joueurs,None,20,True)
+            Server.lobbies[nbLobby]["game"] = game
+            sendDict = self.constructCall(nbLobby,True)
+            print(sendDict)
+            return str(sendDict)
+        except:
+            raise("Erreur network création")
             
     def convertJson(self,msg):
         return ast.literal_eval(str(msg))
@@ -168,24 +176,40 @@ class Server:
                 self.removeClient(client,nbLobby,True)
                 return
             if data :
-                if data == "getid":
-                    self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
-                elif data == "getUserNames":
-                    self.sendToClient("userNames."+str(Server.lobbies[nbLobby]["players"]), client, nbLobby)
-                elif data == "play":
-                    if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
-                        game = self.createGame(nbLobby)
-                        self.sendToAll("launchGame."+str(game), client, nbLobby)
-                elif "placePiece." in data:
-                    data = data.replace("placePiece.", '')
-                    self.placePiece(client,nbLobby,self.convertJson(data))            
-                elif "changeIA." in data:
-                    if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
-                        data = data.replace("changeIA.", '')
-                        info : list = data.split("-")
-                        if info and len(info) > 1 and int(info[1]) >= 0 and int(info[1]) <= 3:
-                            Server.lobbies[nbLobby]["iaLevels"][int(info[1])] = info[0]
-                            print(Server.lobbies[nbLobby])
+                try:
+                    if data == "getid":
+                        self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
+                    elif data == "getUserNames":
+                        self.sendToClient("userNames."+str(Server.lobbies[nbLobby]["players"]), client, nbLobby)
+                    elif data == "play":
+                        if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
+                            game = self.createGame(nbLobby)
+                            self.sendToAll("launchGame."+str(game), client, nbLobby)
+                    elif "placePiece." in data:
+                        data = data.replace("placePiece.", '')
+                        self.placePiece(client,nbLobby,self.convertJson(data)) 
+                    elif "surrender." in data:
+                        data = data.replace("surrender.", '')
+                        game = Server.lobbies[nbLobby]["game"]
+                        if game:
+                            info = # récup les infos create call et ensuite on verif si on ajoute les winners ou pas
+                            if (game.addSurrenderedPlayerOnline(game.getPlayers()[self.getClientId(client,nbLobby)])):
+                                self.sendToOther("placement."+str(info), client, lobbyId)
+                                self.sendToOther("winners."+game.getWinners(), client, nbLobby)   
+                    elif "changeIA." in data:
+                        if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
+                            data = data.replace("changeIA.", '')
+                            info : list = data.split("-")
+                            if info and len(info) > 1 and int(info[1]) >= 0 and int(info[1]) <= 3:
+                                Server.lobbies[nbLobby]["iaLevels"][int(info[1])] = info[0]
+                                print(Server.lobbies[nbLobby])
+                    else:
+                        self.sendToClient("errormsg.Cheating is not allowed", client, nbLobby)
+                        self.removeClient(client,nbLobby,True)
+                except ValueError as e:
+                    self.sendToClient("errormsg."+str(e), client, nbLobby)
+                    self.removeClient(client,nbLobby,True)
+                    return
                     
                 #self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
 
@@ -245,29 +269,32 @@ class Server:
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
         game = Server.lobbies[nbLobby]["game"]
-        if game:     
-            if self.getClientId(client,nbLobby) == game.getCurrentPlayerId():
-                pieceId = placement["pieceId"]
-                colonne = placement["colonne"]
-                ligne = placement["ligne"]
-                dc = placement["dc"]
-                dl = placement["dl"]
-                piece = game.getCurrentPlayer().getPiece(str(pieceId))
-                play = game.playTurn(piece, colonne, ligne, dc, dl)
-                #win = game.getWinners()
-                
-                # if (win):
-                #     self.vueJeu.partieTermine(win)
-                info = self.constructCall(nbLobby,play)
-                print(info,"ODOODSDJFKSDJFSDFHDS")
-                info["piece"] = piece
-                self.sendToAll("placement."+str(info), client, nbLobby)
-                print("j'ai send !!!")
-                return play
-            else:
-                info = self.constructCall(nbLobby,False)
-                self.sendToClient("placement."+str(info), client, nbLobby)
-                return False
+        try:
+            if game:     
+                if self.getClientId(client,nbLobby) == game.getCurrentPlayerId():
+                    pieceId = placement["pieceId"]
+                    colonne = placement["colonne"]
+                    ligne = placement["ligne"]
+                    dc = placement["dc"]
+                    dl = placement["dl"]
+                    piece = game.getCurrentPlayer().getPiece(str(pieceId))
+                    play = game.playTurn(piece, colonne, ligne, dc, dl)
+                    #win = game.getWinners()
+                    
+                    # if (win):
+                    #     self.vueJeu.partieTermine(win)
+                    info = self.constructCall(nbLobby,play)
+                    print(info,"ODOODSDJFKSDJFSDFHDS")
+                    info["piece"] = pieceId
+                    self.sendToAll("placement."+str(info), client, nbLobby)
+                    print("j'ai send !!!")
+                    return play
+                else:
+                    info = self.constructCall(nbLobby,False)
+                    self.sendToClient("placement."+str(info), client, nbLobby)
+                    return False
+        except:
+            raise ValueError("Erreur network placement")
         
 s1 = Server()
 s1.condition()

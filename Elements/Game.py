@@ -9,7 +9,7 @@ class Game:
 
     """Classe de gestion des parties de jeu blokus
     """
-    def __init__(self : Game, joueurs : list[Player]|None,plateau : Board|None,taille : int) -> None:
+    def __init__(self : Game, joueurs : list[Player]|None,plateau : Board|None,taille : int,online : bool = False) -> None:
         """Constructeur créant une partie avec des joueurs et un plateau de taille n
 
         Args:
@@ -22,6 +22,7 @@ class Game:
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
+        self.__online : bool = online
     
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -82,10 +83,24 @@ class Game:
         """
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
         self.__nextPlayer()
-        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        if not self.__online:
+            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if self.getWinners():
-            config.Config.controller.vueJeu.partieTermine
+            if not self.__online:
+                config.Config.controller.vueJeu.partieTermine
         return self.getWinners()
+    
+    def addSurrenderedPlayerOnline(self: Game, player) -> bool|list[Player]:
+        if not self.__online:
+            return False
+        if player not in self.__joueursAbandon:
+            if self.getCurrentPlayer() == player:
+                self.addSurrenderedPlayer()
+            else:
+                self.__joueursAbandon.append(player)
+                self.__nextPlayer()
+        return self.getWinners()
+            
 
     def isPlayerSurrendered(self : Game) -> bool:
         """Méthode permettant de savoir si le joueur courant a abandonné
@@ -110,7 +125,8 @@ class Game:
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
-        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        if not self.__online:
+            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
 
     def isGameFinished(self : Game) -> bool:
         """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau
@@ -188,7 +204,8 @@ class Game:
                     self.addSurrenderedPlayer()
                 else:
                     self.__nextPlayer()
-                config.Config.controller.updateBoard()
+                if not self.__online:
+                    config.Config.controller.updateBoard()
                 # prep tour suivant
                 
                 # config.Config.controller.updatePlayers(self.getCurrentPlayer())

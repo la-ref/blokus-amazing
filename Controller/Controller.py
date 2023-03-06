@@ -132,10 +132,12 @@ class Controller(tk.Tk):
         # self.changePage("GameInterface")
         # config.Config.controller.changePage("GameInterface")
             
-    def refreshGame(self,info):
-        print("je passe")
+    def refreshGame(self,info, pieceId = False):
         self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
-        self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),True)
+        self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),False)
+        
+        if pieceId:
+            self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["playing"]))
     
     
     def currentlyPlaying(self):
@@ -183,7 +185,7 @@ class Controller(tk.Tk):
         return self.onlineGame.board
     
     def getOnlinePlayerName(self,id):
-        if id > 0 and id <= 3:
+        if id >= 0 and id <= 3:
             return self.onlineGame.players[id]
         return None
     
@@ -208,7 +210,9 @@ class Controller(tk.Tk):
             print("vaffanculo")
             return
         else:
+            print("je passe ???")
             self.onlineGame.refreshInfo(info)
+            self.refreshGame(info,info["piece"])
             
     def changeIALevel(self,IaNb,lvl):
         if self.connection:
@@ -243,6 +247,8 @@ class Controller(tk.Tk):
             }
             print("je vais send",self.connection)
             self.connection.send("placePiece."+str(info))
+        elif self.onlineGame and not self.onlineGame.isPlaying():
+            return False
         else :
             if joueur == self.game.getCurrentPlayerId():
                 play = self.game.playTurn(piece, colonne, ligne, dc, dl)

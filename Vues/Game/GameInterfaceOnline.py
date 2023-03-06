@@ -107,6 +107,18 @@ class GameInterfaceOnline(tk.Frame):
         self.border.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
         self.border.itemconfigure(self.RegleBlokus,state=tk.HIDDEN)
         self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
+        
+    def deletePieceOnline(self,pieceId,player):
+        player = player-1
+        if player >= 0 and player <=3:
+            if player == 0:
+                self.List1.deletePieceOnline(pieceId,player)
+            elif player == 1:
+                self.List2.deletePieceOnline(pieceId,player)
+            elif player == 2:
+                self.List3.deletePieceOnline(pieceId,player)
+            elif player == 3:
+                self.List4.deletePieceOnline(pieceId,player)
 
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
@@ -239,7 +251,6 @@ class GameInterfaceOnline(tk.Frame):
             couleur (int): couleur du joueur courant
             affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
         """
-        
         self.board.refreshPlayer(couleur,affiche)
 
     

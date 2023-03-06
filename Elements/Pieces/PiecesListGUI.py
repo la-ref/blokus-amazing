@@ -66,6 +66,12 @@ class PiecesListGUI(tk.Frame):
                 maxheight = 0
 
 
+    def deletePieceOnline(self,pieceId,player):
+        if pieceId >= 0 and pieceId <= len(self.tableau_piece_forme): 
+            print(pieceId,"piece =")
+            self.tableau_piece_forme[pieceId-1].deletePieceOnline()
+            
+        
 
         
     def changeName(self, newName : str):
