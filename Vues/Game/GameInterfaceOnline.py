@@ -25,6 +25,7 @@ class GameInterfaceOnline(tk.Frame):
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None
+        self.surrendered = []
         
         
     def initialize(self : GameInterfaceOnline) -> None:
@@ -109,7 +110,8 @@ class GameInterfaceOnline(tk.Frame):
         self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
         
     def deletePieceOnline(self,pieceId,player):
-        player = player-1
+        print("i played with the player : ",player)
+              #player = player-1
         if player >= 0 and player <=3:
             if player == 0:
                 self.List1.deletePieceOnline(pieceId,player)
@@ -209,15 +211,18 @@ class GameInterfaceOnline(tk.Frame):
             self (GameInterfaceOnline): GameInterfaceOnline
             player (int): id du joueur qui a abandonné
         """
-        match player:
-            case 0:
-                self.List1.surrender()
-            case 1:
-                self.List2.surrender()
-            case 2:
-                self.List3.surrender()
-            case 3:
-                self.List4.surrender()
+        if player >= 0 and player <= 3:
+            if player not in self.surrendered:
+                self.surrendered.append(player)
+            match player:
+                case 0:
+                    self.List1.surrender()
+                case 1:
+                    self.List2.surrender()
+                case 2:
+                    self.List3.surrender()
+                case 3:
+                    self.List4.surrender()
 
     def leave(self : GameInterfaceOnline) -> None:
         """Méthode callback qui permet quand on click sur le bouton de leave de quitter la page de jeu en informant le controlleur
@@ -230,7 +235,7 @@ class GameInterfaceOnline(tk.Frame):
         self.List2.remettrePiece_copy()
         self.List3.remettrePiece_copy()
         self.List4.remettrePiece_copy()
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.leaveOnline()
 
     def refreshBoard(self : GameInterfaceOnline,plateau) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
@@ -263,11 +268,11 @@ class GameInterfaceOnline(tk.Frame):
         )
         
         if len(listPlayer)==1:
-            self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text="Le gagnant de la partie est : \n"+listPlayer[0].getName()+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+            self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text="Le gagnant de la partie est : \n"+listPlayer[0]+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         else:
             winStr = "Les gagnants de la partie sont :\n"
             for pl in listPlayer:
-                winStr+=pl.getName()+", "
+                winStr+=pl+", "
             self.text_winners = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0],text=winStr+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[1]),anchor=tk.CENTER,justify='center')
         
         self.border.tag_raise(self.quitter)

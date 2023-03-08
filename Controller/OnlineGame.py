@@ -5,6 +5,8 @@ class OnlineGame:
         self.board = board
         self.players = players
         self.surrender = surrender
+        self.winners = False
+        self.surrendered = False
         self.myTurn = False
         
     def isPlaying(self):
@@ -25,11 +27,20 @@ class OnlineGame:
     def setIsPlaying(self,val):
         if val == self.id:
             self.myTurn = True
+        else:
+            self.myTurn = False
+    
+    def setIsSurrendered(self):
+        if not self.surrendered:
+            if self.id in self.surrender.keys():
+                self.surrendered = True
             
     def refreshInfo(self,info):
         self.board = info["board"]
         self.players = info["players"]
         self.surrender = info["surrendered"]
+        self.winners = info["winner"]
         self.setIsPlaying(int(info["playing"]))
+        self.setIsSurrendered()
         
         

@@ -446,7 +446,7 @@ class Connexion(Frame):
         """ Fonction qui permet le callback du bouton "Quitter"
         
         """
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.changePage("Accueil")
         
 
         

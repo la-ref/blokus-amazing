@@ -1,9 +1,13 @@
+import scapy.all as scapy
+import socket
 
-
-from Elements.Game import Game
-import Elements.Player as Player
-import json
-
-joueurs = [Player.Player(0,"PERSONNE 1"),Player.Player(1,"PERSONNE 2"),Player.Player(2,"PERSONNE 3"),Player.Player(3,"PERSONNE 4")]
-game = Game(joueurs,None,20)
-print(joueurs[0].toJson())
+for i in range(200):
+    for y in range(200):
+        pack = scapy.IP(src="localhost", dst="localhost") / scapy.TCP(sport=57220, dport=5005,seq=i,ack=y,flags="S") / "Fuck you"
+        scapy.send(pack)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(("localhost",5005))
+        p = scapy.IP(dst="localhost")/scapy.TCP(flags="S", sport=scapy.RandShort(),dport=5005)/"Hallo world!"
+        q = scapy.IP(dst="localhost")/scapy.TCP(flags="S", sport=57220,dport=5005)/"Hallo world!"
+        scapy.send(p)
+        scapy.send(q)

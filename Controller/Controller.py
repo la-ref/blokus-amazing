@@ -30,13 +30,13 @@ class Controller(tk.Tk):
         
         config.initialisation(self)
 
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
+        self.frames = { "Accueil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.connection = None
         self.currentPage = ""
         self.onlineGame = None
-        self.changePage('Acceuil')
+        self.changePage('Accueil')
         self.mainloop()
             
     def changePage(self : Controller, nomFrame : str, online = False):
@@ -52,7 +52,8 @@ class Controller(tk.Tk):
             self.connection.error = True
             self.connection.stopSock()
             self.connection = None
-            self.changePage("Acceuil")
+            self.onlineGame = None
+            self.changePage("Accueil")
         if nomFrame != "lobbyOnline" or online:
             self.vueJeu = self.frames[nomFrame]
             self.vueJeu.initialize()
@@ -133,11 +134,17 @@ class Controller(tk.Tk):
         # config.Config.controller.changePage("GameInterface")
             
     def refreshGame(self,info, pieceId = False):
+        # TRY CATCH STP
         self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
         self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),False)
         
         if pieceId:
-            self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["playing"]))
+            self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["played"]))
+        if self.onlineGame.surrender:
+            for k in self.onlineGame.surrender.keys():
+                self.frames["GameInterfaceOnline"].surrender(k)
+        if self.onlineGame.winners:
+            self.frames["GameInterfaceOnline"].partieTermine(self.onlineGame.winners)
     
     
     def currentlyPlaying(self):
@@ -162,7 +169,11 @@ class Controller(tk.Tk):
         Args:
             self (Controller): Controller
         """
-        if not self.game.isPlayerSurrendered():
+        if (self.connection and self.currentPage == "GameInterfaceOnline" and self.onlineGame):
+            if not self.onlineGame.surrendered:
+                self.connection.send("surrender.")
+            
+        elif not self.game.isPlayerSurrendered():
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
             self.game.addSurrenderedPlayer()
             if self.game.getWinners():
@@ -207,7 +218,6 @@ class Controller(tk.Tk):
     
     def placement(self,info):
         if info["playing"] == "Nope":
-            print("vaffanculo")
             return
         else:
             print("je passe ???")
@@ -219,7 +229,19 @@ class Controller(tk.Tk):
             info = "changeIA."+str(IaNb)+"-"+str(lvl)
             self.connection.send(info)
         
-    
+    def leaveOnline(self,send=True, error= False):
+        if (self.connection and self.onlineGame):
+            if send:
+                self.connection.send("leave")
+            self.connection.error = True
+            self.connection.stopSock()
+            self.connection = None
+            self.onlineGame = None
+            self.changePage("Accueil")
+            if error:
+                print(error)
+                pass #afficher un msg d'erreur
+            
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:
         """Fonction de liaison entre le placement d'une piece graphique et moteur
@@ -245,6 +267,7 @@ class Controller(tk.Tk):
                 "dc":dc,
                 "dl":dl
             }
+            print("MA SUPER ROTATION",piece.getRotation())
             print("je vais send",self.connection)
             self.connection.send("placePiece."+str(info))
         elif self.onlineGame and not self.onlineGame.isPlaying():

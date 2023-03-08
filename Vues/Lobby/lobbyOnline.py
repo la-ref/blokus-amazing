@@ -183,7 +183,7 @@ class lobbyOnline(Frame):
         # config.Config.controller.changePage("GameInterface")
     
     def QuitterBouton(self,event):
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.leaveOnline()
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         if typ == "entre":

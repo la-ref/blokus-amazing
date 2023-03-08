@@ -47,33 +47,40 @@ class Server:
             Server.lobbies[lobbyId]["admin"] = 0
             
     def sendAdmin(self,lobbyId,client):
-        self.sendToAll("admin."+str(Server.lobbies[lobbyId]["admin"]), client, lobbyId)
+        try:
+            self.sendToAll("admin."+str(Server.lobbies[lobbyId]["admin"]), client, lobbyId)
+        except:
+            pass
     
     def removeClient(self,client,lobbyId, username = False):
-        if client in Server.lobbies[lobbyId]["clients"].values():
-            # Server.lobbies[lobbyId]["clients"][client].close()
-            clientId = self.getClientId(client,lobbyId)
-            game = Server.lobbies[lobbyId]["game"]
-            if game:
-                if (Server.lobbies[lobbyId]["game"].addSurrenderedPlayerOnline(game.getPlayers()[clientId])):
-                    self.sendToOther("winners."+game.getWinners(), client, lobbyId)
-                else: 
+        if lobbyId >= 0 and lobbyId < len(Server.lobbies):
+            if client in Server.lobbies[lobbyId]["clients"].values():
+                #client.close()
+                clientId = self.getClientId(client,lobbyId)
+                game = Server.lobbies[lobbyId]["game"]
+                if game:
+                    game.addSurrenderedPlayerOnline(game.getPlayers()[clientId])
                     info = self.constructCall(lobbyId,True)
-                    self.sendToOther("placement."+str(info), client, lobbyId)
-            del Server.lobbies[lobbyId]["clients"][clientId]
-            if username:
-                #self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
-                del Server.lobbies[lobbyId]["players"][clientId]
-                self.sendToOther("userNames."+str(Server.lobbies[lobbyId]["players"]), client, lobbyId)
-                t = threading.Timer(0.5,self.sendAdmin,[lobbyId,client])
-                t.start()
-            if clientId == Server.lobbies[lobbyId]["admin"]:
-                self.changeAdmin(lobbyId)
+                    self.sendToOther("refreshgame."+str(info), client, lobbyId)
+                    self.deleteLobby(lobbyId)
+                del Server.lobbies[lobbyId]["clients"][clientId]
+                if username:
+                    #self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
+                    del Server.lobbies[lobbyId]["players"][clientId]
+                    if not game:
+                        self.sendToOther("userNames."+str(Server.lobbies[lobbyId]["players"]), client, lobbyId)
+                        t = threading.Timer(1,self.sendAdmin,[lobbyId,client])
+                        t.start()
+                if not game and clientId == Server.lobbies[lobbyId]["admin"]:
+                    self.changeAdmin(lobbyId)
                 
-
+    def removeLobby(self,lobbyId):
+        Server.lobbies.pop(lobbyId)
+        
 
                 
     def addLobby(self,connection):
+        print(Server.lobbies)
         lob,cli,added = 0,0,False
         if len(Server.lobbies) > 0:
             for lobbyId in range(len(Server.lobbies)): 
@@ -101,28 +108,31 @@ class Server:
         return lob,cli
         
     def accept(self):
-        c, addr = self.s.accept()
-        lob = 0
-        cli = 0
-        lob,cli = self.addLobby(c)
-            
-        data = c.recv(8192)
-        if len(data) == 0:
-            if c in Server.lobbies[lob]["clients"].values():
-                #print("client déconnecter : , {}".format(Server.lobbies[lob]["clients"][cli]))
-                self.removeClient(cli,lob)
-                return
-        else:
-            data = str(data.decode())
-            Server.lobbies[lob]["players"][cli]=data
-            #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
-            self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
-            self.sendToOther("userNames."+str(Server.lobbies[lob]["players"]), self.getClientFromId(cli,lob), lob)
-            self.receiveV2(self.getClientFromId(cli,lob),lob)
-            t = threading.Timer(0.5,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
-            t.start()
-            print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
-            print(Server.lobbies[lob]["players"])
+        try:
+            c, addr = self.s.accept()
+            lob = 0
+            cli = 0
+            lob,cli = self.addLobby(c)
+                
+            data = c.recv(8192)
+            if len(data) == 0:
+                if c in Server.lobbies[lob]["clients"].values():
+                    #print("client déconnecter : , {}".format(Server.lobbies[lob]["clients"][cli]))
+                    self.removeClient(cli,lob)
+                    return
+            else:
+                data = str(data.decode())
+                Server.lobbies[lob]["players"][cli]=data
+                #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
+                self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
+                self.sendToOther("userNames."+str(Server.lobbies[lob]["players"]), self.getClientFromId(cli,lob), lob)
+                self.receiveV2(self.getClientFromId(cli,lob),lob)
+                t = threading.Timer(0.5,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
+                t.start()
+                print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
+                print(Server.lobbies[lob])
+        except:
+            self.removeClient(cli,lob)
             
     def constructCall(self,nbLobby,playing):
         sendDict = {}
@@ -137,7 +147,10 @@ class Server:
             sendDict["surrendered"] = playerSurrender
             sendDict["board"] = Server.lobbies[nbLobby]["game"].getBoard().getBoard().tolist()
             sendDict["playing"] = Server.lobbies[nbLobby]["game"].getCurrentPlayer().getID()
-            sendDict["winner"] = False
+            sendDict["winner"] = Server.lobbies[nbLobby]["game"].getWinnersName()
+            sendDict["piece"] = False
+            sendDict["played"] = False
+                                        
         else:
             sendDict["playing"] = "Nope"
         return sendDict
@@ -157,7 +170,14 @@ class Server:
             print(sendDict)
             return str(sendDict)
         except:
-            raise("Erreur network création")
+            raise ValueError("Erreur network création")
+        
+    def deleteLobby(self,nbLobby):
+        if Server.lobbies[nbLobby]["game"] and Server.lobbies[nbLobby]["game"].getWinnersName():
+            print('okKOKOKOKOKOKOKOKOKKOKOOKOKOKOOKOKOKO KOK OOK OK OKO KO KO KO KO O  OKO K OK O')
+            for c in Server.lobbies[nbLobby]["clients"]:
+                self.removeClient(c,nbLobby,True)
+            self.removeLobby(nbLobby)
             
     def convertJson(self,msg):
         return ast.literal_eval(str(msg))
@@ -185,17 +205,19 @@ class Server:
                         if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
                             game = self.createGame(nbLobby)
                             self.sendToAll("launchGame."+str(game), client, nbLobby)
+                    elif data == "leave":
+                        print(client,"eh leaves")
+                        self.removeClient(client,nbLobby,True)              
                     elif "placePiece." in data:
                         data = data.replace("placePiece.", '')
                         self.placePiece(client,nbLobby,self.convertJson(data)) 
                     elif "surrender." in data:
-                        data = data.replace("surrender.", '')
                         game = Server.lobbies[nbLobby]["game"]
                         if game:
-                            info = # récup les infos create call et ensuite on verif si on ajoute les winners ou pas
-                            if (game.addSurrenderedPlayerOnline(game.getPlayers()[self.getClientId(client,nbLobby)])):
-                                self.sendToOther("placement."+str(info), client, lobbyId)
-                                self.sendToOther("winners."+game.getWinners(), client, nbLobby)   
+                            game.addSurrenderedPlayerOnline(game.getPlayers()[self.getClientId(client,nbLobby)])
+                            info = self.constructCall(nbLobby,True)
+                            self.sendToAll("refreshgame."+str(info), client, nbLobby)
+                            self.deleteLobby(nbLobby)
                     elif "changeIA." in data:
                         if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
                             data = data.replace("changeIA.", '')
@@ -214,10 +236,15 @@ class Server:
                 #self.send(str(self.getClientUserName(client,nbLobby)) + " - " + data, client, nbLobby)
 
     def receive(self):
-        for nbLobby in range(len(Server.lobbies)): 
-            for k in Server.lobbies[nbLobby]["clients"]:
-                t1_2_1 = threading.Thread(target=self.f,args=(Server.lobbies[nbLobby]["clients"][k],nbLobby))
-                t1_2_1.start()
+        try:
+            for nbLobby in range(len(Server.lobbies)): 
+                if nbLobby >= 0 and nbLobby < len(Server.lobbies):
+                    for k in Server.lobbies[nbLobby]["clients"]:
+                        t1_2_1 = threading.Thread(target=self.f,args=(Server.lobbies[nbLobby]["clients"][k],nbLobby))
+                        t1_2_1.start()
+                
+        except:
+            pass
                 
     def receiveV2(self,cli,lob):
         t1_2_1 = threading.Thread(target=self.f,args=(cli,lob))
@@ -237,12 +264,16 @@ class Server:
             
 
     def sendToOther(self,msg, client, lobby):
-        for k, v in Server.lobbies[lobby]["clients"].items():
-            if v != client:
-                try:
-                    v.sendall(bytes(msg, "utf-8"))
-                except :
-                    self.removeClient(client,lobby,True)
+        try:
+            if lobby >= 0 and lobby < len(Server.lobbies):
+                for k, v in Server.lobbies[lobby]["clients"].items():
+                    if v != client:
+                        try:
+                            v.sendall(bytes(msg, "utf-8"))
+                        except :
+                            self.removeClient(client,lobby,True)
+        except:
+            self.removeClient(client,lobby,True)
     
     def sendToClient(self,msg, client, lobby):
         try:
@@ -286,6 +317,7 @@ class Server:
                     info = self.constructCall(nbLobby,play)
                     print(info,"ODOODSDJFKSDJFSDFHDS")
                     info["piece"] = pieceId
+                    info["played"] = self.getClientId(client,nbLobby)
                     self.sendToAll("placement."+str(info), client, nbLobby)
                     print("j'ai send !!!")
                     return play

@@ -11,26 +11,20 @@ class Client:
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.nom = input("Ton pseudo : \n")
-        # print("\x1B[F\x1B[2K", end="")
         self.nom = nom
-        self.id = 2
+        self.id = 0
         now = str(datetime.now())[:-7]
         self.error = False
         try:
             self.s.connect(("localhost", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
-            self.sendToMenu()
-            self.s.close()
+            config.Config.controller.leaveOnline(send=False)
             print("error connect", "({}) : The server is not online.\n".format(now))
             
     def getId(self):
         self.send(self.nom)
         self.id = int(self.oneReceive())
-        # if not self.id:
-        #     # envoi page d'erreur au client..
-        #     return
         return self.id
     
     def sendToMenu(self):
@@ -39,13 +33,12 @@ class Client:
     def stopSock(self):
         try:
             self.s.shutdown(socket.SHUT_WR)
+            self.s.close()
         except:
-            config.Config.controller.changePage("Accueil")
+            pass
             
     
     def convertJson(self,msg):
-        #self.send("getUserNames")
-        #return ast.literal_eval(str(self.oneReceive()))
         return ast.literal_eval(str(msg))
 
     def receive(self):
@@ -54,12 +47,14 @@ class Client:
                 data = self.s.recv(8192*2)
                 if len(data) == 0:
                     self.error = True
-                    self.sendToMenu()
-                    self.s.close()
+                    config.Config.controller.leaveOnline(send=False)
                     break
                 else:
                     val = str(data.decode())
                     print(val,"§§§§§§§§§§§§§§§")
+                    if "errormsg." in val:
+                        val = val.replace("errormsg.", '')
+                        config.Config.controller.leaveOnline(send=False,error=val)
                     if config.Config.controller.currentPage == "lobbyOnline":
                         if "userNames." in val:
                             val = val.replace("userNames.", '')
@@ -74,12 +69,13 @@ class Client:
                         if "placement." in val:
                             val = val.replace("placement.", '')
                             config.Config.controller.placement(self.convertJson(val))
-                            
-                    #print("{}\n".format(val))
+                        if "refreshgame." in val:
+                            val = val.replace("refreshgame.", '')
+                            config.Config.controller.placement(self.convertJson(val))
             except:
                 self.error = True
                 print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
-                self.s.close()
+                config.Config.controller.leaveOnline(send=False)
                 break
             
     def oneReceive(self):
@@ -90,14 +86,13 @@ class Client:
             print("MY DATA ", data)
             if len(data) == 0:
                 self.error = True
-                self.sendToMenu()
-                self.s.close()
+                config.Config.controller.leaveOnline(send=False)
             else:
                 return data.decode()
         except:
             self.error = True
             print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
-            self.s.close()
+            config.Config.controller.leaveOnline(send=False)
             return None
                 
     def send(self,msg = None):
@@ -110,21 +105,5 @@ class Client:
         except:
             self.error = True
             print(("error send", "({}) : Server has been disconnected.\n".format(now)))
-            self.sendToMenu()
-            self.s.close()
+            config.Config.controller.leaveOnline(send=False)
         return sended
-            
-    def inp(self):
-        while not self.error:
-            msg = input("\n")
-            print("\x1B[F\x1B[2K", end="")
-            if not self.send(msg):
-                break
-            
-
-# c1 = Client()
-# t1 = threading.Thread(target=c1.receive)
-# t1.start()
-
-# t23 = threading.Thread(target=c1.inp)
-# t23.start()

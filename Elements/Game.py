@@ -98,7 +98,6 @@ class Game:
                 self.addSurrenderedPlayer()
             else:
                 self.__joueursAbandon.append(player)
-                self.__nextPlayer()
         return self.getWinners()
             
 
@@ -176,6 +175,16 @@ class Game:
                     winners.append(self.__joueurs[i])
             return winners
         return []
+    
+    def getWinnersName(self : Game) -> list[str]:
+        winners = self.getWinners()
+        new = []
+        if winners:
+            for player in winners:
+                new.append(player.getName())
+            return new
+        return False
+                
     
     def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int) -> bool:
         """Méthode qui permet de jouer le tour du joueur courant
