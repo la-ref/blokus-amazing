@@ -24,7 +24,7 @@ class ai():
                     return (i,y)
 
     def play(self):
-        poss = nbPossible(self.player)
+        poss = nbPossible(config.Config.controller.game, self.player)
         if poss:
             if self.__difficulty=="Facile":
                 piece = r.choice(poss)

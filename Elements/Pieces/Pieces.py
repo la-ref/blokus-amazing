@@ -18,11 +18,9 @@ class Pieces:
         self.__id : int = identifiant
         self.__forme : np.ndarray = forme
         self.__delimitation : np.ndarray = self.__findCorners() # matrice permettant de connaitre les coins de la pièces voir _findCorners()
-        self.__rotation = 0
-        self.__flipped = 0
         self.nbFlip = nbFlip # pour parcours ia
         self.nbRot = nbRot   # pour parcours ia
-        self.__flip : bool = False # pour parcours ia
+        self.__flipped = 0   # pour parcours ia
         self.__rotation : int = 0 # pour parcours ia
     
     def __findCorners(self : Pieces) -> np.ndarray:
@@ -159,11 +157,11 @@ class Pieces:
         """
         return self.__rotation
     
-    def getFlip(self : Pieces) -> bool:
+    def getFlip(self : Pieces) -> int:
         """Méthode getter pour obtenir si la pièces est flip ou non
         Args:
             self (Pieces): pieces
         Returns:
             bool: True si elle est flip, False si elle ne l'est pas
         """
-        return self.__flip
+        return self.__flipped
