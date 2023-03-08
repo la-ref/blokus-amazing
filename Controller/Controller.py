@@ -129,7 +129,6 @@ class Controller(tk.Tk):
                 "rotation" : rota,
                 "flip" : flip})
             self.__tour += 1 
-            print(self.__json)
             
             if (win):
                 print("TEST")
