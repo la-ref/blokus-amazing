@@ -16,7 +16,7 @@ class Client:
         now = str(datetime.now())[:-7]
         self.error = False
         try:
-            self.s.connect(("localhost", Client.PORT))
+            self.s.connect(("51.75.249.26", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
             config.Config.controller.leaveOnline(send=False)

@@ -13,7 +13,7 @@ class Server:
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #print(socket.gethostbyname(socket.gethostname()))
-        self.s.bind(('localhost', Server.PORT)) # n'importe quelle adresse
+        self.s.bind(('51.75.249.26', Server.PORT)) # n'importe quelle adresse
         self.s.listen(40)
         
     def chooseANumber(self,lobbyId):
@@ -308,8 +308,10 @@ class Server:
                     ligne = placement["ligne"]
                     dc = placement["dc"]
                     dl = placement["dl"]
+                    rotation = placement["rotation"]
+                    flip = placement["flip"]
                     piece = game.getCurrentPlayer().getPiece(str(pieceId))
-                    play = game.playTurn(piece, colonne, ligne, dc, dl)
+                    play = game.playTurn(piece, colonne, ligne, dc, dl,rotation,flip)
                     #win = game.getWinners()
                     
                     # if (win):

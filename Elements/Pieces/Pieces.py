@@ -1,5 +1,6 @@
 from __future__ import annotations
 import numpy as np
+import copy
 class Pieces:
     """Classe représentant une pièce du jeu blokus
     """
@@ -165,3 +166,13 @@ class Pieces:
             bool: True si elle est flip, False si elle ne l'est pas
         """
         return self.__flipped
+    
+    def ajoutRotationFlip(self: Pieces, rota : int,flip:int):
+        piece = copy.deepcopy(self)
+        for i in range(rota):
+            piece.rotate90()
+        if flip:
+            piece.flip()
+        return piece
+
+        

@@ -265,7 +265,9 @@ class Controller(tk.Tk):
                 "colonne":colonne,
                 "ligne":ligne,
                 "dc":dc,
-                "dl":dl
+                "dl":dl,
+                "rotation":piece.getRotation(),
+                "flip":piece.getFlip()
             }
             print("MA SUPER ROTATION",piece.getRotation())
             print("je vais send",self.connection)

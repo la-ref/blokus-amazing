@@ -186,7 +186,7 @@ class Game:
         return False
                 
     
-    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int) -> bool:
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int,rotation,flip) -> bool:
         """Méthode qui permet de jouer le tour du joueur courant
         
         Args:
@@ -202,6 +202,7 @@ class Game:
         """
         if len(self.__joueursAbandon) != len(self.__joueurs):
             
+            piece = piece.ajoutRotationFlip(rotation,flip)
             ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
             if ajout: # si une pièce peut être ajouter
                 self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
