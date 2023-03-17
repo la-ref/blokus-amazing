@@ -58,6 +58,23 @@ class ai():
                     print(piece[0].getForme(),piece[1],piece[2],piece[4],piece[5], config.Config.controller.game.getBoard().getBoard())
                     print("plaçable pas placé")
                     exit(-6)
+            elif self.__difficulty=="Expert":
+                # Faire le choix du min max
+                piece = joue(self.player.getID(), 1)
+                print(piece)
+
+                for i in range(piece[6]):
+                    piece[0].rotate90()
+                
+                for i in range(piece[7]):
+                    piece[0].flip()
+                
+                if config.Config.controller.placePiece(piece[0],piece[3].getID(),piece[1],piece[2],piece[4],piece[5]):
+                    pass
+                else:
+                    print(piece[0].getForme(),piece[1],piece[2],piece[4],piece[5], config.Config.controller.game.getBoard().getBoard())
+                    print("plaçable pas placé")
+                    exit(-6)
             else: 
                 print("erreur : ia sans difficulté")
                 exit(-6)

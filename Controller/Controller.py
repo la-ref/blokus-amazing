@@ -11,6 +11,8 @@ from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
 from Vues.Game.GameInterface import GameInterface
 from HighScore.fonctionJson import fonctionJson
+import threading
+
 
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
@@ -118,10 +120,12 @@ class Controller(tk.Tk):
         
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
-        """
+        """ 
         if joueur == self.game.getCurrentPlayerId():
             # print(piece, colonne, ligne, dc, dl)
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
+            
+        
             win = self.game.getWinners()
             tab = []
             rota = piece.getRotation()

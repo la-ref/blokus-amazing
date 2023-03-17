@@ -294,6 +294,11 @@ class lobbyUser(Frame):
 
             config.Config.controller.changePlayer(self.joueur)
 
+    # def infiniteCharge(self):
+    #     while(self.activeclavier == True):
+    #     
+
+
     def boutonSwitchIA(self,event):
         """Méthode qui permet de faire apparaitre les types de l'ia du joueur
         

@@ -7,6 +7,7 @@ from config import config
 from time import sleep
 from HighScore.fonctionJson import fonctionJson
 import threading
+import multiprocessing as mp
 
 class Game:
 
@@ -25,10 +26,13 @@ class Game:
         self.__joueursAbandon : list[Player] = []
         self.__currentPlayerPos : int = -1
         self.__plateau : Board = plateau or Board(taille)
+        self.__enCours = True
         
         for pj in self.__joueurs:
             pj.resetPiece()
-            
+    
+    def enCours(self) -> bool:
+        return self.__enCours
         
     def start(self):
         threading.Timer(0.5,self.__nextPlayer).start()
@@ -157,10 +161,10 @@ class Game:
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if len(self.__joueursAbandon) != len(self.__joueurs):
-            if self.getCurrentPlayer().getAI():
-                threading.Timer(.5,config.Config.controller.updateBoard).start() #delai l'appel
-                self.getCurrentPlayer().getAI().play()
-                sleep(0.5)
+            
+            threading.Timer(.5, config.Config.controller.updateBoard)
+            if config.Config.controller.game.getCurrentPlayer().getAI():
+                config.Config.controller.game.getCurrentPlayer().getAI().play()
             return True
         else:
             return False

@@ -8,6 +8,7 @@ from config import config
 from Elements.Board import Board
 import Vues.accueil as accueil 
 from Vues.ScrollableFrame import ScrollableFrame
+import threading
 
 
 class GameInterface(tk.Frame):
@@ -25,6 +26,7 @@ class GameInterface(tk.Frame):
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None
+
         
         
     def initialize(self : GameInterface) -> None:
@@ -53,10 +55,11 @@ class GameInterface(tk.Frame):
         self.Lists[1].move(x=1047,y=80) # vert
 
         self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2))
-        self.Lists[2].move(x=1047,y=524) #  rouge
+        self.Lists[2].move(x=1047,y=524) # rouge
 
         self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3))
-        self.Lists[3].move(x=70,y=524) #bleu
+        self.Lists[3].move(x=70,y=524) # bleu
+
 
         self.giveUp = self.border.create_image(
             (1440//2)-(config.Config.image[6].width()//2), 
@@ -105,6 +108,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
         self.border.itemconfigure(self.RegleBlokus,state=tk.HIDDEN)
         self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
+        
+        threading.Timer(0.5,updateGraphic)
 
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
@@ -317,6 +322,10 @@ class GameInterface(tk.Frame):
     def no(self,event):
         self.remove_modal()
         
+def updateGraphic():
+    while config.Config.controller.game.enCours():
+        config.Config.controller.updateBoard()
+
 
 
 
