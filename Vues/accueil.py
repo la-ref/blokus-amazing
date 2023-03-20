@@ -79,6 +79,7 @@ class Accueil(Frame):
             image=config.Config.image[3],
             anchor=tkinter.NW
         )
+        self.canvas.tag_bind(BoutonScore, "<Button-1>", self.ScoreBouton)
         self.canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
         self.canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
 
@@ -168,11 +169,6 @@ class Accueil(Frame):
             self.scrollable_frame.destroy()
             self.canvas.delete(self.windowRegle)
 
-    def BoutonScore(self,event):
-        """ Fonction qui permet le callback du bouton "Score"
-        
-        """
-        self.window.destroy()
     
     def EnLigneBouton(self,event):
         """ Fonction qui permet le callback du bouton "En ligne"
@@ -198,6 +194,13 @@ class Accueil(Frame):
         """
         import Vues.Lobby.lobbyLocal as lobbyLocal
         config.Config.controller.changePage("lobbyLocal")
+        
+    def ScoreBouton(self, event):
+        """Fonction de callback du bouton "Score"
+        """
+        
+        import Vues.LeaderboardInterface as LeaderboardInteface
+        config.Config.controller.changePage("LeaderboardInterface")
         
         
         

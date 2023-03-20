@@ -11,6 +11,7 @@ from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
 from Vues.Game.GameInterface import GameInterface
 from HighScore.fonctionJson import fonctionJson
+from Vues.LeaderboardInterface import LeaderboardInterface
 
 class Controller(tk.Tk):
     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
@@ -22,7 +23,7 @@ class Controller(tk.Tk):
         
         config.initialisation(self)
         
-        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
+        self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "LeaderboardInterface" : LeaderboardInterface(self)}
         self.game : Game
         self.__json = []
         self.__tour = 1
@@ -68,6 +69,11 @@ class Controller(tk.Tk):
             self (Controller): Contorller
         """
         if not self.game.isPlayerSurrendered():
+            list_joueur = self.game.getPlayers()
+            list_nomjoueurs = []
+            for i in list_joueur :
+                nom = i.getName()
+                list_nomjoueurs.append(nom)
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
             self.game.addSurrenderedPlayer()
             win = self.game.getWinners()
@@ -75,6 +81,7 @@ class Controller(tk.Tk):
             if (win):
                 for k in win:
                     tab.append(k.getName())
+                self.__json[0].update({"joueurs" : list_nomjoueurs})
                 self.__json[0].update({"winners" : tab})
                 fonctionJson().JsonAjout(self.__json)                
                 self.vueJeu.partieTermine(self.game.getWinners())
@@ -117,6 +124,11 @@ class Controller(tk.Tk):
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
         if joueur == self.game.getCurrentPlayerId():
+            list_joueur = self.game.getPlayers()
+            list_nomjoueurs = []
+            for i in list_joueur :
+                nom = i.getName()
+                list_nomjoueurs.append(nom)
             play = self.game.playTurn(piece, colonne, ligne, dc, dl)
             win = self.game.getWinners()
             tab = []
@@ -134,6 +146,7 @@ class Controller(tk.Tk):
                 print("TEST")
                 for k in win:
                     tab.append(k.getName())
+                self.__json[0].update({"joueurs" : list_nomjoueurs})
                 self.__json[0].update({"winners" : tab})
                 fonctionJson().JsonAjout(self.__json)
                 self.vueJeu.partieTermine(win)

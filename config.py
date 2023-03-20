@@ -138,6 +138,11 @@ class config():
         # Game hover
         self.image.append(PhotoImage(file="Images/Plateau/button_info_hover.png")) # 58
         self.image.append(PhotoImage(file="Images/Plateau/button_info.png")) # 59
+        
+        # Scoreboard
+        self.image.append(PhotoImage(file="Images/Leaderboard/button.png")) # 60
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite.png")) # 61
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche.png")) # 62
 
 
          
