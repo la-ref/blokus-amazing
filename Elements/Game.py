@@ -132,6 +132,7 @@ class Game:
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         win = self.getWinners()
         if win:
+            config.Config.controller.vueJeu.changeTextPartie(" ",0)
             config.Config.controller.vueJeu.partieTermine
             print(win)
         return win
@@ -161,7 +162,7 @@ class Game:
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if len(self.__joueursAbandon) != len(self.__joueurs):
-            
+            config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
             threading.Timer(.5, config.Config.controller.updateBoard)
             if config.Config.controller.game.getCurrentPlayer().getAI():
                 config.Config.controller.game.getCurrentPlayer().getAI().play()
@@ -258,7 +259,16 @@ class Game:
                 config.Config.controller.vueJeu.removePiece(self.__currentPlayerPos,piece.getIdentifiant())
                 self.getCurrentPlayer().ajoutTour()
 
-
+                rota = piece.getRotation()
+                flip = piece.getFlip()
+                config.Config.controller.json.append({"num_tour" : config.Config.controller.tour,
+                    "joueur" : self.getCurrentPlayerId(),
+                    "num_piece" : piece.getIdentifiant(),
+                    "position_plateau" : [colonne,ligne],
+                    "rotation" : rota,
+                    "flip" : flip})
+                config.Config.controller.tour += 1 
+                print(config.Config.controller.json)
             
                 if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
                     self.addSurrenderedPlayer()

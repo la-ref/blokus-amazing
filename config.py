@@ -64,8 +64,8 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/empty_list.png")) #9
         self.image.append(PhotoImage(file="Images/Plateau/player_yellow.png")) #10
         self.image.append(PhotoImage(file="Images/Plateau/player_green.png")) #11
-        self.image.append(PhotoImage(file="Images/Plateau/player_blue.png")) #12
-        self.image.append(PhotoImage(file="Images/Plateau/player_red.png")) #13
+        self.image.append(PhotoImage(file="Images/Plateau/player_red.png")) #12
+        self.image.append(PhotoImage(file="Images/Plateau/player_blue.png")) #13
 
         # Lobby local
         self.image.append(PhotoImage(file="Images/LobbyLocal/arriere_plan.png")) #14
@@ -120,8 +120,8 @@ class config():
         #Piece
         self.image.append(PhotoImage(file="Images/Plateau/yellow.png")) #48
         self.image.append(PhotoImage(file="Images/Plateau/green.png")) #49
-        self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 50
-        self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 51
+        self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 50
+        self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 51
 
 
         #Accueil

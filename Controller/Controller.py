@@ -30,8 +30,8 @@ class Controller(tk.Tk):
         self.frames = { "Acceuil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
-        self.__json = []
-        self.__tour = 1
+        self.json = []
+        self.tour = 1
         self.changePage('Acceuil')
         self.mainloop()
 
@@ -64,6 +64,7 @@ class Controller(tk.Tk):
         """
         self.vueJeu.refreshBoard(self.game.getBoard())
         self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
+        self.update()
 
     def surrender(self : Controller) -> None:
         """Méthode callback qui pour chaque personne qui on abandonné de mettre à jour leur status sur le jeu
@@ -80,8 +81,8 @@ class Controller(tk.Tk):
             if (win):
                 for k in win:
                     tab.append(k.getName())
-                self.__json[0].update({"winners" : tab})
-                fonctionJson().JsonAjout(self.__json)                
+                self.json[0].update({"winners" : tab})
+                fonctionJson().JsonAjout(self.json)                
                 self.vueJeu.partieTermine(self.game.getWinners())
 
 
@@ -128,23 +129,13 @@ class Controller(tk.Tk):
         
             win = self.game.getWinners()
             tab = []
-            rota = piece.getRotation()
-            flip = piece.getFlip()
-            self.__json.append({"num_tour" : self.__tour,
-                "joueur" : joueur,
-                "num_piece" : piece.getIdentifiant(),
-                "position_plateau" : [colonne,ligne],
-                "rotation" : rota,
-                "flip" : flip})
-            self.__tour += 1 
-            print(self.__json)
 
             if (win):
                 print("TEST")
                 for k in win:
                     tab.append(k.getName())
-                self.__json[0].update({"winners" : tab})
-                fonctionJson().JsonAjout(self.__json)
+                self.json[0].update({"winners" : tab})
+                fonctionJson().JsonAjout(self.json)
                 self.vueJeu.partieTermine(win)
             return play
         else:

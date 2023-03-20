@@ -39,6 +39,13 @@ class GameInterface(tk.Frame):
         """
         for widgets in self.winfo_children():
             widgets.destroy()
+
+        self.couleur : dict = {
+            10:"#FFC700",
+            11:"#32BF00",
+            12:"#BC0000",
+            13:"#0045CC"
+        }
             
         self.border = tk.Canvas()
         self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
@@ -61,9 +68,12 @@ class GameInterface(tk.Frame):
         self.Lists[3].move(x=70,y=524) # bleu
 
 
+        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
+        
+
         self.giveUp = self.border.create_image(
-            (1440//2)-(config.Config.image[6].width()//2), 
-            120, 
+            411, 
+            845, 
             image=config.Config.image[6],
             anchor=tk.NW
         )
@@ -73,8 +83,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
         self.quitter = self.border.create_image(
-            577, 
-            820, 
+            815, 
+            845, 
             image=config.Config.image[7],
             anchor=tk.NW
         )
@@ -83,8 +93,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
         BoutonInfo = self.border.create_image(
-            815, 
-            826, 
+            690, 
+            845, 
             image=config.Config.image[59],
             anchor=tk.NW
         )
@@ -163,6 +173,15 @@ class GameInterface(tk.Frame):
             self.border.itemconfigure(self.giveUp, image=config.Config.image[6])
             self.border.config(cursor="")
 
+    def changeTextPartie(self, message : str, couleur : int) -> None:
+        """ Méthode permettant de modifier le text affiché à l'écran. 
+
+        Args:
+            self (GameInterface) : GameInterface
+            message (str) : Le message affiché 
+        """
+        self.border.itemconfig(self.information, text=message, fill=self.couleur[10+couleur])
+
     def hoverLeave(self : GameInterface,typ : str) -> None:
         """Méthode permettant de modifier le bouton quitter bouton en fonction du hover de celui ci en quitter et entrer
 
@@ -188,12 +207,12 @@ class GameInterface(tk.Frame):
         if typ == "entre":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[58])
-                self.border.moveto(idButton,806,818)
+                self.border.moveto(idButton,690,845)
                 self.border.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[59])
-                self.border.moveto(idButton,815,826)
+                self.border.moveto(idButton,690,845)
                 self.border.config(cursor="")
             
     def surrender(self : GameInterface,player : int) -> None:

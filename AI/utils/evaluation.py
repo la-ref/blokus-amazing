@@ -98,6 +98,9 @@ def joue(joueurId : int, profond : int = 1) -> list:
     listPoss = nbPossible(config.Config.controller.game, listJoueur[joueurId])
     listPoss=choices(listPoss,k=NB_CPU)
     listTab = []
+    listPoss=sorted(listPoss, key= lambda x : x[0].difficulty)[-20:]
+    for poss in listPoss:
+        print(poss[0].difficulty)
     
     # création des copies de tableaux et ajout des à tester
     for piece in listPoss:
@@ -108,7 +111,7 @@ def joue(joueurId : int, profond : int = 1) -> list:
     
     
     if mp.cpu_count() < NB_CPU:
-        raise ValueError("The number of CPU's specified exceed the amount available")
+        raise ValueError("The number of CPU's specified exceed the available amount.\nspecified : "+str(NB_CPU))
     game = config.Config.controller.game
     depth = profond*len(config.Config.controller.game.getCurrentPlayers())-1
     nextId = config.Config.controller.game.getNextPlayer(joueurId)

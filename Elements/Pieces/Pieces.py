@@ -4,7 +4,7 @@ class Pieces:
     """Classe représentant une pièce du jeu blokus
     """
 
-    def __init__(self: Pieces, forme : np.ndarray, identifiant: int, nbRot : int, nbFlip: int) -> None:
+    def __init__(self: Pieces, forme : np.ndarray, identifiant: int, nbRot : int, nbFlip: int, difficulty : int) -> None:
         """Constructeur créant une pièce identifié par un entier est étant sous forme d'un tableau 2d
 
         Args:
@@ -22,6 +22,7 @@ class Pieces:
         self.nbRot = nbRot   # pour parcours ia
         self.__flipped = 0   # pour parcours ia
         self.__rotation : int = 0 # pour parcours ia
+        self.difficulty = difficulty # evaluation ia
     
     def __findCorners(self : Pieces) -> np.ndarray:
         """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
