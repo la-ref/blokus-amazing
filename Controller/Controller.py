@@ -221,6 +221,7 @@ class Controller(tk.Tk):
     def leaveOnline(self,send=True, error :str|bool= False):
         if (self.connection and self.onlineGame) and not self.leaving:
             self.leaving = True
+            legitLeave = False
             if send:
                 self.connection.send("leave")
                 legitLeave = True
