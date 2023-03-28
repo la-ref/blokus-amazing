@@ -31,5 +31,8 @@ class fonctionJson:
             print(val_test)
             print(data)
             
+        mon_fichier.close()
+            
         with open(path,"w") as mon_fichier: 
             json.dump(data, mon_fichier)  
+        mon_fichier.close()

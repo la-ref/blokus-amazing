@@ -2,8 +2,9 @@ from config import config
 import numpy as np
 import random as r
 import time
-from AI.utils.evaluation import joue
+from AI.utils.evaluation import joueDifficile, getSorted
 from AI.utils.nbPossible import nbPossible
+from Elements.Pieces.Pieces import Pieces
 
 class ai():
     
@@ -43,9 +44,14 @@ class ai():
                     exit(-6)
             elif self.__difficulty=="Moyen":
                 # Faire le choix du min max
-                piece = joue(self.player.getID(), 1)
-                print(piece)
-
+                
+                poss = getSorted(poss, 40)
+                
+                if type(poss[0])==Pieces:
+                    piece=poss
+                else:
+                    piece = r.choice(poss)
+                    
                 for i in range(piece[6]):
                     piece[0].rotate90()
                 
@@ -60,7 +66,7 @@ class ai():
                     exit(-6)
             elif self.__difficulty=="Expert":
                 # Faire le choix du min max
-                piece = joue(self.player.getID(), 1)
+                piece = joueDifficile(self.player.getID(), poss, 1)
                 print(piece)
 
                 for i in range(piece[6]):

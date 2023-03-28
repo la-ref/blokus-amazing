@@ -90,17 +90,20 @@ def workAlphaBeta(game, profondeur : int, joueurId : int, listJoueur: list, alph
     
           
           
-def joue(joueurId : int, profond : int = 1) -> list:
-    NB_CPU = 8
+def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list:
+    NB_CPU = mp.cpu_count()//2
+    
+    if NB_CPU==0:
+        raise ValueError("The number of CPU's is too low for this game to work")
 
     listJoueur=config.Config.controller.game.getCurrentPlayers()
 
-    listPoss = nbPossible(config.Config.controller.game, listJoueur[joueurId])
-    listPoss=choices(listPoss,k=NB_CPU)
+    
+    listPoss=getSorted(listPoss, 40)
+    
     listTab = []
-    listPoss=sorted(listPoss, key= lambda x : x[0].difficulty)[-20:]
-    for poss in listPoss:
-        print(poss[0].difficulty)
+    
+    listPoss=choices(listPoss,k=NB_CPU)
     
     # création des copies de tableaux et ajout des à tester
     for piece in listPoss:
@@ -110,8 +113,7 @@ def joue(joueurId : int, profond : int = 1) -> list:
     
     
     
-    if mp.cpu_count() < NB_CPU:
-        raise ValueError("The number of CPU's specified exceed the available amount.\nspecified : "+str(NB_CPU))
+    
     game = config.Config.controller.game
     depth = profond*len(config.Config.controller.game.getCurrentPlayers())-1
     nextId = config.Config.controller.game.getNextPlayer(joueurId)
@@ -134,7 +136,29 @@ def joue(joueurId : int, profond : int = 1) -> list:
     return listPoss[np.argmax(res)]
     
 
-          
+def getSorted(listPoss : list, limit : int):
+    """ Renvoie un extrait des coups trié par difficulté de la liste des coups possibles
+        Renvoie les plus difficiles
+
+    Args:
+        listPoss (list): liste des coups possible
+        limit (int): limites max de coup à prendre
+
+    Returns:
+        list : extrait de listPoss
+    """
+    
+    
+    ch = len(listPoss)//4
+    if ch <4:
+        listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-4]
+    elif ch > limit//4:
+        listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-limit:]
+    else:
+        listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-ch:]
+    
+    print(listPoss)
+    return listPoss
           
           
                 
@@ -175,58 +199,6 @@ def minmax(game,q : queue.Queue, config, joueurId : int, listJoueur: list, plate
         return valuation_jeu(game,plateau, config.controller.game.getNextPlayer(joueurId))
     
     
-    
-# def joue2(joueurId : int, profondeur : int = 1) -> list:
-
-#     listJoueur=config.Config.controller.game.getCurrentPlayers()
-#     # for playe in listJoueur:
-#     #     print(playe.getName())
-#     # print(joueurId)
-#     listPoss = nbPossible(config.Config, listJoueur[joueurId])
-#     listPoss=choices(listPoss,k=2)
-#     # print("liste possibilite : ", listPoss)
-#     listValeur = []
-    
-#     q : queue.Queue = queue.Queue()
-#     if mp.cpu_count() < 4:
-#         raise ValueError("The number of CPU's specified exceed the amount available")
-
-#     df_list = np.array_split(listPoss, 4)
-#     pool = mp.Pool(4)
-#     res = pool.map(partial(minmax, q=q, config=config.Config, joueurId=config.Config.controller.game.getNextPlayer(joueurId), listJoueur=listJoueur, plateau=tempPlat.getBoard(), profondeur=profondeur*len(config.Config.controller.game.getCurrentPlayers())-1), df_list)
-#     pool.close()
-#     pool.join()
-    
-    
-#     # for piece in listPoss:
-#     for piece in listPoss:
-#         # print("profondeur :", profondeur, piece)
-#         tempPlat = config.Config.controller.game.getBoard().copy()
-#         # print(tempPlat)
-#         tempPlat.ajouterPiece(piece[0],piece[1],piece[2],piece[3],piece[4],piece[5])
-        
-        
-#         t = mp.Process(target=minmax ,args=(q, config.Config, config.Config.controller.game.getNextPlayer(joueurId), listJoueur, tempPlat.getBoard(), profondeur*len(config.Config.controller.game.getCurrentPlayers())-1))
-#         t.start()
-#         listTread.append(t)
-
-#     # print(listTread)
-#     for th in listTread:
-#         th.join()
-#         listValeur.append(q.get())
-        
-        
-        
-    
-    
-#     # print("\neisugusuigdiugihsiugjdhilugiudoihgdiohjiodriuohji", q.empty(), "\n\n")
-#     # while not q.empty():
-#     #     listValeur.append(q.get())
-        
-    
-#     print(listValeur)
-#     return listPoss[np.argmax(listValeur)]
-
 
 
 

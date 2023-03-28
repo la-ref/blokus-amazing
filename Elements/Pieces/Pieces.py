@@ -76,6 +76,9 @@ class Pieces:
                          
         return delim
 
+    def getDifficulty(self : Pieces) -> int :
+        return self.difficulty
+
     def getDelimitation(self: Pieces) -> np.ndarray:
         """Méthode getter permettant d'avoir la délimitation d'une pièce
 

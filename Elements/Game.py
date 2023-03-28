@@ -259,16 +259,17 @@ class Game:
                 config.Config.controller.vueJeu.removePiece(self.__currentPlayerPos,piece.getIdentifiant())
                 self.getCurrentPlayer().ajoutTour()
 
+
                 rota = piece.getRotation()
                 flip = piece.getFlip()
                 config.Config.controller.json.append({"num_tour" : config.Config.controller.tour,
                     "joueur" : self.getCurrentPlayerId(),
                     "num_piece" : piece.getIdentifiant(),
-                    "position_plateau" : [colonne,ligne],
+                    "position_plateau" : [int(colonne),int(ligne)],
                     "rotation" : rota,
                     "flip" : flip})
                 config.Config.controller.tour += 1 
-                print(config.Config.controller.json)
+                
             
                 if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
                     self.addSurrenderedPlayer()
