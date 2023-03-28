@@ -18,6 +18,7 @@ class Server:
             exit("Adresse IP invalide, le format doit être similaire à ex : 192.1.21.100")
         if Server.PORT > 28000 or Server.PORT <= 22: exit("Port invalide, le port doit être compri entre 23 et 28000")
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
         print("Allumé sur l'IP : PORT -> ",socket.gethostbyname(socket.gethostname()),":",Server.PORT)
         self.s.bind(("localhost", Server.PORT)) # n'importe quelle adresse
         self.s.listen(40)
@@ -124,7 +125,7 @@ class Server:
             lob = 0
             cli = 0
             
-            data = c.recv(32000)
+            data = c.recv(8192)
             depart = str(data.decode())
             print(depart)
             if "blokus." in depart:
@@ -205,7 +206,7 @@ class Server:
         while True:
             data = None
             try:
-                data = client.recv(32000)
+                data = client.recv(8192)
                 if len(data) == 0:
                     self.removeClient(client,nbLobby,True)
                     return
