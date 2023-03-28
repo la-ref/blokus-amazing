@@ -107,7 +107,7 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
-        if self.mon_state == True:
+        if self.mon_state:
             self.x,self.y=self.getPieceCoord()
             self.ancienx,self.ancieny=self.getPieceCoord()
 
@@ -129,7 +129,7 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
-        if self.mon_state == True:
+        if self.mon_state:
             self.x,self.y=self.getPieceCoord()
             self.ancienx,self.ancieny=self.getPieceCoord()
 
@@ -415,7 +415,7 @@ class Pieces_placement(tk.Frame):
         self.premier2 = 0
 
         # Téléportation de la pièce à l'endroit de la souris
-        if self.mon_state == True:
+        if self.mon_state:
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
                 piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y) 

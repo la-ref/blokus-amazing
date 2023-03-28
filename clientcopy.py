@@ -16,19 +16,15 @@ class Client:
         now = str(datetime.now())[:-7]
         self.error = False
         try:
-            self.s.connect(("51.75.249.26", Client.PORT))
+            self.s.connect(("localhost", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
-            config.Config.controller.leaveOnline(send=False)
-            print("error connect", "({}) : The server is not online.\n".format(now))
+            config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")
             
     def getId(self):
         self.send(self.nom)
         self.id = int(self.oneReceive())
         return self.id
-    
-    def sendToMenu(self):
-        config.Config.controller.changePage("connexion")
     
     def stopSock(self):
         try:
@@ -47,7 +43,7 @@ class Client:
                 data = self.s.recv(8192*2)
                 if len(data) == 0:
                     self.error = True
-                    config.Config.controller.leaveOnline(send=False)
+                    config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
                     break
                 else:
                     val = str(data.decode())
@@ -59,9 +55,6 @@ class Client:
                         if "userNames." in val:
                             val = val.replace("userNames.", '')
                             config.Config.controller.changeUserNames(self.convertJson(val))
-                        elif "admin." in val:
-                            val = val.replace("admin.", '')
-                            config.Config.controller.setAdmin(int(val))
                         elif "launchGame." in val:
                             val = val.replace("launchGame.", '')
                             config.Config.controller.launchGame(self.convertJson(val))
@@ -75,7 +68,7 @@ class Client:
             except:
                 self.error = True
                 print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
-                config.Config.controller.leaveOnline(send=False)
+                config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
                 break
             
     def oneReceive(self):
@@ -86,13 +79,13 @@ class Client:
             print("MY DATA ", data)
             if len(data) == 0:
                 self.error = True
-                config.Config.controller.leaveOnline(send=False)
+                config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
             else:
                 return data.decode()
         except:
             self.error = True
             print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
-            config.Config.controller.leaveOnline(send=False)
+            config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
             return None
                 
     def send(self,msg = None):
@@ -105,5 +98,5 @@ class Client:
         except:
             self.error = True
             print(("error send", "({}) : Server has been disconnected.\n".format(now)))
-            config.Config.controller.leaveOnline(send=False)
+            config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
         return sended

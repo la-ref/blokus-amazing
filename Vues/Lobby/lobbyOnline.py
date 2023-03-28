@@ -99,12 +99,23 @@ class lobbyOnline(Frame):
         elif id == 3:
             self.bouton_bleu.changeName(name)
             
+    def iaButtons(self,k,val,val2):
+        if k == 0:
+            self.bouton_jaune.showIAButtons(val,val2)
+        if k == 1:
+            self.bouton_vert.showIAButtons(val,val2)
+        if k == 2:
+            self.bouton_rouge.showIAButtons(val,val2)
+        if k == 3:
+            self.bouton_bleu.showIAButtons(val,val2)
+            
     def changeUserNames(self,userList):
         for i in range(4):
             self.changeUserName(i,"IA-"+str(i))
+            self.iaButtons(i, self.currentPlayerID == i,self.admin)
         for k,v in userList.items():
             self.changeUserName(k,v)
-        
+            self.iaButtons(k,False,False)
             
     def changeCurrentPlayer(self ,id):
         if id >= 0 and id < 4:
@@ -121,11 +132,12 @@ class lobbyOnline(Frame):
             self.admin = True
         else:
             self.admin = False
+        
             
-        self.bouton_jaune.showIAButtons(self.currentPlayerID == 0,self.admin)
-        self.bouton_vert.showIAButtons(self.currentPlayerID == 1,self.admin)
-        self.bouton_bleu.showIAButtons(self.currentPlayerID == 2,self.admin)
-        self.bouton_rouge.showIAButtons(self.currentPlayerID == 3,self.admin)
+        # self.bouton_jaune.showIAButtons(self.currentPlayerID == 0,self.admin)
+        # self.bouton_vert.showIAButtons(self.currentPlayerID == 1,self.admin)
+        # self.bouton_bleu.showIAButtons(self.currentPlayerID == 2,self.admin)
+        # self.bouton_rouge.showIAButtons(self.currentPlayerID == 3,self.admin)
         self.refreshAdmin()
             
     

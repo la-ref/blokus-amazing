@@ -36,6 +36,7 @@ class Controller(tk.Tk):
         self.connection = None
         self.currentPage = ""
         self.onlineGame = None
+        self.leaving = False
         self.changePage('Accueil')
         self.mainloop()
             
@@ -80,7 +81,7 @@ class Controller(tk.Tk):
             self.onlineGame.id = int(self.connection.getId())
             self.changeCurrentPlayer(self.onlineGame.id)
             self.frames["lobbyOnline"].changeUserName(self.onlineGame.id,self.onlineGame.userName)
-            time.sleep(1)
+            #time.sleep(1)
             t1 = threading.Thread(target=self.connection.receive)
             t1.daemon = True
             t1.start()
@@ -88,8 +89,7 @@ class Controller(tk.Tk):
             #players = self.connection.getUserNames()
             #self.changeUserNames(players)
         else:
-            self.changePage("connexion")
-            self.frames["connexion"].showError("Aucun serveur disponible")
+            self.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")
         # self.t1 = threading.Thread(target=self.connection.receive)
         # self.t1.daemon = True
         # self.t1.start()
@@ -104,7 +104,10 @@ class Controller(tk.Tk):
             self.frames["lobbyOnline"].changeCurrentPlayer(int(nb))
         
     def changeUserNames(self,players):
+        print("hey! ", players)
         if self.currentPage == "lobbyOnline":
+            self.setAdmin(int(players["admin"]))
+            players.pop("admin")
             self.frames["lobbyOnline"].changeUserNames(players)
         
     def setAdmin(self,id):
@@ -229,18 +232,25 @@ class Controller(tk.Tk):
             info = "changeIA."+str(IaNb)+"-"+str(lvl)
             self.connection.send(info)
         
-    def leaveOnline(self,send=True, error= False):
-        if (self.connection and self.onlineGame):
+    def leaveOnline(self,send=True, error :str|bool= False):
+        if (self.connection and self.onlineGame) and not self.leaving:
+            self.leaving = True
+            legitLeave = False
             if send:
                 self.connection.send("leave")
+                legitLeave = True
             self.connection.error = True
             self.connection.stopSock()
             self.connection = None
+            winner = False
+            if self.onlineGame:
+                winner = self.onlineGame.winners
             self.onlineGame = None
             self.changePage("Accueil")
-            if error:
-                print(error)
-                pass #afficher un msg d'erreur
+            if error and not winner and not legitLeave:
+                self.frames["Accueil"].errorPop(error)
+            self.leaving = False
+            
             
 
     def placePiece(self, piece : Pieces,joueur: int, colonne : int, ligne : int, dc : int, dl : int) -> bool:

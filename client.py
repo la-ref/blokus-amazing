@@ -5,7 +5,7 @@ import time
 
 class Client:
 
-    PORT = 5005
+    PORT = 25000
     Compteur = 5
 
     def __init__(self):

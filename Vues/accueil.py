@@ -14,8 +14,10 @@ class Accueil(Frame):
         self.window.title("Blokus")
         self.window.wm_iconphoto(True, config.Config.image[47])
         self.hidden = True
+        self.errorPopUp = None
         self.scrollable_frame = None
         self.windowRegle = None
+        self.pop_up_text = None
 
     def initialize(self):
         """ Fonction qui initialise la page d'accueil
@@ -46,6 +48,7 @@ class Accueil(Frame):
             image=config.Config.image[5],
             anchor=tkinter.NW
         )
+        
         self.canvas.tag_bind(HorsLigneBouton, "<Button-1>", self.HorsLigneBouton)
         self.canvas.tag_bind(HorsLigneBouton, "<Enter>",lambda *_: self.hoverBouton("entre","horsligne",HorsLigneBouton))
         self.canvas.tag_bind(HorsLigneBouton, "<Leave>",lambda *_: self.hoverBouton("sort","horsligne",HorsLigneBouton))
@@ -154,6 +157,25 @@ class Accueil(Frame):
         self.window.destroy()
         exit(1)
         
+    def errorPop(self,error = "Erreur fatale : Le serveur a été deconnecté!"):
+        if not self.errorPopUp and not self.pop_up_text and self.hidden:
+            self.errorPopUp = self.canvas.create_image(
+                0,  
+                0, 
+                image=config.Config.image[73],
+                anchor=tkinter.NW
+            )
+            self.pop_up_text = self.canvas.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2,text=error,fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tkinter.CENTER,justify='center')
+            self.canvas.tag_bind(self.errorPopUp, "<Button-1>", self.removeErrorPop)
+        
+            
+    def removeErrorPop(self,e):
+        if self.errorPopUp and self.pop_up_text:
+            self.canvas.itemconfigure(self.RegleFondBlokus,state=tkinter.HIDDEN)
+            self.canvas.delete(self.errorPopUp)
+            self.canvas.delete(self.pop_up_text)
+            self.errorPopUp = None
+            self.pop_up_text = None
 
         
     def fermerRegle(self,event):
@@ -168,6 +190,7 @@ class Accueil(Frame):
             self.scrollable_frame.destroye()
             self.scrollable_frame.destroy()
             self.canvas.delete(self.windowRegle)
+        print(self.errorPopUp, self.pop_up_text)
 
     def BoutonScore(self,event):
         """ Fonction qui permet le callback du bouton "Score"

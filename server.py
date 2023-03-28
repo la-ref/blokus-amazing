@@ -1,19 +1,25 @@
 from datetime import datetime
-import socket,pickle,ast
+import socket,ast
 import threading
-import time
 from Elements.Game import Game
 import Elements.Player as Player
-import numpy
+import copy
+import sys
+import ipaddress
 
 class Server:
     lobbies = []
-    PORT = 5005
-
+    IP = str(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1] else "127.0.0.1"
+    PORT = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] else 5005
     def __init__(self):
+        try:
+            ipaddress.ip_address(Server.IP)
+        except:
+            exit("Adresse IP invalide, le format doit être similaire à ex : 192.1.21.100")
+        if Server.PORT > 28000 or Server.PORT <= 22: exit("Port invalide, le port doit être compri entre 23 et 28000")
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #print(socket.gethostbyname(socket.gethostname()))
-        self.s.bind(('51.75.249.26', Server.PORT)) # n'importe quelle adresse
+        print("Allumé sur l'IP : PORT -> ",socket.gethostbyname(socket.gethostname()),":",Server.PORT)
+        self.s.bind(("localhost", Server.PORT)) # n'importe quelle adresse
         self.s.listen(40)
         
     def chooseANumber(self,lobbyId):
@@ -50,7 +56,7 @@ class Server:
         try:
             self.sendToAll("admin."+str(Server.lobbies[lobbyId]["admin"]), client, lobbyId)
         except:
-            pass
+            raise ValueError("Erreur message")
     
     def removeClient(self,client,lobbyId, username = False):
         if lobbyId >= 0 and lobbyId < len(Server.lobbies):
@@ -63,16 +69,20 @@ class Server:
                     info = self.constructCall(lobbyId,True)
                     self.sendToOther("refreshgame."+str(info), client, lobbyId)
                     self.deleteLobby(lobbyId)
-                del Server.lobbies[lobbyId]["clients"][clientId]
-                if username:
+                if lobbyId >= 0 and lobbyId < len(Server.lobbies) and client in Server.lobbies[lobbyId]["clients"].values():
+                    del Server.lobbies[lobbyId]["clients"][clientId]
+                if not game and lobbyId >= 0 and lobbyId < len(Server.lobbies) and clientId == Server.lobbies[lobbyId]["admin"]:
+                    self.changeAdmin(lobbyId)
+                if username and lobbyId >= 0 and lobbyId < len(Server.lobbies):
                     #self.sendToOther(str(Server.lobbies[lobbyId]["players"][clientId]) + " - déconnecter",client,lobbyId)
                     del Server.lobbies[lobbyId]["players"][clientId]
                     if not game:
-                        self.sendToOther("userNames."+str(Server.lobbies[lobbyId]["players"]), client, lobbyId)
-                        t = threading.Timer(1,self.sendAdmin,[lobbyId,client])
-                        t.start()
-                if not game and clientId == Server.lobbies[lobbyId]["admin"]:
-                    self.changeAdmin(lobbyId)
+                        players = copy.deepcopy(Server.lobbies[lobbyId]["players"])
+                        players["admin"] = Server.lobbies[lobbyId]["admin"]
+                        #self.sendAdmin(lobbyId,client)
+                        self.sendToOther("userNames."+str(players),client, lobbyId)
+                        #t = threading.Timer(1.2,self.sendToOther,["userNames."+str(Server.lobbies[lobbyId]["players"]),client, lobbyId])
+                        #t.start()
                 
     def removeLobby(self,lobbyId):
         Server.lobbies.pop(lobbyId)
@@ -125,10 +135,12 @@ class Server:
                 Server.lobbies[lob]["players"][cli]=data
                 #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
                 self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
-                self.sendToOther("userNames."+str(Server.lobbies[lob]["players"]), self.getClientFromId(cli,lob), lob)
+                players = copy.deepcopy(Server.lobbies[lob]["players"])
+                players["admin"] = Server.lobbies[lob]["admin"]
+                self.sendToOther("userNames."+str(players), self.getClientFromId(cli,lob), lob)
                 self.receiveV2(self.getClientFromId(cli,lob),lob)
-                t = threading.Timer(0.5,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
-                t.start()
+                #t = threading.Timer(1.2,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
+                #t.start()
                 print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
                 print(Server.lobbies[lob])
         except:
@@ -200,13 +212,14 @@ class Server:
                     if data == "getid":
                         self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
                     elif data == "getUserNames":
-                        self.sendToClient("userNames."+str(Server.lobbies[nbLobby]["players"]), client, nbLobby)
+                        players = copy.deepcopy(Server.lobbies[nbLobby]["players"])
+                        players["admin"] = Server.lobbies[nbLobby]["admin"]
+                        self.sendToClient("userNames."+str(players), client, nbLobby)
                     elif data == "play":
                         if self.getClientId(client,nbLobby) == Server.lobbies[nbLobby]["admin"] and not Server.lobbies[nbLobby]["game"]:
                             game = self.createGame(nbLobby)
                             self.sendToAll("launchGame."+str(game), client, nbLobby)
                     elif data == "leave":
-                        print(client,"eh leaves")
                         self.removeClient(client,nbLobby,True)              
                     elif "placePiece." in data:
                         data = data.replace("placePiece.", '')

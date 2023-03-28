@@ -289,7 +289,7 @@ class lobbyUser(Frame):
                     self.parent.itemconfigure(self.text, text=self.nomJoueur, font=('Lilita One', config.Config.taillePolice[2]))
 
             #config.Config.controller.changePlayer(self.joueurs)
-            
+    
             
     def showIAButtons(self,isMe,isAdmin):
         if isAdmin and not isMe:
