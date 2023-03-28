@@ -86,17 +86,8 @@ class Controller(tk.Tk):
             t1.daemon = True
             t1.start()
             self.connection.send("getUserNames")
-            #players = self.connection.getUserNames()
-            #self.changeUserNames(players)
         else:
             self.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")
-        # self.t1 = threading.Thread(target=self.connection.receive)
-        # self.t1.daemon = True
-        # self.t1.start()
-
-        # self.t23 = threading.Thread(target=self.connection.inp)
-        # self.t23.daemon = True
-        # self.t23.start()
         pass
         
     def changeCurrentPlayer(self,nb):
@@ -125,29 +116,24 @@ class Controller(tk.Tk):
             self.changePage("GameInterfaceOnline",True)
             self.refreshGame(info)
         else:
-            pass
-            ###################################
-            #### ENVOI PAGE ERREUR ACCEUIL ####
-            ###################################
-        # joue = []
-        # for k,player in joueurs.items():
-        #     joue.append(Player(k,player))
-        # self.onlineGame.setBoard(Game(joue,None,20)) ##############
-        # self.changePage("GameInterface")
-        # config.Config.controller.changePage("GameInterface")
+            self.leaveOnline(send=False,error="Erreur fatale : Vous n'êtes pas en ligne")
+            
             
     def refreshGame(self,info, pieceId = False):
-        # TRY CATCH STP
-        self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
-        self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),False)
-        
-        if pieceId:
-            self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["played"]))
-        if self.onlineGame.surrender:
-            for k in self.onlineGame.surrender.keys():
-                self.frames["GameInterfaceOnline"].surrender(k)
-        if self.onlineGame.winners:
-            self.frames["GameInterfaceOnline"].partieTermine(self.onlineGame.winners)
+        try:
+            self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
+            self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),self.onlineGame.winners)
+            
+            if pieceId:
+                self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["played"]))
+            if self.onlineGame.surrender:
+                for k in self.onlineGame.surrender.keys():
+                    self.frames["GameInterfaceOnline"].surrender(k)
+            if self.onlineGame.winners:
+                self.frames["GameInterfaceOnline"].partieTermine(self.onlineGame.winners)
+        except:
+            self.leaveOnline(send=False,error="Erreur fatale : Erreur lancement de partie")
+            
     
     
     def currentlyPlaying(self):
@@ -235,14 +221,12 @@ class Controller(tk.Tk):
     def leaveOnline(self,send=True, error :str|bool= False):
         if (self.connection and self.onlineGame) and not self.leaving:
             self.leaving = True
-            legitLeave = False
             if send:
                 self.connection.send("leave")
                 legitLeave = True
             self.connection.error = True
             self.connection.stopSock()
             self.connection = None
-            winner = False
             if self.onlineGame:
                 winner = self.onlineGame.winners
             self.onlineGame = None

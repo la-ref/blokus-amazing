@@ -20,9 +20,6 @@ class OnlineGame:
         
     def changeUserName(self,name):
         self.userName = name  
-        
-    def changeCurrentlyPlaying(self):
-        pass
     
     def setIsPlaying(self,val):
         if val == self.id:
