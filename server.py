@@ -120,11 +120,16 @@ class Server:
     def accept(self):
         try:
             c, addr = self.s.accept()
+            print(c)
             lob = 0
             cli = 0
-            lob,cli = self.addLobby(c)
-                
+            
             data = c.recv(8192)
+            depart = str(data.decode())
+            if "blokus." in depart:
+                lob,cli = self.addLobby(c)
+            else:
+                raise ValueError("Connexion non autorisé")
             if len(data) == 0:
                 if c in Server.lobbies[lob]["clients"].values():
                     #print("client déconnecter : , {}".format(Server.lobbies[lob]["clients"][cli]))
@@ -132,6 +137,7 @@ class Server:
                     return
             else:
                 data = str(data.decode())
+                data = data.replace("blokus.", '')
                 Server.lobbies[lob]["players"][cli]=data
                 #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
                 self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)

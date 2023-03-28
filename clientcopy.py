@@ -7,7 +7,7 @@ import ast
 
 class Client:
 
-    PORT = 5005
+    PORT = 17560
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,13 +16,13 @@ class Client:
         now = str(datetime.now())[:-7]
         self.error = False
         try:
-            self.s.connect(("localhost", Client.PORT))
+            self.s.connect(("5.tcp.eu.ngrok.io", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")
             
     def getId(self):
-        self.send(self.nom)
+        self.send("blokus."+self.nom)
         self.id = int(self.oneReceive())
         return self.id
     
