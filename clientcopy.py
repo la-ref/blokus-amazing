@@ -11,7 +11,7 @@ class Client:
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
         self.nom = nom
         self.id = 0
         now = str(datetime.now())[:-7]
