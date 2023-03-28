@@ -124,8 +124,9 @@ class Server:
             lob = 0
             cli = 0
             
-            data = c.recv()
+            data = c.recv(32000)
             depart = str(data.decode())
+            print(depart)
             if "blokus." in depart:
                 lob,cli = self.addLobby(c)
             else:
@@ -204,7 +205,7 @@ class Server:
         while True:
             data = None
             try:
-                data = client.recv()
+                data = client.recv(32000)
                 if len(data) == 0:
                     self.removeClient(client,nbLobby,True)
                     return
@@ -215,6 +216,7 @@ class Server:
                 return
             if data :
                 try:
+                    print(data)
                     if data == "getid":
                         self.sendToClient(str(self.getClientId(client,nbLobby)), client, nbLobby)
                     elif data == "getUserNames":

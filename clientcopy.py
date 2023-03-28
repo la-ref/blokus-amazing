@@ -40,7 +40,7 @@ class Client:
     def receive(self):
         while not self.error:
             try:
-                data = self.s.recv()
+                data = self.s.recv(32000)
                 if len(data) == 0:
                     self.error = True
                     config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
@@ -74,7 +74,7 @@ class Client:
     def oneReceive(self):
         try:
             self.s.settimeout(10.0)
-            data = self.s.recv()
+            data = self.s.recv(32000)
             self.s.settimeout(None)
             print("MY DATA ", data)
             if len(data) == 0:
