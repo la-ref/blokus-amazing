@@ -1,5 +1,6 @@
 from datetime import datetime
 import socket,pickle
+import struct
 import threading
 import time
 from config import config
@@ -11,7 +12,7 @@ class Client:
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 1600)
         self.nom = nom
         self.id = 0
         now = str(datetime.now())[:-7]
@@ -33,7 +34,16 @@ class Client:
             self.s.close()
         except:
             pass
-            
+    
+    def recvall(self,sock, count):
+        buf = b''
+        while count:
+            newbuf = sock.recv(count)
+            if not newbuf: return None
+            buf += newbuf
+            count -= len(newbuf)
+        print(buf)
+        return buf
     
     def convertJson(self,msg):
         return ast.literal_eval(str(msg))
@@ -41,7 +51,10 @@ class Client:
     def receive(self):
         while not self.error:
             try:
-                data = self.s.recv(8192)
+                lengthbuf = self.recvall(self.s, 4)
+                length, = struct.unpack('!I', lengthbuf)
+                data = self.recvall(self.s, length)
+                
                 if len(data) == 0:
                     self.error = True
                     config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
@@ -75,7 +88,11 @@ class Client:
     def oneReceive(self):
         try:
             self.s.settimeout(10.0)
-            data = self.s.recv(8192)
+            
+            lengthbuf = self.recvall(self.s, 4)
+            length, = struct.unpack('!I', lengthbuf)
+            data = self.recvall(self.s, length)
+            
             self.s.settimeout(None)
             print("MY DATA ", data)
             if len(data) == 0:
@@ -93,7 +110,8 @@ class Client:
         now = str(datetime.now())[:-7]
         sended = False
         try:
-            self.s.send(bytes(msg, 'utf-8'))
+            self.s.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
+            self.s.sendall(bytes(msg, 'utf-8'))
             print("Moi - {}".format(msg))
             sended = True
         except:

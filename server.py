@@ -1,5 +1,6 @@
 from datetime import datetime
 import socket,ast
+import struct
 import threading
 from Elements.Game import Game
 import Elements.Player as Player
@@ -125,7 +126,9 @@ class Server:
             lob = 0
             cli = 0
             
-            data = c.recv(8192)
+            lengthbuf = self.recvall(c, 4)
+            length, = struct.unpack('!I', lengthbuf)
+            data = self.recvall(c, length)
             depart = str(data.decode())
             print(depart)
             if "blokus." in depart:
@@ -201,12 +204,24 @@ class Server:
             
     def convertJson(self,msg):
         return ast.literal_eval(str(msg))
+    
+    def recvall(self,sock, count):
+        buf = b''
+        while count:
+            newbuf = sock.recv(count)
+            if not newbuf: return None
+            buf += newbuf
+            count -= len(newbuf)
+        print(buf)
+        return buf
         
     def f(self, client, nbLobby):
         while True:
             data = None
             try:
-                data = client.recv(8192)
+                lengthbuf = self.recvall(client, 4)
+                length, = struct.unpack('!I', lengthbuf)
+                data = self.recvall(client, length)
                 if len(data) == 0:
                     self.removeClient(client,nbLobby,True)
                     return
@@ -291,6 +306,7 @@ class Server:
                 for k, v in Server.lobbies[lobby]["clients"].items():
                     if v != client:
                         try:
+                            v.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
                             v.sendall(bytes(msg, "utf-8"))
                         except :
                             self.removeClient(client,lobby,True)
@@ -299,6 +315,8 @@ class Server:
     
     def sendToClient(self,msg, client, lobby):
         try:
+            print("my len : ",len(bytes(msg, "utf-8")))
+            client.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
             client.sendall(bytes(msg, "utf-8"))
         except :
             self.removeClient(client,lobby,True)
