@@ -26,7 +26,7 @@ class Client:
     def receive(self):
         while not self.error:
             try:
-                data = self.s.recv(8192)
+                data = self.s.recv()
                 if len(data) == 0:
                     self.error = True
                     self.s.close()

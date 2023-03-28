@@ -124,7 +124,7 @@ class Server:
             lob = 0
             cli = 0
             
-            data = c.recv(8192)
+            data = c.recv()
             depart = str(data.decode())
             if "blokus." in depart:
                 lob,cli = self.addLobby(c)
@@ -204,7 +204,7 @@ class Server:
         while True:
             data = None
             try:
-                data = client.recv(8192)
+                data = client.recv()
                 if len(data) == 0:
                     self.removeClient(client,nbLobby,True)
                     return
