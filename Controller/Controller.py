@@ -14,7 +14,7 @@ from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
 from Vues.Game.GameInterfaceOnline import GameInterfaceOnline
 from Vues.connexion import Connexion
-from clientcopy import Client
+from client import Client
 
 import time
 import threading
