@@ -5,7 +5,7 @@ class Pieces:
     """Classe représentant une pièce du jeu blokus
     """
 
-    def __init__(self: Pieces, forme : np.ndarray, identifiant: int, nbRot : int, nbFlip: int) -> None:
+    def __init__(self: Pieces, forme : np.ndarray, identifiant: int, nbRot : int, nbFlip: int, difficulty : int) -> None:
         """Constructeur créant une pièce identifié par un entier est étant sous forme d'un tableau 2d
 
         Args:
@@ -19,10 +19,11 @@ class Pieces:
         self.__id : int = identifiant
         self.__forme : np.ndarray = forme
         self.__delimitation : np.ndarray = self.__findCorners() # matrice permettant de connaitre les coins de la pièces voir _findCorners()
-        self.__flipped = 0
         self.nbFlip = nbFlip # pour parcours ia
         self.nbRot = nbRot   # pour parcours ia
         self.__rotation : int = 0 # pour parcours ia
+        self.__flipped : int = 0 # pour parcours ia
+        self.difficulty = difficulty # evaluation ia
     
     def __findCorners(self : Pieces) -> np.ndarray:
         """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
@@ -75,6 +76,9 @@ class Pieces:
                     delim[i][y] = 0 
                          
         return delim
+
+    def getDifficulty(self : Pieces) -> int :
+        return self.difficulty
 
     def getDelimitation(self: Pieces) -> np.ndarray:
         """Méthode getter permettant d'avoir la délimitation d'une pièce

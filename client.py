@@ -8,7 +8,7 @@ import ast
 
 class Client:
 
-    PORT = 14332
+    PORT = 5005
 
     def __init__(self,nom):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,7 +17,7 @@ class Client:
         now = str(datetime.now())[:-7]
         self.error = False
         try:
-            self.s.connect(("4.tcp.eu.ngrok.io", Client.PORT))
+            self.s.connect(("localhost", Client.PORT))
         except ConnectionRefusedError:
             self.error = True
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")

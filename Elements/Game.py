@@ -1,10 +1,10 @@
 from __future__ import annotations
-from typing import Callable
 from Elements.Pieces.Pieces import Pieces
 from Elements.Player import Player
 from Elements.Board import Board
-from Vues.Game.GridInterface import GridInterface
 from config import config
+import threading
+
 class Game:
 
     """Classe de gestion des parties de jeu blokus
@@ -23,7 +23,17 @@ class Game:
         self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
         self.__online : bool = online
+        self.__enCours = True
+
+        for pj in self.__joueurs:
+            pj.resetPiece()
     
+    def enCours(self) -> bool:
+        return self.__enCours
+        
+    def start(self):
+        threading.Timer(0.5,self.__nextPlayer).start()
+
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
 
@@ -70,6 +80,22 @@ class Game:
             int: l'id du joueur courant
         """
         return self.__currentPlayerPos
+    
+    def getCurrentPlayers(self : Game) -> list[Player]:
+        """Méthode getter petmettant d'obtenir la liste des joueurs
+        encore actuellement dans la partie.
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            list: La liste des joueurs encore dans la partie
+        """
+        tableau = []
+        for joueur in self.getPlayers():
+            if joueur not in self.__joueursAbandon:
+                tableau.append(joueur)
+        return tableau
 
     def addSurrenderedPlayer(self : Game) -> bool|list[Player]:
         """Méthode qui permet d'ajouter un joueur dans la liste des joueurs qui ont abandonné et de donne le status de la partie
@@ -87,6 +113,7 @@ class Game:
             config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if self.getWinners():
             if not self.__online:
+                config.Config.controller.vueJeu.changeTextPartie(" ",0)
                 config.Config.controller.vueJeu.partieTermine
         return self.getWinners()
     
@@ -115,7 +142,7 @@ class Game:
     def getSurrenderedPlayer(self):
         return self.__joueursAbandon
 
-    def __nextPlayer(self : Game) -> None:
+    def __nextPlayer(self : Game) :
         """Méthode qui permet de sélectionné le prochain joueur pour être le joueur courant
 
         Args:
@@ -126,6 +153,17 @@ class Game:
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         if not self.__online:
             config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        
+        if not self.__online:
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
+                if self.getCurrentPlayer().getAI():
+                    self.getCurrentPlayer().getAI().play()
+                return True
+            else:
+                return False
+
+####################################################################################################################
 
     def isGameFinished(self : Game) -> bool:
         """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau
@@ -186,7 +224,7 @@ class Game:
         return False
                 
     
-    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int,rotation,flip) -> bool:
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int,rotation = None,flip = None) -> bool:
         """Méthode qui permet de jouer le tour du joueur courant
         
         Args:
@@ -201,8 +239,8 @@ class Game:
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
         if len(self.__joueursAbandon) != len(self.__joueurs):
-            
-            piece = piece.ajoutRotationFlip(rotation,flip)
+            if(rotation or flip):
+                piece = piece.ajoutRotationFlip(rotation,flip)
             ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
             if ajout: # si une pièce peut être ajouter
                 self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))

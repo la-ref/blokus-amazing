@@ -128,17 +128,4 @@ class PiecesListGUI(tk.Frame):
         self.parent.tag_bind(self.nameZone,event_tag,call)
         self.parent.tag_bind(self.text,event_tag,call)
 
-if __name__=="__main__":
-    from tkinter import PhotoImage
-    window = tk.Tk()
-    window.geometry("1440x1024")
-    
-    border = tk.Canvas()
-    border.config(bg="white")
-    border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-    
-    accueil=PiecesListGUI(window, border,"Caaka",1)
-    accueil.changeName("Joueur 1")
 
-
-    window.mainloop()

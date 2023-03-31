@@ -2,44 +2,37 @@ from __future__ import annotations
 import json
 import string
 from Elements.Player import Player
+import os
 
 # Exemple de fonction pour gérer les Json
 
-# class fonctionJson():
-#     """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
-#     donc de la communication entre les différents élèments de l'application
-#     """
+class fonctionJson:
+    """Classe principale qui est l'application qui garantie la gestion de la logique et des vue et
+    donc de la communication entre les différents élèments de l'application
+    """
+    def __init__(self: fonctionJson) -> None:
+        self.val : int
 
-#     def __init__(self: fonctionJson) -> None:
-#         self.__plateau = [[]]
-#         self.__winners = [Player(11,"PERSONNE 1")]
-#     def __repr__(self) -> str:
-#         res = ""
-#         if self.__genre == g.Genre.M : res += "M. "
-#         elif self.__genre == g.Genre.F : res += "Mme "
-#         else : res += "_ "
-#         res += self.__prenom +" "+ self.__nom+",("
-#         res += str(self.__naissance)
-#         if self.__mort:
-#             res += "/ "+str(self.__mort)+")"
-#         else: res += ")"
-#         res += ':"'+self.__bio+'".'
-#         return res
-    
-
-
-#     def toJSON(self) -> str:
-#         dictP = {
-#             'plateau'  : [[]] ,
-#             'winners' : self.__winners,
-#         }
-#         return json.dumps(dictP,ensure_ascii=False)
-
-#     @staticmethod
-#     def buildFromJSon(d: dict):
-#         # genre
-#         self.__plateau : str = d['plateau'] 
-#         self.
-
-#         return fonctionJson(prenom, nom, genre,dateNaissance,dateMort, bio)
-
+    def JsonAjout(self, donne):
+        path = os.getcwd()+"\\HighScore\\highscore.json"
+        print("AJOUT")
+        with open(path, "r") as mon_fichier:
+            data = json.load(mon_fichier)
+            val_test = "Game1"
+            num = 1
+            existe = True
+            while existe == True:
+                if val_test not in data:
+                    existe = False
+                else:
+                    num += 1
+                    val_test = val_test[:4] + str(num)
+            data[val_test] = donne
+            print(val_test)
+            print(data)
+            
+        mon_fichier.close()
+            
+        with open(path,"w") as mon_fichier: 
+            json.dump(data, mon_fichier)  
+        mon_fichier.close()

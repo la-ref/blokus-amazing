@@ -205,3 +205,67 @@ class Board:
             couleur (int): couleur d'un joueur
         """
         self.__board[row][column] = couleur
+
+def findCorners(self : Board, joueur : Player) -> np.ndarray:
+    """Méthode privé qui permet de créer une matrice de délimitation d'une pièce, pour déterminer les coins et les bordures d'une pièce
+
+    Args:
+        self (Board): le plateau
+        joueur (Player): joueur courant
+
+    Returns:
+        np.ndarray: liste des coordonées des coins possibles
+        
+        
+    valeur :
+        0 : non évalué (impossible)
+        1 : possible
+        2 : pièces d'autres joueurs ou adjacent aux pièces du joueur
+        3 : pièces du joueur
+    """
+    
+    tab : np.ndarray = np.full([self.__size,self.__size],0)
+
+    ## cas du premier tour
+    if joueur.getNbTour()==0:
+        if self.__board[0,0]==0:
+            tab[0,0]=1
+        if self.__board[self.__size-1,0]==0:
+            tab[self.__size-1,0]=1
+        if self.__board[0,self.__size-1]==0:
+            tab[0,self.__size-1]=1
+        if self.__board[self.__size-1,self.__size-1]==0:
+            tab[self.__size-1,self.__size-1]=1
+    
+    else:
+        ## set up de tab
+        for i in range(self.__size):
+            for y in range(self.__size):
+                ## cas piece du joueur
+                if self.__board[i][y]==joueur.getColor():
+                    tab[i][y] = 3
+                    for v in [-1,1]:
+                        # ajoute les cases adjacentes
+                        if (i+v >= 0 and i+v <= self.__size-1) and tab[i+v][y]!=3:
+                                tab[i+v][y]=2
+                        if (y+v >= 0 and y+v <= self.__size-1) and tab[i][y+v]!=3:
+                            tab[i][y+v]=2
+                ## cas piece autres joueurs
+                elif self.__board[i][y]!=0:
+                    tab[i][y] = 2
+        
+        # Recherche des coins "potentiels" (qui possède la pièce dans sa diagonale) de chaque élèment du tableau
+        for i in range(self.__size):
+            for y in range(self.__size):
+                if tab[i,y]==3:
+                    ## passe les cases comme indisponibles
+                    for v in [-1,1]:
+                        if (i+v >= 0 and i+v <= self.__size-1) and (y+v >= 0 and y+v <= self.__size-1) and tab[i+v][y+v]==0:
+                            tab[i+v][y+v]=1
+                        if (i+v >= 0 and i+v <= self.__size-1) and (y-v >= 0 and y-v <= self.__size-1) and tab[i+v][y-v]==0:
+                            tab[i+v][y-v]=1
+                        
+                        
+                
+    # print(np.argwhere(tab==1)) test
+    return np.argwhere(tab==1)

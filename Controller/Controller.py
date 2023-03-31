@@ -1,22 +1,19 @@
 from __future__ import annotations
 from Elements.Game import Game
 from Controller.OnlineGame import OnlineGame
-from tkinter import PhotoImage
 import tkinter as tk
-import Elements.Pieces.PiecesListGUI as PG
-from PIL import ImageTk
 from Vues.accueil import Accueil
 from Elements.Player import Player
 from config import config
 from Elements.Pieces.Pieces import Pieces
 from Vues.Lobby.lobbyLocal import lobbyLocal
-from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterface import GameInterface
+from HighScore.fonctionJson import fonctionJson
+from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterfaceOnline import GameInterfaceOnline
 from Vues.connexion import Connexion
 from client import Client
 
-import time
 import threading
 
 class Controller(tk.Tk):
@@ -36,6 +33,9 @@ class Controller(tk.Tk):
         self.currentPage = ""
         self.onlineGame = None
         self.leaving = False
+        self.json = []
+        self.termine = True
+        self.tour = 1
         self.changePage('Accueil')
         self.mainloop()
             
@@ -58,6 +58,8 @@ class Controller(tk.Tk):
             self.vueJeu = self.frames[nomFrame]
             self.vueJeu.initialize()
             self.vueJeu.tkraise()
+        if nomFrame=='GameInterface':
+            self.termine = False
         self.currentPage = nomFrame
             
     def changeUserName(self,name):
@@ -149,6 +151,7 @@ class Controller(tk.Tk):
         """
         self.vueJeu.refreshBoard(self.game.getBoard())
         self.vueJeu.refreshPlayer(self.game.getCurrentPlayerId(),self.game.isGameFinished())
+        self.update()
 
     def surrender(self : Controller) -> None:
         """Méthode callback qui pour chaque personne qui on abandonné de mettre à jour leur status sur le jeu
@@ -164,9 +167,21 @@ class Controller(tk.Tk):
         elif not self.game.isPlayerSurrendered():
             self.vueJeu.surrender(self.game.getCurrentPlayerId())
             self.game.addSurrenderedPlayer()
-            if self.game.getWinners():
-                # call fonction pour win
-                self.vueJeu.partieTermine(self.game.getWinners())
+            self.endGame()
+
+
+    def endGame(self):
+        win = self.game.getWinners()
+        tab = []
+        if (not self.termine and win):
+            self.termine=True
+            for k in win:
+                tab.append(k.getName())
+            self.json[0].update({"winners" : tab})
+            fonctionJson().JsonAjout(self.json)                
+            self.vueJeu.partieTermine(self.game.getWinners())
+            self.json = []
+            self.tour=1
 
 
     def getBoard(self : Controller):
@@ -271,10 +286,7 @@ class Controller(tk.Tk):
         else :
             if joueur == self.game.getCurrentPlayerId():
                 play = self.game.playTurn(piece, colonne, ligne, dc, dl)
-                win = self.game.getWinners()
-                
-                if (win):
-                    self.vueJeu.partieTermine(win)
+                self.endGame()
                 return play
             else:
                 return False

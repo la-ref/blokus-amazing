@@ -1,6 +1,6 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-
+import random
 
 class config():
     """ Classe de configuration de l'application
@@ -13,7 +13,7 @@ class config():
         Args:
             Controller: Controller qui gère le jeu
         """
-        
+        random.seed()
         self.largueur : int = 1440
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
@@ -123,6 +123,7 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 50
         self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 51
 
+
         #Accueil
         self.image.append(PhotoImage(file="Images/Accueil/regle_fond.png")) # 52
         self.image.append(PhotoImage(file="Images/Accueil/regle_text.png")) # 53
@@ -138,7 +139,6 @@ class config():
         # Game hover
         self.image.append(PhotoImage(file="Images/Plateau/button_info_hover.png")) # 58
         self.image.append(PhotoImage(file="Images/Plateau/button_info.png")) # 59
-
 
         # Connexion
         self.image.append(PhotoImage(file="Images/LobbyEnLigne/adresse_ip.png")) # 60
@@ -157,7 +157,6 @@ class config():
         
         # Accueil erreur
         self.image.append(PhotoImage(file="Images/Accueil/error.png")) # 73
-
 
          
 
