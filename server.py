@@ -19,7 +19,6 @@ class Server:
             exit("Adresse IP invalide, le format doit être similaire à ex : 192.1.21.100")
         if Server.PORT > 28000 or Server.PORT <= 22: exit("Port invalide, le port doit être compri entre 23 et 28000")
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
         print("Allumé sur l'IP : PORT -> ",socket.gethostbyname(socket.gethostname()),":",Server.PORT)
         self.s.bind(("localhost", Server.PORT)) # n'importe quelle adresse
         self.s.listen(40)
@@ -215,7 +214,7 @@ class Server:
         print(buf)
         return buf
         
-    def f(self, client, nbLobby):
+    def receives(self, client, nbLobby):
         while True:
             data = None
             try:
@@ -277,14 +276,14 @@ class Server:
             for nbLobby in range(len(Server.lobbies)): 
                 if nbLobby >= 0 and nbLobby < len(Server.lobbies):
                     for k in Server.lobbies[nbLobby]["clients"]:
-                        t1_2_1 = threading.Thread(target=self.f,args=(Server.lobbies[nbLobby]["clients"][k],nbLobby))
+                        t1_2_1 = threading.Thread(target=self.receives,args=(Server.lobbies[nbLobby]["clients"][k],nbLobby))
                         t1_2_1.start()
                 
         except:
             pass
                 
     def receiveV2(self,cli,lob):
-        t1_2_1 = threading.Thread(target=self.f,args=(cli,lob))
+        t1_2_1 = threading.Thread(target=self.receives,args=(cli,lob))
         t1_2_1.start()
 
     def condition(self):
@@ -293,11 +292,6 @@ class Server:
             t1_1.daemon = True
             t1_1.start()
             t1_1.join(1)
-            
-            # t1_2 = threading.Thread(target=self.receive)
-            # t1_2.daemon = True
-            # t1_2.start()
-            # t1_2.join(1)
             
 
     def sendToOther(self,msg, client, lobby):
@@ -340,6 +334,7 @@ class Server:
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
         game = Server.lobbies[nbLobby]["game"]
+        print(placement,"mon placement")
         try:
             if game:     
                 if self.getClientId(client,nbLobby) == game.getCurrentPlayerId():

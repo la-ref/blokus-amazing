@@ -17,7 +17,6 @@ from Vues.connexion import Connexion
 from clientcopy import Client
 
 import time
-import icecream
 import threading
 
 class Controller(tk.Tk):
