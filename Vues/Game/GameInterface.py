@@ -83,7 +83,7 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
         self.quitter = self.border.create_image(
-            815, 
+            800, 
             845, 
             image=config.Config.image[7],
             anchor=tk.NW
@@ -93,8 +93,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
         BoutonInfo = self.border.create_image(
-            690, 
-            845, 
+            690,
+            852,
             image=config.Config.image[59],
             anchor=tk.NW
         )
@@ -207,12 +207,12 @@ class GameInterface(tk.Frame):
         if typ == "entre":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[58])
-                self.border.moveto(idButton,690,845)
+                self.border.moveto(idButton,680,845)
                 self.border.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[59])
-                self.border.moveto(idButton,690,845)
+                self.border.moveto(idButton,690,852)
                 self.border.config(cursor="")
             
     def surrender(self : GameInterface,player : int) -> None:

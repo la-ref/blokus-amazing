@@ -6,6 +6,9 @@ from config import config
 import tkinter as tk
 import Elements.Player as Player
 import AI.ai as ia
+import logging
+import threading
+import time
 class lobbyUser(Frame):
     def __init__(self, window, parent : tk.Canvas, images : list, joueurs : Player.Player, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite"):
         """Méthode qui permet d'initialiser tout l'objet lobbyUser
@@ -56,12 +59,11 @@ class lobbyUser(Frame):
         self.parent.tag_bind(self.nameZone, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
         self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
 
-
         self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueur.getName(),anchor=tk.CENTER)
         self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
         self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
         self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
-        
+
 
         if self.hb == "haut":
             if self.dg == "droite":
@@ -190,7 +192,6 @@ class lobbyUser(Frame):
             self: l'utilisateur tout entier
             x: valeur horizontal
             y: valeur vertical
-        
         """
         self.x = x
         self.y = y
@@ -219,7 +220,9 @@ class lobbyUser(Frame):
         else:
             self.activeclavier = True  
             self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
-    
+            x = threading.Thread(target=self.whileOff)
+            x.start()
+
     def getActiveClavier(self):
         """Fonction qui permet de savoir si le clavier est activé ou non
 
@@ -257,8 +260,26 @@ class lobbyUser(Frame):
         self.activeclavier = boolean
         if boolean == True:
             self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
+            x = threading.Thread(target=self.whileOff)
+            x.start()
         else:
             self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
+
+    def whileOff(self):
+        import time 
+        while self.activeclavier == True:
+            tailles = self.parent.bbox(self.text)
+            width = tailles[2] - tailles[0]
+            print(width, "2222")
+            if width > 300:
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[2]))
+            else:
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[0]))
+
+        if width > 300:
+            self.parent.itemconfigure(self.text, text=self.joueur.getName()+"‎ ", font=('Lilita One', config.Config.taillePolice[2]))
+        else:
+            self.parent.itemconfigure(self.text, text=self.joueur.getName()+"‎ ", font=('Lilita One', config.Config.taillePolice[0]))
 
     def touches(self,event):
         """Méthode qui actualise le pseudo du joueur à chaque touche appuyé de l'ordinateur
@@ -279,24 +300,20 @@ class lobbyUser(Frame):
                 if len(self.joueur.getName()) > 0:
                     self.joueur.setName(str(self.joueur.getName())[:-1])
 
-
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[2]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎', font=('Lilita One', config.Config.taillePolice[2]))
 
             else:
-                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[0]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎ ', font=('Lilita One', config.Config.taillePolice[0]))
                 tailles = self.parent.bbox(self.text)
                 width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[2]))
+                    self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎', font=('Lilita One', config.Config.taillePolice[2]))
 
             config.Config.controller.changePlayer(self.joueur)
 
-    # def infiniteCharge(self):
-    #     while(self.activeclavier == True):
-    #     
 
 
     def boutonSwitchIA(self,event):
@@ -319,10 +336,8 @@ class lobbyUser(Frame):
             else:
                 self.hiddenAll()
                 self.stateactuel = 0
-
-        
         else:
-            self.BoutonIA(event)
+            self.BoutonIA_clic(event)
     
     def joueurEstIA(self):
         """Fonction qui permet de savoir si un joueur est unIA
@@ -417,8 +432,28 @@ class lobbyUser(Frame):
             self.iatype: type de l'ia sous forme STR
         """
         return self.iatype
-    
 
+    def BoutonIA_clic(self,event):
+        self.parent.itemconfigure(self.Bouton_User, state=tk.HIDDEN)
+        self.parent.itemconfigure(self.Bouton_Robot, state=tk.HIDDEN)
+        self.hiddenAll()
+
+        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[23])
+        self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
+        self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
+
+        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[21])
+        self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
+        self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
+        self.boutonUser = "gris"
+        self.joueurType = "ia"
+        self.joueur.setIA(ia.ai("Facile", self.joueur))
+        self.facile(event)
+
+        self.moverobot(self.x,self.y)
+        self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
+        self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)
+    
     def BoutonIA(self,event):
         """Méthode qui permet de créer un bouton IA ou Joueur à l'appui d'un des deux boutons
 
@@ -430,29 +465,16 @@ class lobbyUser(Frame):
         self.parent.itemconfigure(self.Bouton_Robot, state=tk.HIDDEN)
         self.hiddenAll()
 
-        if self.boutonUser == "gris":
-            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[24])
-            self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
-            self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
+        self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[24])
+        self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
+        self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
 
-            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[20])
-            self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
-            self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
-            self.boutonUser = "noir"
-            self.joueurType = "joueur"
-            self.joueur.setIA(None)
-        else:
-            self.Bouton_User = self.parent.create_image(self.uwidth,self.rheight,image=config.Config.image[23])
-            self.parent.tag_bind(self.Bouton_User, "<Enter>",lambda *_: self.hoverBouton("entre","user",self.Bouton_User))
-            self.parent.tag_bind(self.Bouton_User, "<Leave>",lambda *_: self.hoverBouton("sort","user",self.Bouton_User))
-
-            self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[21])
-            self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
-            self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
-            self.boutonUser = "gris"
-            self.joueurType = "ia"
-            self.joueur.setIA(ia.ai("Facile", self.joueur))
-            self.facile(event)
+        self.Bouton_Robot = self.parent.create_image(self.rwidth,self.rheight, image= config.Config.image[20])
+        self.parent.tag_bind(self.Bouton_Robot, "<Enter>",lambda *_: self.hoverBouton("entre","robot",self.Bouton_Robot))
+        self.parent.tag_bind(self.Bouton_Robot, "<Leave>",lambda *_: self.hoverBouton("sort","robot",self.Bouton_Robot))
+        self.boutonUser = "noir"
+        self.joueurType = "joueur"
+        self.joueur.setIA(None)
             # print("Lobbyuser switch ia :", self.joueur.getAI())
         self.moverobot(self.x,self.y)
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
