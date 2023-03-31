@@ -8,6 +8,18 @@ from Elements.Board import Board
 import Vues.accueil as accueil 
 from HighScore.fonctionJson import fonctionJson
 from Vues.Game.GridInterface import GridInterface
+from HighScore.Leaderboard import *
+import Elements.Pieces.PiecesDeclaration as PD
+from tkinter import PhotoImage
+import Elements.Pieces.Pieces as p
+import numpy as np
+import Vues.Game.Block as b
+from config import config
+import platform
+import copy
+import Vues.Game.Pieces_placement as PP
+from Elements.Pieces.Pieces import Pieces
+from Elements.Pieces.PiecesDeclaration import LISTEPIECES
 
 class LeaderboardInterface(tk.Frame):
     """ 
@@ -49,12 +61,19 @@ class LeaderboardInterface(tk.Frame):
         #self.canvas.bind("<Button-1>",self.clique)
         self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= config.Config.image[14])
         
+        
         self.retour = self.canvas.create_image(719.0, 850.0,image= config.Config.image[60])
         self.canvas.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
+        self.canvas.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
+        self.canvas.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
         
         self.fleche_droite = self.canvas.create_image(935.0, 850.0,image= config.Config.image[61])
         
         self.fleche_droite = self.canvas.create_image(500.0, 850.0,image= config.Config.image[62])
+        
+
+
+        self.createPieces()
         
         
         
@@ -63,7 +82,56 @@ class LeaderboardInterface(tk.Frame):
         """
         config.Config.controller.changePage("Acceuil")
         
-        
+    def createPieces(self):
+
+        self.Lists=[]
+        for i in range(4):
+            nb_player = i
+            self.list = list
+            self.x = 0
+            self.y = 0
+            self.le_x = 0
+            self.le_y = 0
+            self.rotate = False
+            self.souris_x = 0
+            self.sourix_y = 0
+            self.state = 0
+            self.tableau_piece = [[]]
+            self.tableau_piece_forme = []
+            self.mon_state = 0
+
+            decalageX = 2
+            decalageY = 100
+            self.tableau_piece_forme = []
+
+            i1 = 0
+            maxheight = 0
+            for valeur in LISTEPIECES.copy():
+                
+                self.tableau_piece_forme.append(PP.Pieces_placement(self.window,self.canvas,nb_player,valeur,self))
+
+                self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
+                decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+                if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
+                    maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
+
+                i1+=1
+
+                if (decalageX) >= 317-(20*3):
+                    decalageX= 2
+                    decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
+                    maxheight = 0
+            self.Lists.append(self.tableau_piece_forme)
+
+        for i in self.Lists[0]:
+            i.moveHigh(x=70,y=80) # jaune
+        for i in self.Lists[1]:
+            i.moveHigh(x=100,y=100) # vert
+        for i in self.Lists[2]:
+            i.moveHigh(x=200,y=200) # rouge
+        for i in self.Lists[3]:
+            i.moveHigh(x=300,y=300)
+
     def create_modal(self):
         self.modal_active = True
         self.modal = self.canvas.create_image(
@@ -110,6 +178,24 @@ class LeaderboardInterface(tk.Frame):
     def no(self):
         self.remove_modal()
         self.modal_active = False
+
+    def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+        """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
+
+        Args:
+            typ (str): "entre" ou "sort"
+            typ2 (str): "jouer" ou "quitter"
+            idButton (int): l'identifiant du bouton cliqué
+        """
+        if typ == "entre":
+            if typ2 == "retour":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[63])
+                self.canvas.config(cursor="hand2")        
+        elif typ == "sort":
+            if typ2 == "retour":
+                self.canvas.itemconfigure(idButton, image=config.Config.image[60])
+                self.canvas.config(cursor="")
+
         
 
 if __name__ == "__main__":

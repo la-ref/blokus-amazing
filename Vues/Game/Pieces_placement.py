@@ -249,6 +249,16 @@ class Pieces_placement(tk.Frame):
             x2,y2=self.parent.coords(piece.bl)
             piece.move(x-x2-piece.base_x,y-y2-piece.base_y)
     
+    def moveHigh(self, x : int, y : int):
+        """Méthode qui permet de modifier l'emplacement de chaque bloc
+        Args:
+            x : coordonnées en X
+            y : coordonnées en Y
+        """
+        for piece in self.tableau_piece_forme:
+            piece.move(x,y)
+    
+
     def move_init(self, x : int, y : int):
         """Méthode qui permet la téléportation de la pièce à l'endroit d'initialisation
         Args:

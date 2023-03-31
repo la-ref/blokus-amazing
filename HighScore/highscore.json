@@ -1,1 +1,141 @@
-{"Game1": [{"num_tour": 1, "joueur": 0, "num_piece": 10, "position_plateau": [0, 0], "rotation": 0, "flip": false, "winners": ["PERSONNE 1"]}, {"num_tour": 2, "joueur": 1, "num_piece": 19, "position_plateau": [18, 0], "rotation": 90, "flip": false}, {"num_tour": 3, "joueur": 2, "num_piece": 8, "position_plateau": [17, 18], "rotation": 90, "flip": false}, {"num_tour": 4, "joueur": 3, "num_piece": 11, "position_plateau": [0, 17], "rotation": 0, "flip": false}, {"num_tour": 5, "joueur": 0, "num_piece": 17, "position_plateau": [2, 3], "rotation": 0, "flip": false}], "Game2": [{"num_tour": 1, "joueur": 0, "num_piece": 9, "position_plateau": [0, 0], "rotation": 0, "flip": false, "joueurs": ["PERSONNE 1", "PERSONNE 2", "PERSONNE 3", "PERSONNE 4"], "winners": ["PERSONNE 1"]}, {"num_tour": 2, "joueur": 1, "num_piece": 18, "position_plateau": [19, 0], "rotation": 270, "flip": false}, {"num_tour": 3, "joueur": 2, "num_piece": 14, "position_plateau": [16, 18], "rotation": 0, "flip": false}, {"num_tour": 4, "joueur": 3, "num_piece": 17, "position_plateau": [1, 17], "rotation": 0, "flip": false}, {"num_tour": 5, "joueur": 0, "num_piece": 17, "position_plateau": [3, 0], "rotation": 0, "flip": false}, {"num_tour": 6, "joueur": 0, "num_piece": 17, "position_plateau": [3, 1], "rotation": 0, "flip": false}], "Game3": [{"num_tour": 1, "joueur": 0, "num_piece": 10, "position_plateau": [0, 0], "rotation": 0, "flip": false, "joueurs": ["PERSONNE 1", "PERSONNE 2", "PERSONNE 3", "PERSONNE 4"], "winners": ["PERSONNE 1"]}, {"num_tour": 2, "joueur": 1, "num_piece": 21, "position_plateau": [18, 0], "rotation": 90, "flip": false}, {"num_tour": 3, "joueur": 2, "num_piece": 21, "position_plateau": [18, 17], "rotation": 0, "flip": false}, {"num_tour": 4, "joueur": 3, "num_piece": 21, "position_plateau": [1, 18], "rotation": 90, "flip": false}, {"num_tour": 5, "joueur": 0, "num_piece": 21, "position_plateau": [2, 3], "rotation": 0, "flip": false}]}
+{
+  "Game1": [
+    {
+      "num_tour": 1,
+      "joueur": 0,
+      "num_piece": 10,
+      "position_plateau": [0, 0],
+      "rotation": 0,
+      "flip": false,
+      "winners": ["PERSONNE 1"]
+    },
+    {
+      "num_tour": 2,
+      "joueur": 1,
+      "num_piece": 19,
+      "position_plateau": [18, 0],
+      "rotation": 90,
+      "flip": false
+    },
+    {
+      "num_tour": 3,
+      "joueur": 2,
+      "num_piece": 8,
+      "position_plateau": [17, 18],
+      "rotation": 90,
+      "flip": false
+    },
+    {
+      "num_tour": 4,
+      "joueur": 3,
+      "num_piece": 11,
+      "position_plateau": [0, 17],
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "num_tour": 5,
+      "joueur": 0,
+      "num_piece": 17,
+      "position_plateau": [2, 3],
+      "rotation": 0,
+      "flip": false
+    }
+  ],
+  "Game2": [
+    {
+      "num_tour": 1,
+      "joueur": 0,
+      "num_piece": 9,
+      "position_plateau": [0, 0],
+      "rotation": 0,
+      "flip": false,
+      "joueurs": ["PERSONNE 1", "PERSONNE 2", "PERSONNE 3", "PERSONNE 4"],
+      "winners": ["PERSONNE 1"]
+    },
+    {
+      "num_tour": 2,
+      "joueur": 1,
+      "num_piece": 18,
+      "position_plateau": [19, 0],
+      "rotation": 270,
+      "flip": false
+    },
+    {
+      "num_tour": 3,
+      "joueur": 2,
+      "num_piece": 14,
+      "position_plateau": [16, 18],
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "num_tour": 4,
+      "joueur": 3,
+      "num_piece": 17,
+      "position_plateau": [1, 17],
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "num_tour": 5,
+      "joueur": 0,
+      "num_piece": 17,
+      "position_plateau": [3, 0],
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "num_tour": 6,
+      "joueur": 0,
+      "num_piece": 17,
+      "position_plateau": [3, 1],
+      "rotation": 0,
+      "flip": false
+    }
+  ],
+  "Game3": [
+    {
+      "num_tour": 1,
+      "joueur": 0,
+      "num_piece": 10,
+      "position_plateau": [0, 0],
+      "rotation": 0,
+      "flip": false,
+      "joueurs": ["PERSONNE 1", "PERSONNE 2", "PERSONNE 3", "PERSONNE 4"],
+      "winners": ["PERSONNE 1"]
+    },
+    {
+      "num_tour": 2,
+      "joueur": 1,
+      "num_piece": 21,
+      "position_plateau": [18, 0],
+      "rotation": 90,
+      "flip": false
+    },
+    {
+      "num_tour": 3,
+      "joueur": 2,
+      "num_piece": 21,
+      "position_plateau": [18, 17],
+      "rotation": 0,
+      "flip": false
+    },
+    {
+      "num_tour": 4,
+      "joueur": 3,
+      "num_piece": 21,
+      "position_plateau": [1, 18],
+      "rotation": 90,
+      "flip": false
+    },
+    {
+      "num_tour": 5,
+      "joueur": 0,
+      "num_piece": 21,
+      "position_plateau": [2, 3],
+      "rotation": 0,
+      "flip": false
+    }
+  ]
+}

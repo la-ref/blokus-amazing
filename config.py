@@ -143,6 +143,7 @@ class config():
         self.image.append(PhotoImage(file="Images/Leaderboard/button.png")) # 60
         self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite.png")) # 61
         self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche.png")) # 62
+        self.image.append(PhotoImage(file="Images/Leaderboard/button_blanc.png")) # 63
 
 
          
