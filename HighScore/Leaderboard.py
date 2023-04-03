@@ -19,31 +19,37 @@ class Leaderboard :
             data = json.load(mon_fichier)            
         return data
     
-    def gameNumber(self, numpartie):
+    def donneGameNumber(self, numpartie):
         val = self.recupJSON
         str = "Game" + numpartie
         fin = val.get(str)
         return fin
     
+    def winner(self, numpartie):
+        val = self.donneGameNumber(numpartie)
+        tab = []
+        tab = val.get("winners")
+        return tab
+        
 
     def getPlayers(self, index):
         val = self.recupJSON
         val.get("Game" + index)[0].get("Joueurs")
         return val
     
-    def getPlayerPieceJouee(self, id, num):
-        val = self.gameNumber(num)
+    def getPlayerPieceJouee(self, idplayer, num):
+        val = self.donneGameNumber(num)
         tab = []
         for i in val:
-            if i.get("joueur") == id:
+            if i.get("joueur") == idplayer:
                 tab.append(i.get("num_piece"))
         return tab
         
-    def getPlayerPositionPieceJouee(self, id, num):
-        val = self.gameNumber(num)
+    def getPlayerPositionPieceJouee(self, idplayer, num):
+        val = self.donneGameNumber(num)
         tab = []
         for i in val:
-            if i.get("joueur") == id:
+            if i.get("joueur") == idplayer:
                 tab.append({"num_piece" : i.get("num_piece"), "position" : i.get("position_plateau"), "rotation" : i.get("rotation"), "flip" : i.get("flip")})
         return tab        
     
