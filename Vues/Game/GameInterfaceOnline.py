@@ -38,6 +38,13 @@ class GameInterfaceOnline(tk.Frame):
         """
         for widgets in self.winfo_children():
             widgets.destroy()
+
+        self.couleur : dict = {
+            10:"#FFC700",
+            11:"#32BF00",
+            12:"#0045CC",
+            13:"#BC0000"
+        }
             
         self.border = tk.Canvas()
         self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
@@ -61,9 +68,12 @@ class GameInterfaceOnline(tk.Frame):
         self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(3),3)
         self.List4.move(x=70,y=524) #bleu
 
+        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
+
+
         self.giveUp = self.border.create_image(
-            (1440//2)-(config.Config.image[6].width()//2), 
-            120, 
+            411, 
+            845, 
             image=config.Config.image[6],
             anchor=tk.NW
         )
@@ -73,8 +83,8 @@ class GameInterfaceOnline(tk.Frame):
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
         self.quitter = self.border.create_image(
-            577, 
-            820, 
+            800, 
+            845, 
             image=config.Config.image[7],
             anchor=tk.NW
         )
@@ -83,8 +93,8 @@ class GameInterfaceOnline(tk.Frame):
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
         BoutonInfo = self.border.create_image(
-            815, 
-            826, 
+            690,
+            852,
             image=config.Config.image[59],
             anchor=tk.NW
         )
@@ -195,12 +205,12 @@ class GameInterfaceOnline(tk.Frame):
         if typ == "entre":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[58])
-                self.border.moveto(idButton,806,818)
+                self.border.moveto(idButton,680,845)
                 self.border.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[59])
-                self.border.moveto(idButton,815,826)
+                self.border.moveto(idButton,690,852)
                 self.border.config(cursor="")
             
     def surrender(self : GameInterfaceOnline,player : int) -> None:

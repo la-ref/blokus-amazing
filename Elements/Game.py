@@ -20,9 +20,11 @@ class Game:
         """
         self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
         self.__joueursAbandon : list[Player] = []
-        self.__currentPlayerPos : int = 0
-        self.__plateau : Board = plateau or Board(taille)
         self.__online : bool = online
+        self.__currentPlayerPos : int = -1
+        if self.__online:
+            self.__currentPlayerPos : int = 0
+        self.__plateau : Board = plateau or Board(taille)
         self.__enCours = True
 
         for pj in self.__joueurs:
@@ -33,6 +35,27 @@ class Game:
         
     def start(self):
         threading.Timer(0.5,self.__nextPlayer).start()
+
+
+    def getNextPlayer(self : Game, nbPlayer : int) -> int:
+        """Méthode qui permet de récuperer l'id du joueur suivant
+
+        Args:
+            self (Game): Game
+            nbPlayer : id du joueur current
+            
+        Returns:
+            int: id du joueur suivant
+        """
+        pos = (nbPlayer+1)%len(self.__joueurs)
+        while  self.__joueurs[pos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
+            pos = (pos+1)%len(self.__joueurs)
+        if len(self.__joueursAbandon) != len(self.__joueurs):
+            return pos
+        else:
+            return -1
+        
+    
 
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -224,7 +247,7 @@ class Game:
         return False
                 
     
-    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int,rotation = None,flip = None) -> bool:
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int, rotation = None,flip = None) -> bool:
         """Méthode qui permet de jouer le tour du joueur courant
         
         Args:
@@ -238,29 +261,62 @@ class Game:
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        if len(self.__joueursAbandon) != len(self.__joueurs):
-            if(rotation or flip):
-                piece = piece.ajoutRotationFlip(rotation,flip)
-            ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
-            if ajout: # si une pièce peut être ajouter
-                self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
-                self.getCurrentPlayer().ajoutTour()
+        if self.__online:
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                if(rotation or flip):
+                    piece = piece.ajoutRotationFlip(rotation,flip)
+                ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+                if ajout: # si une pièce peut être ajouter
+                    self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                    self.getCurrentPlayer().ajoutTour()
 
 
-            
-                if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
-                    self.addSurrenderedPlayer()
-                else:
-                    self.__nextPlayer()
-                if not self.__online:
-                    config.Config.controller.updateBoard()
-                # prep tour suivant
                 
-                # config.Config.controller.updatePlayers(self.getCurrentPlayer())
-                
-                return True
-            return False
+                    if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
+                        self.addSurrenderedPlayer()
+                    else:
+                        self.__nextPlayer()
+                    # prep tour suivant
+                    
+                    # config.Config.controller.updatePlayers(self.getCurrentPlayer())
+                    
+                    return True
+                return False
 
+            else:
+                # call fonction winner
+                return False
         else:
-            # call fonction winner
-            return False
+            
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                
+                ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+                if ajout: # si une pièce peut être ajouter
+                    self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                    config.Config.controller.vueJeu.removePiece(self.__currentPlayerPos,piece.getIdentifiant())
+                    self.getCurrentPlayer().ajoutTour()
+
+
+                    rota = piece.getRotation()
+                    flip = piece.getFlip()
+                    config.Config.controller.json.append({"num_tour" : config.Config.controller.tour,
+                        "joueur" : self.getCurrentPlayerId(),
+                        "num_piece" : piece.getIdentifiant(),
+                        "position_plateau" : [int(colonne),int(ligne)],
+                        "rotation" : rota,
+                        "flip" : flip})
+                    config.Config.controller.tour += 1 
+                    
+                
+                    if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
+                        self.addSurrenderedPlayer()
+                    else:
+                        self.__nextPlayer()
+                    config.Config.controller.updateBoard()
+                    
+                    return True
+                return False
+
+            else:
+                # call fonction winner
+                return False

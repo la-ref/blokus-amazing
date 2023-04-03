@@ -67,14 +67,12 @@ class ai():
             elif self.__difficulty=="Expert":
                 # Faire le choix du min max
                 piece = joueDifficile(self.player.getID(), poss, 1)
-                print(piece)
 
                 for i in range(piece[6]):
                     piece[0].rotate90()
                 
                 for i in range(piece[7]):
                     piece[0].flip()
-                
                 if config.Config.controller.placePiece(piece[0],piece[3].getID(),piece[1],piece[2],piece[4],piece[5]):
                     pass
                 else:
@@ -86,5 +84,4 @@ class ai():
                 exit(-6)
                 
         else:
-            print(self.player.getName()+" abandonne !")
             config.Config.controller.surrender()

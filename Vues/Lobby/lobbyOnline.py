@@ -72,18 +72,18 @@ class lobbyOnline(Frame):
         self.canvas.tag_bind(self.namezone_vert_text, "<Button-1>",lambda *_: self.Boutonselect(1))
 
 
-        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],2,22,hb="bas",droiteg="gauche",edit= (lambda: True if self.currentPlayerID == 2 else False)())
-        self.bouton_rouge.move(279,883)
-        self.namezone_rouge = self.bouton_rouge.getNameZone()
-        self.namezone_rouge_text = self.bouton_rouge.getNameZone_Text()
+        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],3,22,hb="bas",droiteg="gauche",edit= (lambda: True if self.currentPlayerID == 3 else False)())
+        self.bouton_bleu.move(279,883)
+        self.namezone_rouge = self.bouton_bleu.getNameZone()
+        self.namezone_rouge_text = self.bouton_bleu.getNameZone_Text()
         self.canvas.tag_bind(self.namezone_rouge, "<Button-1>",lambda *_: self.Boutonselect(2))
         self.canvas.tag_bind(self.namezone_rouge_text, "<Button-1>",lambda *_: self.Boutonselect(2))
 
 
-        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],3,15,hb="bas",droiteg="droite",edit= (lambda: True if self.currentPlayerID == 3 else False)())
-        self.bouton_bleu.move(1156,883)
-        self.namezone_bleu = self.bouton_bleu.getNameZone()
-        self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()
+        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],2,15,hb="bas",droiteg="droite",edit= (lambda: True if self.currentPlayerID == 2 else False)())
+        self.bouton_rouge.move(1156,883)
+        self.namezone_bleu = self.bouton_rouge.getNameZone()
+        self.namezone_bleu_text = self.bouton_rouge.getNameZone_Text()
         self.canvas.tag_bind(self.namezone_bleu, "<Button-1>",lambda *_: self.Boutonselect(3))
         self.canvas.tag_bind(self.namezone_bleu_text, "<Button-1>",lambda *_: self.Boutonselect(3))
 

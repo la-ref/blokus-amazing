@@ -96,14 +96,14 @@ def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list:
     if NB_CPU==0:
         raise ValueError("The number of CPU's is too low for this game to work")
 
-    listJoueur=config.Config.controller.game.getCurrentPlayers()
+    listJoueur=config.Config.controller.game.getPlayers()
 
-    
     listPoss=getSorted(listPoss, 40)
+
     
     listTab = []
     
-    listPoss=choices(listPoss,k=NB_CPU)
+    
     
     # création des copies de tableaux et ajout des à tester
     for piece in listPoss:
@@ -119,20 +119,21 @@ def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list:
     nextId = config.Config.controller.game.getNextPlayer(joueurId)
     
     
-    
-    
-    div_list = np.array_split(listTab, NB_CPU)
-    pool = mp.Pool(NB_CPU)
+    if len(listTab)>NB_CPU:
+        div_list = np.array_split(listTab, NB_CPU)
+        pool = mp.Pool(NB_CPU)
+        
+    else:
+        div_list = np.array_split(listTab, len(listTab))
+        pool = mp.Pool(len(listTab))
+      
+
+      
     res = pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
     pool.close()
     pool.join()
+
     
-    print(res)
-    
-        
-    # # print(listValeur)
-    # return listPoss[np.argmax(listValeur)]
-    print(res)
     return listPoss[np.argmax(res)]
     
 
@@ -150,14 +151,13 @@ def getSorted(listPoss : list, limit : int):
     
     
     ch = len(listPoss)//4
-    if ch <4:
-        listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-4]
-    elif ch > limit//4:
+    if ch <=4:
+        listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())
+    elif ch >= limit:
         listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-limit:]
     else:
         listPoss=sorted(listPoss, key= lambda x : x[0].getDifficulty())[-ch:]
     
-    print(listPoss)
     return listPoss
           
           
