@@ -1,13 +1,11 @@
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+
+from tkinter import Tk, Canvas, Frame
 import tkinter
-import sys
 from config import *
 import tkinter as tk
 import Elements.Player as Player
 import Vues.Lobby.lobbyUser as lobbyUser
 from Vues.accueil import *
-from Vues.Game.GameInterface import GameInterface
 
 class lobbyLocal(Frame):
     def __init__(self,window):
@@ -213,7 +211,7 @@ class lobbyLocal(Frame):
     def QuitterBouton(self):
         """ Méthode permettant re venir à la page d'Accueil (initialisation de la page d'accueil)
         """
-        config.Config.controller.changePage("Accueil")
+        config.Config.controller.changePage("Acceuil")
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
@@ -296,4 +294,5 @@ class lobbyLocal(Frame):
     def no(self):
         self.remove_modal()
         self.modal_active = False
+
 

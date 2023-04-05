@@ -23,8 +23,13 @@ class config():
         import platform
         if platform.system() == "Darwin":
             self.taillePolice=[40,32,30,22]
-        elif platform.system() == "Windows" or platform.system() == "Linux":
+            self.jsonPath = "/HighScore/highscore.json"
+        elif platform.system() == "Windows":
             self.taillePolice=[30,25,22,15]
+            self.jsonPath = "\\HighScore\\highscore.json"
+        elif platform.system() == "Linux":
+            self.taillePolice=[30,25,22,15]
+            self.jsonPath = "/HighScore/highscore.json"
 
 
         # vérifie si la police est installée

@@ -3,6 +3,7 @@ import json
 import string
 from Elements.Player import Player
 import os
+from config import config
 
 # Exemple de fonction pour gérer les Json
 
@@ -14,8 +15,7 @@ class fonctionJson:
         self.val : int
 
     def JsonAjout(self, donne):
-        path = os.getcwd()+"\\HighScore\\highscore.json"
-        print("AJOUT")
+        path = os.getcwd()+config.Config.jsonPath
         with open(path, "r") as mon_fichier:
             data = json.load(mon_fichier)
             val_test = "Game1"
@@ -28,8 +28,6 @@ class fonctionJson:
                     num += 1
                     val_test = val_test[:4] + str(num)
             data[val_test] = donne
-            print(val_test)
-            print(data)
             
         mon_fichier.close()
             
