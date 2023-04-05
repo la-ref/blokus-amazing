@@ -123,7 +123,7 @@ class Controller(tk.Tk):
     def refreshGame(self,info, pieceId = False):
         try:
             self.frames["GameInterfaceOnline"].refreshBoard(self.onlineGame.board)
-            self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),self.onlineGame.winners)
+            self.frames["GameInterfaceOnline"].refreshPlayer(int(info["playing"]),self.onlineGame.winners,self.onlineGame.players[int(info["playing"])])
             
             if pieceId:
                 self.frames["GameInterfaceOnline"].deletePieceOnline(int(pieceId),int(info["played"]))
@@ -266,7 +266,6 @@ class Controller(tk.Tk):
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        print("yes super")
         if self.onlineGame and self.onlineGame.isPlaying():
             pId = piece.getIdentifiant()
             info = {
@@ -278,8 +277,6 @@ class Controller(tk.Tk):
                 "rotation":piece.getRotation(),
                 "flip":piece.getFlip()
             }
-            print("MA SUPER ROTATION",piece.getRotation())
-            print("je vais send",self.connection)
             self.connection.send("placePiece."+str(info))
         elif self.onlineGame and not self.onlineGame.isPlaying():
             return False

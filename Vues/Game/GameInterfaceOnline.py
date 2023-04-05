@@ -247,6 +247,15 @@ class GameInterfaceOnline(tk.Frame):
         self.List4.remettrePiece_copy()
         config.Config.controller.leaveOnline()
 
+    def changeTextPartie(self, message : str, couleur : int) -> None:
+        """ Méthode permettant de modifier le text affiché à l'écran. 
+
+        Args:
+            self (GameInterface) : GameInterface
+            message (str) : Le message affiché 
+        """
+        self.border.itemconfig(self.information, text=message, fill=self.couleur[10+couleur])
+
     def refreshBoard(self : GameInterfaceOnline,plateau) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
         d'afficher l'ensemble des pièces présentes sur un plateau directement graphiquement sur la grille
@@ -257,7 +266,7 @@ class GameInterfaceOnline(tk.Frame):
         """
         self.board.refreshBoard(plateau)
 
-    def refreshPlayer(self : GameInterfaceOnline,couleur : int,affiche : bool) -> None:
+    def refreshPlayer(self : GameInterfaceOnline,idPlayer : int,affiche : bool, pseudo :str) -> None:
         """Méthode callback pour GridInterfaceOnline qui le met à jour permettant 
         de mettre à jour le joueur courant et de l'afficher graphiquement au tour de la grille
 
@@ -266,7 +275,8 @@ class GameInterfaceOnline(tk.Frame):
             couleur (int): couleur du joueur courant
             affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
         """
-        self.board.refreshPlayer(couleur,affiche)
+        self.board.refreshPlayer(idPlayer,affiche)
+        self.changeTextPartie("C'est à " + pseudo + " de jouer",idPlayer)
 
     
     def partieTermine(self, listPlayer):

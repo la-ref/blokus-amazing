@@ -241,7 +241,7 @@ class GameInterface(tk.Frame):
             self (GameInterface): GameInterface
         """
         
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.changePage("Accueil")
 
     def refreshBoard(self : GameInterface,plateau : Board) -> None:
         """Méthode callback pour GridInterface qui le met à jour permettant 

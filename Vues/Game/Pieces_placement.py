@@ -13,7 +13,7 @@ class Pieces_placement(tk.Frame):
 
     """Classe de gestion de la pièce
     """
-    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
+    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str, list):
         """Constructeur créant une pièce du joueur
         Args:
             self (Game): game
@@ -30,6 +30,7 @@ class Pieces_placement(tk.Frame):
         self.window.bind("<Motion>", self.on_drag, add='+')
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
+        self.list = list
         self.nb_player = nb_player
         self.x = 0
         self.y = 0
@@ -368,6 +369,8 @@ class Pieces_placement(tk.Frame):
                 for piece in self.tableau_piece_forme:
                     piece.delete()
                 self.tableau_piece_forme = []
+                # self.list.removePiece_placement(self) 
+                # self.destroy()
             else:
                 # remet la piece à la position si non
                 for piece in self.tableau_piece_forme:
@@ -421,6 +424,12 @@ class Pieces_placement(tk.Frame):
                 piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y) 
         self.premier2 = 0
         
+    def enlever_piece(self):
+            # supprime si oui
+            for piece in self.tableau_piece_forme:
+                piece.delete()
+            self.tableau_piece_forme = []
+            self.list.removePiece_placement(self.la_piece)
 
 if __name__=="__main__":
     from tkinter import PhotoImage
