@@ -71,8 +71,6 @@ class LeaderboardInterface(tk.Frame):
         
         self.fleche_droite = self.canvas.create_image(500.0, 850.0,image= config.Config.image[62])
         
-
-
         self.createPieces()
         
         
@@ -83,54 +81,115 @@ class LeaderboardInterface(tk.Frame):
         config.Config.controller.changePage("Acceuil")
         
     def createPieces(self):
+        from Elements.Game import Game
+        self.joueurs = []
+        config.Config.controller.game = Game(self.joueurs,None,20)
+        config.Config.controller.game.start()
+        self.border = tk.Canvas()
+        self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
 
+        self.border.config(bg="white")
+        self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
+        self.board = GridInterface(self.border,config.Config.controller.getBoard())
+        self.board.move(x=720-270,y=512-270)
         self.Lists=[]
-        for i in range(4):
-            nb_player = i
-            self.list = list
-            self.x = 0
-            self.y = 0
-            self.le_x = 0
-            self.le_y = 0
-            self.rotate = False
-            self.souris_x = 0
-            self.sourix_y = 0
-            self.state = 0
-            self.tableau_piece = [[]]
-            self.tableau_piece_forme = []
-            self.mon_state = 0
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0))
+        self.Lists[0].move(x=70,y=80) # jaune
 
-            decalageX = 2
-            decalageY = 100
-            self.tableau_piece_forme = []
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1))
+        self.Lists[1].move(x=1047,y=80) # vert
 
-            i1 = 0
-            maxheight = 0
-            for valeur in LISTEPIECES.copy():
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2))
+        self.Lists[2].move(x=1047,y=524) #  rouge
+
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3))
+        self.Lists[3].move(x=70,y=524)
+        self.board : Board = config.Config.controller.getBoard()
+        self.pieces = []
+        for i in range(self.board.getBoardSize()):
+            for y in range(self.board.getBoardSize()):
+                valeur : int|None = self.board.getColorAt(i,y)
+                if valeur:
+                    piece = config.Config.image[valeur+47]
+                    if ((i,y) not in self.pieces):
+                        self.canvas.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
+                        self.pieces.append((i,y))
+
+    def refreshBoard(self,plateau : Board) -> None:
+        """Méthode callback pour GridInterface qui le met à jour permettant 
+        d'afficher l'ensemble des pièces présentes sur un plateau directement graphiquement sur la grille
+
+        Args:
+            self (GameInterface): GameInterface
+            plateau (Board): plateau de jeu à afficher
+        """
+        self.board : Board = config.Config.controller.getBoard()
+        self.pieces = []
+        for i in range(self.board.getBoardSize()):
+            for y in range(self.board.getBoardSize()):
+                valeur : int|None = self.board.getColorAt(i,y)
+                if valeur:
+                    piece = config.Config.image[valeur+47]
+                    if ((i,y) not in self.pieces):
+                        self.canvas.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
+                        self.pieces.append((i,y))
+    def refreshPlayer(self,couleur : int,affiche : bool) -> None:
+        """Méthode callback pour GridInterface qui le met à jour permettant 
+        de mettre à jour le joueur courant et de l'afficher graphiquement au tour de la grille
+
+        Args:
+            self (GameInterface): GameInterface
+            couleur (int): couleur du joueur courant
+            affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
+        """
+        pass
+        # self.Lists=[]
+        # for i in range(4):
+        #     nb_player = i
+        #     self.list = list
+        #     self.x = 0
+        #     self.y = 0
+        #     self.le_x = 0
+        #     self.le_y = 0
+        #     self.rotate = False
+        #     self.souris_x = 0
+        #     self.sourix_y = 0
+        #     self.state = 0
+        #     self.tableau_piece = [[]]
+        #     self.tableau_piece_forme = []
+        #     self.mon_state = 0
+
+        #     decalageX = 2
+        #     decalageY = 100
+        #     self.tableau_piece_forme = []
+
+        #     i1 = 0
+        #     maxheight = 0
+        #     for valeur in LISTEPIECES.copy():
                 
-                self.tableau_piece_forme.append(PP.Pieces_placement(self.window,self.canvas,nb_player,valeur,self))
+        #         self.tableau_piece_forme.append(PP.Pieces_placement(self.window,self.canvas,nb_player,valeur,self))
 
-                self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
-                decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
-                if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
-                    maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
+        #         self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
+        #         decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
+        #         if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
+        #             maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
 
-                i1+=1
+        #         i1+=1
 
-                if (decalageX) >= 317-(20*3):
-                    decalageX= 2
-                    decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
-                    maxheight = 0
-            self.Lists.append(self.tableau_piece_forme)
+        #         if (decalageX) >= 317-(20*3):
+        #             decalageX= 2
+        #             decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
+        #             maxheight = 0
+        #     self.Lists.append(self.tableau_piece_forme)
 
-        for i in self.Lists[0]:
-            i.moveHigh(x=70,y=80) # jaune
-        for i in self.Lists[1]:
-            i.moveHigh(x=100,y=100) # vert
-        for i in self.Lists[2]:
-            i.moveHigh(x=200,y=200) # rouge
-        for i in self.Lists[3]:
-            i.moveHigh(x=300,y=300)
+        # for i in self.Lists[0]:
+        #     i.moveHigh(x=70,y=80) # jaune
+        # for i in self.Lists[1]:
+        #     i.moveHigh(x=100,y=100) # vert
+        # for i in self.Lists[2]:
+        #     i.moveHigh(x=200,y=200) # rouge
+        # for i in self.Lists[3]:
+        #     i.moveHigh(x=300,y=300)
 
     def create_modal(self):
         self.modal_active = True
