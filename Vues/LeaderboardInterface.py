@@ -38,40 +38,41 @@ class LeaderboardInterface(tk.Frame):
     def initialize(self):
         """ 
         """
-        for widgets in self.winfo_children():
-            widgets.unbind('<ButtonPress-1>')
-            widgets.destroy()
+        # self.canvas = tk.Canvas(
+        #     self.window,
+        #     bg = "#FFFFFF",
+        #     height = 1024,
+        #     width = 1440,
+        #     bd = 0,
+        #     highlightthickness = 0,
+        #     relief = "ridge"
+        # )
+        
+    
+        self.json = fonctionJson()
+        self.joueurs = self.json.getPlayers("Game1")
+        self.createPieces(self.joueurs)
+        # for widgets in self.winfo_children():
+        #     widgets.unbind('<ButtonPress-1>')
+        #     widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False
 
         self.touche = None
-        self.canvas = tk.Canvas(
-            self.window,
-            bg = "#FFFFFF",
-            height = 1024,
-            width = 1440,
-            bd = 0,
-            highlightthickness = 0,
-            relief = "ridge"
-        )
-        
-        
         self.modal_active = False
-        self.canvas.place(x = 0, y = 0)
+        # self.canvas.place(x = 0, y = 0)
         #self.canvas.bind("<Button-1>",self.clique)
-        self.Arriere_plan = self.canvas.create_image(720.0,512.0,image= config.Config.image[14])
+        # self.Arriere_plan = self.border.create_image(720.0,512.0,image= config.Config.image[14])
         
         
-        self.retour = self.canvas.create_image(719.0, 850.0,image= config.Config.image[60])
-        self.canvas.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
-        self.canvas.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
-        self.canvas.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
+        self.retour = self.border.create_image(719.0, 850.0,image= config.Config.image[60])
+        self.border.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
+        self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
+        self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
         
-        self.fleche_droite = self.canvas.create_image(935.0, 850.0,image= config.Config.image[61])
+        self.fleche_droite = self.border.create_image(935.0, 850.0,image= config.Config.image[61])
         
-        self.fleche_droite = self.canvas.create_image(500.0, 850.0,image= config.Config.image[62])
-        
-        self.createPieces()
+        self.fleche_droite = self.border.create_image(500.0, 850.0,image= config.Config.image[62])
         
         
         
@@ -80,9 +81,9 @@ class LeaderboardInterface(tk.Frame):
         """
         config.Config.controller.changePage("Acceuil")
         
-    def createPieces(self):
+    def createPieces(self,joueurs):
         from Elements.Game import Game
-        self.joueurs = []
+        self.joueurs = joueurs
         config.Config.controller.game = Game(self.joueurs,None,20)
         config.Config.controller.game.start()
         self.border = tk.Canvas()
@@ -112,7 +113,7 @@ class LeaderboardInterface(tk.Frame):
                 if valeur:
                     piece = config.Config.image[valeur+47]
                     if ((i,y) not in self.pieces):
-                        self.canvas.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
+                        self.border.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
                         self.pieces.append((i,y))
 
     def refreshBoard(self,plateau : Board) -> None:
@@ -123,16 +124,7 @@ class LeaderboardInterface(tk.Frame):
             self (GameInterface): GameInterface
             plateau (Board): plateau de jeu à afficher
         """
-        self.board : Board = config.Config.controller.getBoard()
-        self.pieces = []
-        for i in range(self.board.getBoardSize()):
-            for y in range(self.board.getBoardSize()):
-                valeur : int|None = self.board.getColorAt(i,y)
-                if valeur:
-                    piece = config.Config.image[valeur+47]
-                    if ((i,y) not in self.pieces):
-                        self.canvas.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
-                        self.pieces.append((i,y))
+        pass
     def refreshPlayer(self,couleur : int,affiche : bool) -> None:
         """Méthode callback pour GridInterface qui le met à jour permettant 
         de mettre à jour le joueur courant et de l'afficher graphiquement au tour de la grille
@@ -143,86 +135,39 @@ class LeaderboardInterface(tk.Frame):
             affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
         """
         pass
-        # self.Lists=[]
-        # for i in range(4):
-        #     nb_player = i
-        #     self.list = list
-        #     self.x = 0
-        #     self.y = 0
-        #     self.le_x = 0
-        #     self.le_y = 0
-        #     self.rotate = False
-        #     self.souris_x = 0
-        #     self.sourix_y = 0
-        #     self.state = 0
-        #     self.tableau_piece = [[]]
-        #     self.tableau_piece_forme = []
-        #     self.mon_state = 0
-
-        #     decalageX = 2
-        #     decalageY = 100
-        #     self.tableau_piece_forme = []
-
-        #     i1 = 0
-        #     maxheight = 0
-        #     for valeur in LISTEPIECES.copy():
-                
-        #         self.tableau_piece_forme.append(PP.Pieces_placement(self.window,self.canvas,nb_player,valeur,self))
-
-        #         self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
-        #         decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
-        #         if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
-        #             maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
-
-        #         i1+=1
-
-        #         if (decalageX) >= 317-(20*3):
-        #             decalageX= 2
-        #             decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
-        #             maxheight = 0
-        #     self.Lists.append(self.tableau_piece_forme)
-
-        # for i in self.Lists[0]:
-        #     i.moveHigh(x=70,y=80) # jaune
-        # for i in self.Lists[1]:
-        #     i.moveHigh(x=100,y=100) # vert
-        # for i in self.Lists[2]:
-        #     i.moveHigh(x=200,y=200) # rouge
-        # for i in self.Lists[3]:
-        #     i.moveHigh(x=300,y=300)
 
     def create_modal(self):
         self.modal_active = True
-        self.modal = self.canvas.create_image(
+        self.modal = self.border.create_image(
             0, 
             0, 
             image=config.Config.image[46],
             anchor=tk.NW
         )
 
-        self.modal_no = self.canvas.create_image(
+        self.modal_no = self.border.create_image(
             config.Config.largueur/2-372,
             config.Config.hauteur/2+25,
             image=config.Config.image[56],
             anchor=tk.NW
         )
 
-        self.modal_yes =self.canvas.create_image(
+        self.modal_yes =self.border.create_image(
             config.Config.largueur/2+100,
             config.Config.hauteur/2+25,
             image=config.Config.image[57],
             anchor=tk.NW
         )
         
-        self.canvas.tag_bind(self.modal_yes, "<Button-1>",lambda *_: self.yes())
-        self.canvas.tag_bind(self.modal_no, "<Button-1>",lambda *_: self.no())
-        self.text_modal = self.canvas.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+        self.border.tag_bind(self.modal_yes, "<Button-1>",lambda *_: self.yes())
+        self.border.tag_bind(self.modal_no, "<Button-1>",lambda *_: self.no())
+        self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         self.modal_active = True
      
     """ Fonction permettant de détruire le modal actif """
    
     def remove_modal(self):
-        self.canvas.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
+        self.border.delete(self.modal,self.modal_no,self.modal_yes,self.text_modal)
 
 
     """ Fonction callback de confirmation des modaux
@@ -248,12 +193,12 @@ class LeaderboardInterface(tk.Frame):
         """
         if typ == "entre":
             if typ2 == "retour":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[63])
-                self.canvas.config(cursor="hand2")        
+                self.border.itemconfigure(idButton, image=config.Config.image[63])
+                self.border.config(cursor="hand2")        
         elif typ == "sort":
             if typ2 == "retour":
-                self.canvas.itemconfigure(idButton, image=config.Config.image[60])
-                self.canvas.config(cursor="")
+                self.border.itemconfigure(idButton, image=config.Config.image[60])
+                self.border.config(cursor="")
 
         
 

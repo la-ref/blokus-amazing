@@ -37,3 +37,36 @@ class fonctionJson:
             
         with open(self.chemin, mode = "w") as mon_fichier:  
             json.dump(data, mon_fichier)  
+
+    def getJSON(self):
+        """Fonction permettant de
+
+        Args:
+            donne (_type_): _description_
+        """
+        with open(self.chemin, mode = "r") as mon_fichier:
+            data = json.load(mon_fichier)
+            return data
+    
+    def getPlayers(self, partie):
+        """Fonction permettant de récupérer la liste des joueurs de la partie
+
+        Args:
+            Partie: Le nom de la partie (Game+numéro)
+        """
+        listjoueurs = []
+        with open(self.chemin, mode = "r") as mon_fichier:
+            data = json.load(mon_fichier)
+            joueurs = data[partie][0]['joueurs']
+
+        for i in range(len(joueurs)):
+            listjoueurs.append(Player(i, data[partie][0]['joueurs'][i]))
+
+        return listjoueurs
+
+    def getNbGames(self):
+        """Fonction permettant de récupérer le nombre de partie
+        """
+        with open(self.chemin, mode = "r") as mon_fichier:
+            data = json.load(mon_fichier)
+        return len(data)
