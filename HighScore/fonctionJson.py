@@ -70,3 +70,15 @@ class fonctionJson:
         with open(self.chemin, mode = "r") as mon_fichier:
             data = json.load(mon_fichier)
         return len(data)
+
+    def getWinners(self, partie):
+        """Fonction permettant de récupérer la liste des joueurs de la partie
+
+        Args:
+            Partie: Le nom de la partie (Game+numéro)
+        """
+        with open(self.chemin, mode = "r") as mon_fichier:
+            data = json.load(mon_fichier)
+            joueurs = data[partie][0]['winners']
+
+        return joueurs

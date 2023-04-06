@@ -36,44 +36,13 @@ class LeaderboardInterface(tk.Frame):
         self.windowRegle = None
 
     def initialize(self):
-        """ 
+        """ Initialisation de la partie
         """
-        # self.canvas = tk.Canvas(
-        #     self.window,
-        #     bg = "#FFFFFF",
-        #     height = 1024,
-        #     width = 1440,
-        #     bd = 0,
-        #     highlightthickness = 0,
-        #     relief = "ridge"
-        # )
-        
-    
         self.json = fonctionJson()
-        self.joueurs = self.json.getPlayers("Game1")
+        self.nbgame = 1
+        self.joueurs = self.json.getPlayers("Game"+str(self.nbgame))
         self.createPieces(self.joueurs)
-        # for widgets in self.winfo_children():
-        #     widgets.unbind('<ButtonPress-1>')
-        #     widgets.destroy()
-        self.boutonUser = []
-        self.activeclavier = False
 
-        self.touche = None
-        self.modal_active = False
-        # self.canvas.place(x = 0, y = 0)
-        #self.canvas.bind("<Button-1>",self.clique)
-        # self.Arriere_plan = self.border.create_image(720.0,512.0,image= config.Config.image[14])
-        
-        
-        self.retour = self.border.create_image(719.0, 850.0,image= config.Config.image[60])
-        self.border.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
-        self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
-        self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
-        
-        self.fleche_droite = self.border.create_image(935.0, 850.0,image= config.Config.image[61])
-        
-        self.fleche_droite = self.border.create_image(500.0, 850.0,image= config.Config.image[62])
-        
         
         
     def Retour(self):
@@ -115,6 +84,40 @@ class LeaderboardInterface(tk.Frame):
                     if ((i,y) not in self.pieces):
                         self.border.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
                         self.pieces.append((i,y))
+        # for widgets in self.winfo_children():
+        #     widgets.unbind('<ButtonPress-1>')
+        #     widgets.destroy()
+        self.boutonUser = []
+        self.activeclavier = False
+
+        self.touche = None
+        self.modal_active = False
+        
+        self.retour = self.border.create_image(719.0, 850.0,image= config.Config.image[60])
+        self.border.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
+        self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
+        self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
+        
+        self.fleche_droite = self.border.create_image(935.0, 850.0,image= config.Config.image[61])
+        self.border.tag_bind(self.fleche_droite, "<Button-1>",lambda *_: self.suivant())
+        self.border.tag_bind(self.fleche_droite, "<Enter>",lambda *_: self.hoverBouton("entre","droite",self.fleche_droite))
+        self.border.tag_bind(self.fleche_droite, "<Leave>",lambda *_: self.hoverBouton("sort","droite",self.fleche_droite))
+
+        self.fleche_gauche = self.border.create_image(500.0, 850.0,image= config.Config.image[62])
+        self.border.tag_bind(self.fleche_gauche, "<Button-1>",lambda *_: self.precedent())
+        self.border.tag_bind(self.fleche_gauche, "<Enter>",lambda *_: self.hoverBouton("entre","gauche",self.fleche_gauche))
+        self.border.tag_bind(self.fleche_gauche, "<Leave>",lambda *_: self.hoverBouton("sort","gauche",self.fleche_gauche))
+
+        listPlayer = self.json.getWinners("Game"+str(self.nbgame))
+        if len(listPlayer)==1:
+            self.text_winners = self.border.create_text(config.Config.largueur/2,150,text="Le gagnant de la partie est : \n"+listPlayer[0]+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
+        else:
+            winStr = "Les gagnants de la partie sont :\n"
+            for pl in listPlayer:
+                winStr+=pl+", "
+            self.text_winners = self.border.create_text(config.Config.largueur/2,150,text=winStr+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[1]),anchor=tk.CENTER,justify='center')
+
+        
 
     def refreshBoard(self,plateau : Board) -> None:
         """Méthode callback pour GridInterface qui le met à jour permettant 
@@ -163,7 +166,32 @@ class LeaderboardInterface(tk.Frame):
         self.border.tag_bind(self.modal_no, "<Button-1>",lambda *_: self.no())
         self.text_modal = self.border.create_text(config.Config.largueur/2,(config.Config.hauteur/2)-config.Config.taillePolice[0]/2-25,text="Êtes vous sûr de vouloir quitter ?",fill="#000000",font=("Lilita One", config.Config.taillePolice[0]),anchor=tk.CENTER,justify='center')
         self.modal_active = True
-     
+
+    
+
+    def suivant(self):
+        """ Méthode permettant de passer à la parite suivante
+        
+        """
+        if self.json.getNbGames() == self.nbgame:
+            self.nbgame = 1
+        else:
+            self.nbgame += 1
+        self.joueurs = self.json.getPlayers("Game"+str(self.nbgame))
+        self.createPieces(self.joueurs)
+        
+
+    def precedent(self):
+        """ Méthode permettant de passer à la partie précédente
+
+        """
+        if self.nbgame-1 <= 0:
+            self.nbgame = self.json.getNbGames()
+        else:
+            self.nbgame -= 1
+        self.joueurs = self.json.getPlayers("Game"+str(self.nbgame))
+        self.createPieces(self.joueurs)
+
     """ Fonction permettant de détruire le modal actif """
    
     def remove_modal(self):
@@ -194,10 +222,22 @@ class LeaderboardInterface(tk.Frame):
         if typ == "entre":
             if typ2 == "retour":
                 self.border.itemconfigure(idButton, image=config.Config.image[63])
-                self.border.config(cursor="hand2")        
+                self.border.config(cursor="hand2")     
+            elif typ2 == "droite":
+                self.border.itemconfigure(idButton, image=config.Config.image[64])
+                self.border.config(cursor="hand2")       
+            elif typ2 == "gauche":
+                self.border.itemconfigure(idButton, image=config.Config.image[65])
+                self.border.config(cursor="hand2")     
         elif typ == "sort":
             if typ2 == "retour":
                 self.border.itemconfigure(idButton, image=config.Config.image[60])
+                self.border.config(cursor="")
+            elif typ2 == "gauche":
+                self.border.itemconfigure(idButton, image=config.Config.image[62])
+                self.border.config(cursor="")
+            elif typ2 == "droite":
+                self.border.itemconfigure(idButton, image=config.Config.image[61])
                 self.border.config(cursor="")
 
         

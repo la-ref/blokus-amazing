@@ -145,7 +145,8 @@ class config():
         self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche.png")) # 62
         self.image.append(PhotoImage(file="Images/Leaderboard/button_blanc.png")) # 63
 
-
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite_hover.png")) # 64
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche_hover.png")) # 65
          
 
         
