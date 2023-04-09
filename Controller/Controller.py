@@ -13,6 +13,7 @@ from Vues.Lobby.lobbyOnline import lobbyOnline
 from Vues.Game.GameInterfaceOnline import GameInterfaceOnline
 from Vues.connexion import Connexion
 from client import Client
+import multiprocessing as mp
 
 import threading
 
@@ -21,11 +22,11 @@ class Controller(tk.Tk):
     donc de la communication entre les différents élèments de l'application
     """
 
-    def __init__(self: Controller, pool, NB_CPU) -> None:
+    def __init__(self: Controller, NB_CPU) -> None:
         tk.Tk.__init__(self)
         config.initialisation(self, NB_CPU)
         self.protocol()
-        self.pool = pool
+        self.pool = mp.Pool(NB_CPU)
         self.frames = { "Accueil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))

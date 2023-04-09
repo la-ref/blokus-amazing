@@ -176,15 +176,20 @@ class Game:
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
-        if not self.__online:
-            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+
+        if self.__online:
+            print("bonjour je suis ici",self.getCurrentPlayer().getName())
+            if self.getCurrentPlayer().getAI():
+                print("bonjour je suis effcitvement une IA")
+                self.getCurrentPlayer().getAI().play()
         
         if not self.__online:
+            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
             if len(self.__joueursAbandon) != len(self.__joueurs):
                 config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
+                print(self.getCurrentPlayerId())
                 if self.getCurrentPlayer().getAI():
-                    # try:
-                        self.getCurrentPlayer().getAI().play()
+                    self.getCurrentPlayer().getAI().play()
                     # except:
                     #     try:
                     #         if config.Config.controller:

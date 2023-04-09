@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import socket,ast
 import struct
 import threading
@@ -7,12 +8,23 @@ import Elements.Player as Player
 import copy
 import sys
 import ipaddress
+import multiprocessing as mp
+import AI.aionline as aionline
 
 class Server:
     lobbies = []
     IP = str(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1] else "127.0.0.1"
     PORT = int(sys.argv[2]) if len(sys.argv) > 2 and sys.argv[2] else 5005
     def __init__(self):
+        # try:
+        #     NB_CPU= mp.cpu_count()-1 if mp.cpu_count()-1<6 else 6
+    
+        #     if NB_CPU==0:
+        #         raise ValueError("The number of CPU's is too low for this game to work")        
+                
+        #     self.pool = mp.Pool(NB_CPU)
+        # except:
+        #     exit("The number of CPU's is too low for this game to work")
         try:
             ipaddress.ip_address(Server.IP)
         except:
@@ -87,9 +99,7 @@ class Server:
                 
     def removeLobby(self,lobbyId):
         Server.lobbies.pop(lobbyId)
-        
-
-                
+                   
     def addLobby(self,connection):
         print(Server.lobbies)
         lob,cli,added = 0,0,False
@@ -184,14 +194,26 @@ class Server:
             joueurs = []
             for i in range(len(Server.lobbies[nbLobby]["players"])):
                 joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
+            if len(joueurs) != 4:
+                NB_CPU= mp.cpu_count()-1 if mp.cpu_count()-1<6 else 6
+        
+                if NB_CPU==0:
+                    raise ValueError("The number of CPU's is too low for this game to work")        
+                    
+                Server.lobbies[nbLobby]["pool"] = mp.Pool(NB_CPU)
             while len(joueurs) != 4:
-                joueurs.append(Player.Player(len(joueurs),"IA-"+str(len(joueurs))))
+                myIA = aionline.ai(Server.lobbies[nbLobby]["iaLevels"][len(joueurs)],Player.Player(len(joueurs),"IA-"+str(len(joueurs))))
+                player = Player.Player(len(joueurs),"IA-"+str(len(joueurs)))
+                player.setIA(myIA)
+                joueurs.append(player)
             game = Game(joueurs,None,20,True)
             Server.lobbies[nbLobby]["game"] = game
             sendDict = self.constructCall(nbLobby,True)
             print(sendDict)
             return str(sendDict)
-        except:
+        except Exception as e:
+            print(e)
+            print("je suis ici!")
             raise ValueError("Erreur network création")
         
     def deleteLobby(self,nbLobby):
@@ -199,6 +221,8 @@ class Server:
             print('okKOKOKOKOKOKOKOKOKKOKOOKOKOKOOKOKOKO KOK OOK OK OKO KO KO KO KO O  OKO K OK O')
             for c in Server.lobbies[nbLobby]["clients"]:
                 self.removeClient(c,nbLobby,True)
+            if "pool" in Server.lobbies[nbLobby].keys():
+                Server.lobbies[nbLobby]["pool"].terminate()
             self.removeLobby(nbLobby)
             
     def convertJson(self,msg):
@@ -298,12 +322,13 @@ class Server:
         try:
             if lobby >= 0 and lobby < len(Server.lobbies):
                 for k, v in Server.lobbies[lobby]["clients"].items():
-                    if v != client:
+                    if v != client or not client:
                         try:
                             v.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
                             v.sendall(bytes(msg, "utf-8"))
                         except :
-                            self.removeClient(client,lobby,True)
+                            if client:
+                                self.removeClient(client,lobby,True)
         except:
             self.removeClient(client,lobby,True)
     
@@ -317,7 +342,13 @@ class Server:
     
     def sendToAll(self,msg,client,lobby):
         self.sendToOther(msg,client,lobby)                  
-        self.sendToClient(msg,client,lobby)      
+        self.sendToClient(msg,client,lobby)
+        
+    def surrenderIA(self,nbLobby,game,id):
+        game.addSurrenderedPlayerOnline(game.getPlayers()[id])
+        info = self.constructCall(nbLobby,True)
+        self.sendToClient("refreshgame."+str(info), None, nbLobby)
+        self.deleteLobby(nbLobby)   
 
     def placePiece(self,client,nbLobby,placement) -> bool:
         """Fonction de liaison entre le placement d'une piece graphique et moteur
@@ -358,15 +389,27 @@ class Server:
                     self.sendToAll("placement."+str(info), client, nbLobby)
                     print("j'ai send !!!")
                     return play
+                elif game.getCurrentPlayer().getAI():
+                    playerId = game.getCurrentPlayerId()
+                    play = game.getCurrentPlayer().getAI().play(game,Server.lobbies[nbLobby]["pool"],self.surrenderIA,playerId,nbLobby)
+                    if play:
+                        info = self.constructCall(nbLobby,True)
+                        info["piece"] = play
+                        info["played"] = playerId
+                        self.sendToOther("placement."+str(info), None, nbLobby)
                 else:
-                    info = self.constructCall(nbLobby,False)
-                    self.sendToClient("placement."+str(info), client, nbLobby)
+                    if game.getCurrentPlayer().getAI() == None:
+                        info = self.constructCall(nbLobby,False)
+                        self.sendToClient("placement."+str(info), client, nbLobby)
                     return False
         except:
             raise ValueError("Erreur network placement")
-        
-s1 = Server()
-s1.condition()
+   
+if __name__ == "__main__":
+
+    s1 = Server()
+    s1.condition()
+    
 
 
 # if __name__ == "__main__":

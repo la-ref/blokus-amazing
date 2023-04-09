@@ -13,8 +13,7 @@ if __name__ == "__main__":
 
 
     global CT
-    pool = mp.Pool(NB_CPU)
-    CT = cc.Controller(pool, NB_CPU)
+    CT = cc.Controller(NB_CPU)
 
     os._exit(1)
 

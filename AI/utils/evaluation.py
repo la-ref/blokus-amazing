@@ -95,7 +95,7 @@ def workAlphaBeta(game, profondeur : int, joueurId : int, listJoueur: list, alph
     
           
           
-def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list | None:
+def joueDifficile(joueurId : int, listPoss, profond : int = 1, pool = None) -> list | None:
     
 
     listJoueur=config.Config.controller.game.getPlayers()
@@ -129,13 +129,12 @@ def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list | None:
         # pool = mp.Pool(len(listTab))
         
     # try:
-    res = config.Config.controller.pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
+    if pool:
+        res = pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
+    else:   
+        res = config.Config.controller.pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
 
     return listPoss[np.argmax(res)]
-
-    # except:
-    #     pool.terminate()
-    #     return None
 
     
 
