@@ -32,6 +32,9 @@ class Game:
     
     def enCours(self) -> bool:
         return self.__enCours
+    
+    def end(self):
+        self.__enCours=False
         
     def start(self):
         threading.Timer(0.5,self.__nextPlayer).start()
@@ -55,7 +58,6 @@ class Game:
         else:
             return -1
         
-    
 
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
@@ -181,7 +183,16 @@ class Game:
             if len(self.__joueursAbandon) != len(self.__joueurs):
                 config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
                 if self.getCurrentPlayer().getAI():
-                    self.getCurrentPlayer().getAI().play()
+                    # try:
+                        self.getCurrentPlayer().getAI().play()
+                    # except:
+                    #     try:
+                    #         if config.Config.controller:
+                    #             print("controller ici mais partie quitter")
+                    #             pass
+                    #     except:
+                    #         print("plus de controller")
+                    #         exit(1)
                 return True
             else:
                 return False

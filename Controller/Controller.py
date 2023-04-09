@@ -21,11 +21,11 @@ class Controller(tk.Tk):
     donc de la communication entre les différents élèments de l'application
     """
 
-    def __init__(self: Controller) -> None:
+    def __init__(self: Controller, pool, NB_CPU) -> None:
         tk.Tk.__init__(self)
-        
-        config.initialisation(self)
-
+        config.initialisation(self, NB_CPU)
+        self.protocol()
+        self.pool = pool
         self.frames = { "Accueil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
@@ -36,8 +36,18 @@ class Controller(tk.Tk):
         self.json = []
         self.termine = True
         self.tour = 1
+        self.protocol("WM_DELETE_WINDOW", self.on_closing_window)
         self.changePage('Accueil')
         self.mainloop()
+        
+        
+
+    def on_closing_window(self):
+        self.pool.terminate()
+        self.pool.join()
+        self.destroy()
+        
+        
             
     def changePage(self : Controller, nomFrame : str, online = False):
         """Méthode permettant de changer la page qui va être afficher sur l'application

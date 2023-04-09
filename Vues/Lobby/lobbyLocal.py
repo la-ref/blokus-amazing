@@ -211,7 +211,7 @@ class lobbyLocal(Frame):
     def QuitterBouton(self):
         """ Méthode permettant re venir à la page d'Accueil (initialisation de la page d'accueil)
         """
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.changePage("Accueil")
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         """ Méthode permettant de modifier l'image au survol de la souris sur l'objet

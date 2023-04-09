@@ -7,13 +7,14 @@ class config():
     """
     Config : config
     
-    def __init__(self, controller):
+    def __init__(self, controller, NB_CPU):
         """ Constructeur qui permet d'initialiser les émléments principaux du jeu
 
         Args:
             Controller: Controller qui gère le jeu
         """
         random.seed()
+        self.NB_CPU= NB_CPU
         self.largueur : int = 1440
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
@@ -166,11 +167,11 @@ class config():
 
         
     @staticmethod
-    def initialisation(controller):
+    def initialisation(controller, NB_CPU):
         """
         Initialisation de la configuration. L'accès à la configuration ce fait via config.Config 
         """
-        config.Config = config(controller)
+        config.Config = config(controller, NB_CPU)
     
 
     def tableauImage(self):

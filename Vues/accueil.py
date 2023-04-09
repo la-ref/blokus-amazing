@@ -154,8 +154,8 @@ class Accueil(Frame):
         """ Fonction qui permet le callback du bouton "Quitter"
         
         """
-        self.window.destroy()
-        exit(1)
+        self.window.on_closing_window()
+
         
     def errorPop(self,error = "Erreur fatale : Le serveur a été deconnecté!"):
         if not self.errorPopUp and not self.pop_up_text and self.hidden:

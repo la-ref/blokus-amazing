@@ -6,6 +6,7 @@ from random import choices
 import multiprocessing as mp
 from functools import partial
 import time
+
 MinMaxCeof = 10
 
     
@@ -85,16 +86,17 @@ def alphaBeta(game, profondeur : int, joueurId : int, listJoueur: list, alpha: i
 def workAlphaBeta(game, profondeur : int, joueurId : int, listJoueur: list, alpha: int, beta : int, plateaux):
     listVal= []
     for i in range(len(plateaux)):
+        
+        if not game.enCours():
+            print("termine !!!")
+            raise KeyboardInterrupt()
         listVal.append(alphaBeta(game,profondeur,joueurId,listJoueur,alpha,beta,plateaux[i]))
     return listVal
     
           
           
-def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list:
-    NB_CPU = mp.cpu_count()//2
+def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list | None:
     
-    if NB_CPU==0:
-        raise ValueError("The number of CPU's is too low for this game to work")
 
     listJoueur=config.Config.controller.game.getPlayers()
 
@@ -119,22 +121,22 @@ def joueDifficile(joueurId : int, listPoss, profond : int = 1) -> list:
     nextId = config.Config.controller.game.getNextPlayer(joueurId)
     
     
-    if len(listTab)>NB_CPU:
-        div_list = np.array_split(listTab, NB_CPU)
-        pool = mp.Pool(NB_CPU)
+    if len(listTab)>config.Config.NB_CPU:
+        div_list = np.array_split(listTab, config.Config.NB_CPU)
         
     else:
         div_list = np.array_split(listTab, len(listTab))
-        pool = mp.Pool(len(listTab))
-      
+        # pool = mp.Pool(len(listTab))
+        
+    # try:
+    res = config.Config.controller.pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
 
-      
-    res = pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
-    pool.close()
-    pool.join()
-
-    
     return listPoss[np.argmax(res)]
+
+    # except:
+    #     pool.terminate()
+    #     return None
+
     
 
 def getSorted(listPoss : list, limit : int):
@@ -161,45 +163,7 @@ def getSorted(listPoss : list, limit : int):
     return listPoss
           
           
-                
     
-
-def minmax(game,q : queue.Queue, config, joueurId : int, listJoueur: list, plateau, profondeur : int, first : bool = True):
-
-    if profondeur >= 0:
-        listValeur = []
-        listPoss = nbPossible(config, listJoueur[joueurId])
-        if listPoss:
-            # for piece in listPoss:
-            for piece in choices(listPoss,k=2): 
-                # print("profondeur :", profondeur, piece)   
-                # Boucle des pièce possible du joueur
-                # tempPlat = plateau.copy()  # Copie du tableau sans les références
-                # # tempPlat.ajouterPiece(piece[0],piece[1],piece[2],piece[3],piece[4],piece[5]) # On test l'ajout de la pièce dans le plateau de jeu
-                plateau = ajouterPTest(game,plateau,piece[0],piece[1],piece[2],piece[3],piece[4],piece[5])
-                listValeur.append(minmax(game,q, config, config.controller.game.getNextPlayer(joueurId), listJoueur, plateau, profondeur-1, False)) # On ajoute la valuation de la pièce
-                
-            # print("\nIUHIUUYGUYGUYUYUYUYGUYUYYGUYGYGUYGTT\n",listValeur,"\n\n")
-            if profondeur%len(config.controller.game.getCurrentPlayers())==0:
-                # cas joueur évalué 
-                if first:
-                    q.put(max(listValeur))
-                else:
-                    return max(listValeur)
-            else: # Cas opposant
-                if first:
-                    q.put(min(listValeur))
-                else:
-                    return min(listValeur)
-            
-        else: # cas ou le joueur ne peut pas jouer
-            return minmax(game,q,config, listJoueur[(joueurId+1)%len(listJoueur)].getID(), listJoueur, plateau, profondeur-1, False)
-
-    else: # cas de sortie
-        return valuation_jeu(game,plateau, config.controller.game.getNextPlayer(joueurId))
-    
-    
-
 
 
 def ajouterPTest(game,board: np.ndarray,piece,column:int,row:int,player,declageX : int,declageY : int):
