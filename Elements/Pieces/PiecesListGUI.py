@@ -106,7 +106,9 @@ class PiecesListGUI(tk.Frame):
 
     def removePiece(self,piece : int):
         self.tableau_piece_forme[piece-1].enlever_piece()
-
+    
+    def removePieceHighscore(self,piece : int):
+        self.tableau_piece_forme[piece-1].enlever_piece()
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
 

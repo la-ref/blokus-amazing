@@ -2,6 +2,8 @@ from __future__ import annotations
 import json
 import string
 from Elements.Player import Player
+from Elements.Pieces.Pieces import Pieces
+from Elements.Pieces.PiecesDeclaration import LISTEPIECES
 import os.path as path
 
 # Exemple de fonction pour gérer les Json
@@ -82,3 +84,25 @@ class fonctionJson:
             joueurs = data[partie][0]['winners']
 
         return joueurs
+
+    def getPieces(self, partie):
+        """Fonction permettant de récupérer la liste des joueurs de la partie
+
+        Args:
+            Partie: Le nom de la partie (Game+numéro)
+        """
+        pieces = []
+        position = []
+        joueurs = []
+        with open(self.chemin, mode = "r") as mon_fichier:
+            data = json.load(mon_fichier)
+            for i in range (len(data[partie])):
+                if i != 0:
+                    pieces.append(LISTEPIECES[f"{data[partie][i]['num_piece']}"])
+                    position.append(data[partie][i]['position_plateau'])
+                    joueurs.append(Player(data[partie][i]['joueur'], data[partie][0]['joueurs'][data[partie][i]['joueur']]))
+                    for j in range(data[partie][i]['rotation']):
+                        pieces[i-1].rotate90()
+                    if data[partie][i]['flip'] == True:
+                        pieces[i-1].flip()
+        return pieces, position, joueurs

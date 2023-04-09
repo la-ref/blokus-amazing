@@ -84,26 +84,26 @@ class LeaderboardInterface(tk.Frame):
                     if ((i,y) not in self.pieces):
                         self.border.tag_lower(self.parent.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
                         self.pieces.append((i,y))
-        # for widgets in self.winfo_children():
-        #     widgets.unbind('<ButtonPress-1>')
-        #     widgets.destroy()
+        for widgets in self.winfo_children():
+            widgets.unbind('<ButtonPress-1>')
+            widgets.destroy()
         self.boutonUser = []
         self.activeclavier = False
 
         self.touche = None
         self.modal_active = False
         
-        self.retour = self.border.create_image(719.0, 850.0,image= config.Config.image[60])
+        self.retour = self.border.create_image(719.0, 875.0,image= config.Config.image[60])
         self.border.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
         self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
         self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
         
-        self.fleche_droite = self.border.create_image(935.0, 850.0,image= config.Config.image[61])
+        self.fleche_droite = self.border.create_image(935.0, 875.0,image= config.Config.image[61])
         self.border.tag_bind(self.fleche_droite, "<Button-1>",lambda *_: self.suivant())
         self.border.tag_bind(self.fleche_droite, "<Enter>",lambda *_: self.hoverBouton("entre","droite",self.fleche_droite))
         self.border.tag_bind(self.fleche_droite, "<Leave>",lambda *_: self.hoverBouton("sort","droite",self.fleche_droite))
 
-        self.fleche_gauche = self.border.create_image(500.0, 850.0,image= config.Config.image[62])
+        self.fleche_gauche = self.border.create_image(500.0, 875.0,image= config.Config.image[62])
         self.border.tag_bind(self.fleche_gauche, "<Button-1>",lambda *_: self.precedent())
         self.border.tag_bind(self.fleche_gauche, "<Enter>",lambda *_: self.hoverBouton("entre","gauche",self.fleche_gauche))
         self.border.tag_bind(self.fleche_gauche, "<Leave>",lambda *_: self.hoverBouton("sort","gauche",self.fleche_gauche))
@@ -117,8 +117,31 @@ class LeaderboardInterface(tk.Frame):
                 winStr+=pl+", "
             self.text_winners = self.border.create_text(config.Config.largueur/2,150,text=winStr+"\nBravo ! ",fill="#000000",font=("Lilita One", config.Config.taillePolice[1]),anchor=tk.CENTER,justify='center')
 
+        # Récupération des informations de la partie
+        self.pieces, self.positions, self.joueurs = self.json.getPieces("Game"+str(self.nbgame))
         
 
+        # Ajout des pièces dans le plateau
+        for z in range(len(self.pieces)):
+            x : int = self.positions[z][0]-1
+            y : int = self.positions[z][1]-1
+            delimitation : np.ndarray = self.pieces[z].getDelimitation()
+            for i in range(len(delimitation)):
+                for v in range(len(delimitation[0])):
+                    if ((y+i >=0) and (y+i < self.board.getBoardSize()) and (x+v >=0) and (x+v < self.board.getBoardSize())):
+                        if (delimitation[i][v] == 3):
+                            self.board.ajoutCouleur(y+i,x+v,self.joueurs[z].getColor())
+            # for dec in np.argwhere(self.pieces[i].getDelimitation()==3):
+            #     print(self.board.ajouterPiece(self.pieces[i],int(self.positions[i][0]),int(self.positions[i][1]),self.joueurs[i],int(dec[1]),int(dec[0])))
+
+        # Affichage des pièces
+        for i in range(self.board.getBoardSize()):
+            for y in range(self.board.getBoardSize()):
+                valeur : int|None = self.board.getColorAt(i,y)
+                if valeur:
+                    piece = config.Config.image[valeur+47]
+                    self.border.tag_lower(self.border.create_image(463+y*(piece.width()),255+i*(piece.height()),image=piece))
+    
     def refreshBoard(self,plateau : Board) -> None:
         """Méthode callback pour GridInterface qui le met à jour permettant 
         d'afficher l'ensemble des pièces présentes sur un plateau directement graphiquement sur la grille

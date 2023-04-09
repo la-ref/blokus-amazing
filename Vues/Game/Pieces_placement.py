@@ -423,6 +423,9 @@ class Pieces_placement(tk.Frame):
                 x2,y2=self.parent.coords(piece.bl)
                 piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y) 
         self.premier2 = 0
+    
+    def getPiece(self):
+        return self.piece
         
 
 if __name__=="__main__":
