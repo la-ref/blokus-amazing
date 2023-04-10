@@ -354,7 +354,6 @@ class Server:
     
     def playIA(self,game,lobbyId):
         while game and not game.getWinnersName():
-            print("hey",game)
             if lobbyId >= 0 and lobbyId < len(Server.lobbies):
                 if game:
                     if lobbyId >= 0 and lobbyId < len(Server.lobbies) and len(Server.lobbies[lobbyId]["clients"]) > 0:
@@ -384,7 +383,6 @@ class Server:
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        print("threads",threading.enumerate())
         if nbLobby >= 0 and nbLobby < len(Server.lobbies): 
             game = Server.lobbies[nbLobby]["game"]
             print(placement,"mon placement")
