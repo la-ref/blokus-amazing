@@ -74,7 +74,6 @@ class Server:
     def removeClient(self,client,lobbyId, username = False):
         if lobbyId >= 0 and lobbyId < len(Server.lobbies):
             if client in Server.lobbies[lobbyId]["clients"].values():
-                print("JE VAIS DELETE TES GRAND MORTS")
                 #client.close()
                 clientId = self.getClientId(client,lobbyId)
                 game = Server.lobbies[lobbyId]["game"]
@@ -210,7 +209,6 @@ class Server:
                     myIA = aionline.ai(Server.lobbies[nbLobby]["iaLevels"][i],player,nbLobby,Server.lobbies[nbLobby]["pool"],i,self.surrenderIA,self.placePiece)
                     player.setIA(myIA)
                     joueurs.append(player)
-            print("fucking players",joueurs)
             game = Game(joueurs,None,20,True)
             Server.lobbies[nbLobby]["game"] = game
             sendDict = self.constructCall(nbLobby,True)
@@ -241,7 +239,6 @@ class Server:
             if not newbuf: return None
             buf += newbuf
             count -= len(newbuf)
-        print(buf)
         return buf
         
     def receives(self, client, nbLobby):
@@ -290,7 +287,6 @@ class Server:
                             info : list = data.split("-")
                             if info and len(info) > 1 and int(info[1]) >= 0 and int(info[1]) <= 3:
                                 Server.lobbies[nbLobby]["iaLevels"][int(info[1])] = info[0]
-                                print(Server.lobbies[nbLobby])
                     else:
                         self.sendToClient("errormsg.Cheating is not allowed", client, nbLobby)
                         self.removeClient(client,nbLobby,True)
