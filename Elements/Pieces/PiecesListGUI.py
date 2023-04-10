@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from PIL import ImageTk,Image
 import Elements.Pieces.PiecesDeclaration as PD
@@ -48,7 +49,7 @@ class PiecesListGUI(tk.Frame):
         i1 = 0
         maxheight = 0
         
-        for valeur in (PD.LISTEPIECES if config.Config.controller.onlineGame else config.Config.controller.getGame().getPlayers()[nb_player].getPieces()):
+        for valeur in (copy.deepcopy(PD.LISTEPIECES) if config.Config.controller.onlineGame else config.Config.controller.getGame().getPlayers()[nb_player].getPieces()):
             
             self.tableau_piece_forme.append(PP.Pieces_placement(window,self.parent,nb_player,valeur,self))
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)

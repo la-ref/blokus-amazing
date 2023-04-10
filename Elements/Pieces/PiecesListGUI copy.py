@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from PIL import ImageTk,Image
 import Elements.Pieces.PiecesDeclaration as PD
@@ -49,7 +50,7 @@ class PiecesListGUI(tk.Frame):
 
         i1 = 0
         maxheight = 0
-        for valeur in PD.LISTEPIECES:
+        for valeur in copy.deepcopy(PD.LISTEPIECES):
             self.tableau_piece_forme.append([])
             self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
 

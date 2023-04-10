@@ -74,6 +74,7 @@ class Server:
     def removeClient(self,client,lobbyId, username = False):
         if lobbyId >= 0 and lobbyId < len(Server.lobbies):
             if client in Server.lobbies[lobbyId]["clients"].values():
+                print("JE VAIS DELETE TES GRAND MORTS")
                 #client.close()
                 clientId = self.getClientId(client,lobbyId)
                 game = Server.lobbies[lobbyId]["game"]
@@ -98,7 +99,8 @@ class Server:
                         #t.start()
                 
     def removeLobby(self,lobbyId):
-        Server.lobbies.pop(lobbyId)
+        if lobbyId >= 0 and lobbyId < len(Server.lobbies):
+            Server.lobbies.pop(lobbyId)
                    
     def addLobby(self,connection):
         print(Server.lobbies)
@@ -129,46 +131,47 @@ class Server:
         return lob,cli
         
     def accept(self):
-        try:
-            c, addr = self.s.accept()
-            print(c)
-            lob = 0
-            cli = 0
-            
-            lengthbuf = self.recvall(c, 4)
-            length, = struct.unpack('!I', lengthbuf)
-            data = self.recvall(c, length)
-            depart = str(data.decode())
-            print(depart)
-            if "blokus." in depart:
-                lob,cli = self.addLobby(c)
-            else:
-                raise ValueError("Connexion non autorisé")
-            if len(data) == 0:
-                if c in Server.lobbies[lob]["clients"].values():
-                    #print("client déconnecter : , {}".format(Server.lobbies[lob]["clients"][cli]))
-                    self.removeClient(cli,lob)
-                    return
-            else:
-                data = str(data.decode())
-                data = data.replace("blokus.", '')
-                Server.lobbies[lob]["players"][cli]=data
-                #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
-                self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
-                players = copy.deepcopy(Server.lobbies[lob]["players"])
-                players["admin"] = Server.lobbies[lob]["admin"]
-                self.sendToOther("userNames."+str(players), self.getClientFromId(cli,lob), lob)
-                self.receiveV2(self.getClientFromId(cli,lob),lob)
-                #t = threading.Timer(1.2,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
-                #t.start()
-                print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
-                print(Server.lobbies[lob])
-        except:
-            self.removeClient(cli,lob)
+        while True:
+            try:
+                c, addr = self.s.accept()
+                print(c)
+                lob = 0
+                cli = 0
+                
+                lengthbuf = self.recvall(c, 4)
+                length, = struct.unpack('!I', lengthbuf)
+                data = self.recvall(c, length)
+                depart = str(data.decode())
+                print(depart)
+                if "blokus." in depart:
+                    lob,cli = self.addLobby(c)
+                else:
+                    raise ValueError("Connexion non autorisé")
+                if len(data) == 0:
+                    if c in Server.lobbies[lob]["clients"].values():
+                        #print("client déconnecter : , {}".format(Server.lobbies[lob]["clients"][cli]))
+                        self.removeClient(cli,lob)
+                        return
+                else:
+                    data = str(data.decode())
+                    data = data.replace("blokus.", '')
+                    Server.lobbies[lob]["players"][cli]=data
+                    #self.sendToOther(str(data) + " est entré dans le lobby", self.getClientFromId(cli,lob), lob)
+                    self.sendToClient(str(cli), self.getClientFromId(cli,lob), lob)
+                    players = copy.deepcopy(Server.lobbies[lob]["players"])
+                    players["admin"] = Server.lobbies[lob]["admin"]
+                    self.sendToOther("userNames."+str(players), self.getClientFromId(cli,lob), lob)
+                    self.receiveV2(self.getClientFromId(cli,lob),lob)
+                    #t = threading.Timer(1.2,self.sendAdmin,[lob,self.getClientFromId(cli,lob)])
+                    #t.start()
+                    print("insert", "({}) : {} connected.\n".format(str(datetime.now())[:-7], str(data)[1:]))
+                    print(Server.lobbies[lob])
+            except:
+                self.removeClient(cli,lob)
             
     def constructCall(self,nbLobby,playing):
         sendDict = {}
-        if playing:
+        if playing and nbLobby >= 0 and nbLobby < len(Server.lobbies) and "game" in Server.lobbies[nbLobby].keys():
             playerName = {}
             playerSurrender = {}
             for p in (Server.lobbies[nbLobby]["game"].getPlayers()):
@@ -192,29 +195,32 @@ class Server:
         
         try:
             joueurs = []
-            for i in range(len(Server.lobbies[nbLobby]["players"])):
-                joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
-            if len(joueurs) != 4:
+            if len(Server.lobbies[nbLobby]["players"]) != 4:
                 NB_CPU= mp.cpu_count()-1 if mp.cpu_count()-1<6 else 6
         
                 if NB_CPU==0:
                     raise ValueError("The number of CPU's is too low for this game to work")        
                     
                 Server.lobbies[nbLobby]["pool"] = mp.Pool(NB_CPU)
-            while len(joueurs) != 4:
-                myIA = aionline.ai(Server.lobbies[nbLobby]["iaLevels"][len(joueurs)],Player.Player(len(joueurs),"IA-"+str(len(joueurs))))
-                player = Player.Player(len(joueurs),"IA-"+str(len(joueurs)))
-                player.setIA(myIA)
-                joueurs.append(player)
+            for i in range(4):
+                if i in (Server.lobbies[nbLobby]["players"]).keys():
+                    joueurs.append(Player.Player(i,Server.lobbies[nbLobby]["players"][i]))
+                else:
+                    player = Player.Player(i,"IA-"+str(i))
+                    myIA = aionline.ai(Server.lobbies[nbLobby]["iaLevels"][i],player,nbLobby,Server.lobbies[nbLobby]["pool"],i,self.surrenderIA,self.placePiece)
+                    player.setIA(myIA)
+                    joueurs.append(player)
+            print("fucking players",joueurs)
             game = Game(joueurs,None,20,True)
             Server.lobbies[nbLobby]["game"] = game
             sendDict = self.constructCall(nbLobby,True)
             print(sendDict)
+            tIa = threading.Thread(target=self.playIA,args=(game,nbLobby))
+            tIa.start()
             return str(sendDict)
         except Exception as e:
-            print(e)
-            print("je suis ici!")
-            raise ValueError("Erreur network création")
+            print("je suis ici!",e)
+            raise ValueError("Erreur network création partie")
         
     def deleteLobby(self,nbLobby):
         if Server.lobbies[nbLobby]["game"] and Server.lobbies[nbLobby]["game"].getWinnersName():
@@ -311,18 +317,16 @@ class Server:
         t1_2_1.start()
 
     def condition(self):
-        while True:
-            t1_1 = threading.Thread(target=self.accept)
-            t1_1.daemon = True
-            t1_1.start()
-            t1_1.join(1)
+        t1_1 = threading.Thread(target=self.accept)
+        t1_1.start()
+        t1_1.join()
             
 
     def sendToOther(self,msg, client, lobby):
         try:
             if lobby >= 0 and lobby < len(Server.lobbies):
                 for k, v in Server.lobbies[lobby]["clients"].items():
-                    if v != client or not client:
+                    if v != client or client == None:
                         try:
                             v.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
                             v.sendall(bytes(msg, "utf-8"))
@@ -345,10 +349,30 @@ class Server:
         self.sendToClient(msg,client,lobby)
         
     def surrenderIA(self,nbLobby,game,id):
-        game.addSurrenderedPlayerOnline(game.getPlayers()[id])
-        info = self.constructCall(nbLobby,True)
-        self.sendToClient("refreshgame."+str(info), None, nbLobby)
-        self.deleteLobby(nbLobby)   
+        if game:
+            game.addSurrenderedPlayerOnline(game.getPlayers()[id])
+            info = self.constructCall(nbLobby,True)
+            self.sendToOther("refreshgame."+str(info), None, nbLobby)
+            print("BONJOUR JAI ABANDONNE",info)
+            self.deleteLobby(nbLobby) 
+    
+    def playIA(self,game,lobbyId):
+        while game and not game.getWinnersName():
+            print("hey",game)
+            if lobbyId >= 0 and lobbyId < len(Server.lobbies):
+                if game:
+                    if lobbyId >= 0 and lobbyId < len(Server.lobbies) and len(Server.lobbies[lobbyId]["clients"]) > 0:
+                        if game.getCurrentPlayer().getAI():
+                            game.getCurrentPlayer().getAI().callPlacePiece()
+                    else:
+                        self.removeLobby(lobbyId)
+                        break
+                else:
+                    break
+            else:
+                break
+        return
+                
 
     def placePiece(self,client,nbLobby,placement) -> bool:
         """Fonction de liaison entre le placement d'une piece graphique et moteur
@@ -364,46 +388,51 @@ class Server:
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        game = Server.lobbies[nbLobby]["game"]
-        print(placement,"mon placement")
-        try:
-            if game:     
-                if self.getClientId(client,nbLobby) == game.getCurrentPlayerId():
-                    pieceId = placement["pieceId"]
-                    colonne = placement["colonne"]
-                    ligne = placement["ligne"]
-                    dc = placement["dc"]
-                    dl = placement["dl"]
-                    rotation = placement["rotation"]
-                    flip = placement["flip"]
-                    piece = game.getCurrentPlayer().getPiece(str(pieceId))
-                    play = game.playTurn(piece, colonne, ligne, dc, dl,rotation,flip)
-                    #win = game.getWinners()
-                    
-                    # if (win):
-                    #     self.vueJeu.partieTermine(win)
-                    info = self.constructCall(nbLobby,play)
-                    print(info,"ODOODSDJFKSDJFSDFHDS")
-                    info["piece"] = pieceId
-                    info["played"] = self.getClientId(client,nbLobby)
-                    self.sendToAll("placement."+str(info), client, nbLobby)
-                    print("j'ai send !!!")
-                    return play
-                elif game.getCurrentPlayer().getAI():
-                    playerId = game.getCurrentPlayerId()
-                    play = game.getCurrentPlayer().getAI().play(game,Server.lobbies[nbLobby]["pool"],self.surrenderIA,playerId,nbLobby)
-                    if play:
-                        info = self.constructCall(nbLobby,True)
-                        info["piece"] = play
-                        info["played"] = playerId
-                        self.sendToOther("placement."+str(info), None, nbLobby)
-                else:
-                    if game.getCurrentPlayer().getAI() == None:
-                        info = self.constructCall(nbLobby,False)
-                        self.sendToClient("placement."+str(info), client, nbLobby)
-                    return False
-        except:
-            raise ValueError("Erreur network placement")
+        print("threads",threading.enumerate())
+        if nbLobby >= 0 and nbLobby < len(Server.lobbies): 
+            game = Server.lobbies[nbLobby]["game"]
+            print(placement,"mon placement")
+            try:
+                if game:     
+                    if client and self.getClientId(client,nbLobby) == game.getCurrentPlayerId() and placement:
+                        pieceId = placement["pieceId"]
+                        colonne = placement["colonne"]
+                        ligne = placement["ligne"]
+                        dc = placement["dc"]
+                        dl = placement["dl"]
+                        rotation = placement["rotation"]
+                        flip = placement["flip"]
+                        piece = game.getCurrentPlayer().getPiece(str(pieceId))
+                        play = game.playTurn(piece, colonne, ligne, dc, dl,rotation,flip)
+                        #win = game.getWinners()
+                        
+                        # if (win):
+                        #     self.vueJeu.partieTermine(win)
+                        info = self.constructCall(nbLobby,play)
+                        print(info,"ODOODSDJFKSDJFSDFHDS")
+                        info["piece"] = pieceId
+                        info["played"] = self.getClientId(client,nbLobby)
+                        self.sendToAll("placement."+str(info), client, nbLobby)
+                        print("j'ai send !!!")
+                        #self.playIA(game,nbLobby)
+                    elif game.getCurrentPlayer().getAI():
+                        playerId = game.getCurrentPlayerId()
+                        play = game.getCurrentPlayer().getAI().play(game)
+                        print("je vais play attention IA !",play)
+                        if play:
+                            info = self.constructCall(nbLobby,True)
+                            info["piece"] = play
+                            info["played"] = playerId
+                            print("ce que je send c'est ça : ",info)
+                            self.sendToOther("placement."+str(info), None, nbLobby)
+                            #self.playIA(game,nbLobby)
+                    else:
+                        if game.getCurrentPlayer().getAI() == None:
+                            info = self.constructCall(nbLobby,False)
+                            self.sendToClient("placement."+str(info), client, nbLobby)
+            except Exception as e:
+                print("my error :",e)
+                raise ValueError("Erreur network placement")
    
 if __name__ == "__main__":
 

@@ -136,6 +136,42 @@ def joueDifficile(joueurId : int, listPoss, profond : int = 1, pool = None) -> l
 
     return listPoss[np.argmax(res)]
 
+def joueDifficileOnline(joueurId : int, listPoss, pool,game,profond : int = 1) -> list | None:
+    
+
+    listJoueur=game.getPlayers()
+
+    listPoss=getSorted(listPoss, 40)
+
+    
+    listTab = []
+    
+    
+    
+    # création des copies de tableaux et ajout des à tester
+    for piece in listPoss:
+        tempPlat = np.copy(game.getBoard().getBoard())
+        tempPlat= ajouterPTest(game,tempPlat,piece[0],piece[1],piece[2],piece[3],piece[4],piece[5])
+        listTab.append(tempPlat)
+    
+    
+    
+    depth = profond*len(game.getCurrentPlayers())-1
+    nextId = game.getNextPlayer(joueurId)
+    
+    
+    if len(listTab)>6:
+        div_list = np.array_split(listTab, 6)
+        
+    else:
+        div_list = np.array_split(listTab, len(listTab))
+        # pool = mp.Pool(len(listTab))
+        
+    # try:
+    print(pool)
+    res = pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
+    return listPoss[np.argmax(res)]
+
     
 
 def getSorted(listPoss : list, limit : int):

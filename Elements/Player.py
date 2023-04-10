@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 from Elements.Pieces.PiecesDeclaration import LISTEPIECES
 from Elements.Pieces.Pieces import Pieces
 import AI.ai as ia
@@ -104,7 +105,7 @@ class Player:
             self (Player): joueur
             id (str): id de la pièce à choisir
         """
-        self.__pieces : dict[str,Pieces] = LISTEPIECES.copy()
+        self.__pieces : dict[str,Pieces] = copy.deepcopy(LISTEPIECES.copy())
 
     def removePiece(self : Player,id : str) -> None:
         """Méthode permettant de retirer une pièce choisie dans la liste des pièces d'un joueur

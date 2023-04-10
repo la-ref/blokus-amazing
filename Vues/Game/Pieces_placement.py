@@ -48,7 +48,7 @@ class Pieces_placement(tk.Frame):
         self.tableau_piece_copy=copy.copy(PD.LISTEPIECES[la_piece])
 
         # Initialisation de la pièce
-        self.piece=PD.LISTEPIECES[la_piece]
+        self.piece=copy.deepcopy(PD.LISTEPIECES[la_piece])
 
         # Tableau des délimitations de la pièce
         self.tableau_piece=self.piece.getDelimitation()
@@ -77,7 +77,7 @@ class Pieces_placement(tk.Frame):
     def remettrePiece_copy(self):
         """ Fonction qui permet de remettre les pièces par défaut
         """
-        PD.LISTEPIECES[self.la_piece] = self.tableau_piece_copy
+        self.piece = copy.deepcopy(self.tableau_piece_copy)
 
     def getPieceBoardCoord(self):
         """Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
@@ -118,7 +118,8 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
             
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.pieces = copy.deepcopy(PD.LISTEPIECES)
+            self.piece = self.pieces[self.la_piece]
             self.piece.flip()
 
             # Re-création de la pièce

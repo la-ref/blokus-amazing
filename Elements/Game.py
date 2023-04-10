@@ -29,6 +29,8 @@ class Game:
 
         for pj in self.__joueurs:
             pj.resetPiece()
+            print("hey hey")
+            print(pj.getPieces())
     
     def enCours(self) -> bool:
         return self.__enCours
@@ -177,12 +179,6 @@ class Game:
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
 
-        if self.__online:
-            print("bonjour je suis ici",self.getCurrentPlayer().getName())
-            if self.getCurrentPlayer().getAI():
-                print("bonjour je suis effcitvement une IA")
-                self.getCurrentPlayer().getAI().play()
-        
         if not self.__online:
             config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
             if len(self.__joueursAbandon) != len(self.__joueurs):
