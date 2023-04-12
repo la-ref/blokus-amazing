@@ -97,12 +97,15 @@ class fonctionJson:
         with open(self.chemin, mode = "r") as mon_fichier:
             data = json.load(mon_fichier)
             for i in range (len(data[partie])):
-                if i != 0:
-                    pieces.append(LISTEPIECES[f"{data[partie][i]['num_piece']}"])
-                    position.append(data[partie][i]['position_plateau'])
-                    joueurs.append(Player(data[partie][i]['joueur'], data[partie][0]['joueurs'][data[partie][i]['joueur']]))
-                    for j in range(data[partie][i]['rotation']):
-                        pieces[i-1].rotate90()
-                    if data[partie][i]['flip'] == True:
-                        pieces[i-1].flip()
+                pieces.append(LISTEPIECES[f"{data[partie][i]['num_piece']}"])
+                position.append(data[partie][i]['position_plateau'])
+                joueurs.append(Player(data[partie][i]['joueur'], data[partie][0]['joueurs'][data[partie][i]['joueur']]))
+                print(pieces[i].getDelimitation(), data[partie][i]['flip'], data[partie][i]['rotation'])
+                for j in range(int(data[partie][i]['rotation']/90)):
+                    print('rotation')
+                    pieces[i].rotate90()
+                if data[partie][i]['flip'] == "True":
+                    print('flip')
+                    pieces[i].flip()
+                print(pieces[i].getDelimitation())
         return pieces, position, joueurs

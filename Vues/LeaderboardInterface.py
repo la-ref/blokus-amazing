@@ -134,6 +134,9 @@ class LeaderboardInterface(tk.Frame):
             # for dec in np.argwhere(self.pieces[i].getDelimitation()==3):
             #     print(self.board.ajouterPiece(self.pieces[i],int(self.positions[i][0]),int(self.positions[i][1]),self.joueurs[i],int(dec[1]),int(dec[0])))
 
+        print(self.board.getBoard())
+
+
         # Affichage des pièces
         for i in range(self.board.getBoardSize()):
             for y in range(self.board.getBoardSize()):
