@@ -67,11 +67,12 @@ class Pieces_placement(tk.Frame):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
                     
                     if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
-                        self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                        if platform.system() == "Windows":
-                            self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
-                        else:
-                            self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                        if config.Config.controller.getState() == None:
+                            self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                            if platform.system() == "Windows":
+                                self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
+                            else:
+                                self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
 
     def remettrePiece_copy(self):
@@ -91,7 +92,7 @@ class Pieces_placement(tk.Frame):
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
-        return (x-450)//27+dx-1,(y-242)//27+dy-1,dx,dy
+        return (x-450+2)//27+dx-1,(y-242+2)//27+dy-1,dx,dy
 
     def getPieceCoord(self):
         """
@@ -306,7 +307,7 @@ class Pieces_placement(tk.Frame):
 
 
         # Condition si la pièce est sur le plateau
-        if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+        if (event.x<450-2 or event.x>990-2 or event.y<242-2 or event.y>782-2):
             self.image = config.Config.image[self.nb_player+48]
 
             # Changement de la taille de l'image

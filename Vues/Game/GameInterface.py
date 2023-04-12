@@ -94,7 +94,7 @@ class GameInterface(tk.Frame):
 
         BoutonInfo = self.border.create_image(
             690,
-            852,
+            854,
             image=config.Config.image[59],
             anchor=tk.NW
         )
@@ -207,12 +207,12 @@ class GameInterface(tk.Frame):
         if typ == "entre":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[58])
-                self.border.moveto(idButton,680,845)
+                self.border.moveto(idButton,680,847)
                 self.border.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[59])
-                self.border.moveto(idButton,690,852)
+                self.border.moveto(idButton,690,854)
                 self.border.config(cursor="")
             
     def surrender(self : GameInterface,player : int) -> None:

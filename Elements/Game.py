@@ -29,8 +29,6 @@ class Game:
 
         for pj in self.__joueurs:
             pj.resetPiece()
-            print("hey hey")
-            print(pj.getPieces())
     
     def enCours(self) -> bool:
         return self.__enCours
@@ -316,7 +314,8 @@ class Game:
                         "num_piece" : piece.getIdentifiant(),
                         "position_plateau" : [int(colonne),int(ligne)],
                         "rotation" : rota,
-                        "flip" : flip})
+                        "flip" : flip,
+                        "decalage" : [int(dc),int(dl)]})
                     config.Config.controller.tour += 1 
                     
                 

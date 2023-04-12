@@ -163,7 +163,17 @@ class config():
         
         # Accueil erreur
         self.image.append(PhotoImage(file="Images/Accueil/error.png")) # 73
-         
+
+        # Scoreboard
+        self.image.append(PhotoImage(file="Images/Leaderboard/button.png")) # 74
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite.png")) #75
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche.png")) # 76
+        self.image.append(PhotoImage(file="Images/Leaderboard/button_blanc.png")) # 77
+
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite_hover.png")) # 78
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche_hover.png")) # 79
+        
+
 
         
     @staticmethod

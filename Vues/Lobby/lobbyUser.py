@@ -1,9 +1,14 @@
-from tkinter import Tk, Frame
+from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+import tkinter
+import sys
 from config import config
 import tkinter as tk
 import Elements.Player as Player
 import AI.ai as ia
+import logging
 import threading
+import time
 class lobbyUser(Frame):
     def __init__(self, window, parent : tk.Canvas, images : list, joueurs : Player.Player, nb_player : int, height : int = 420, width : int = 317, droiteg : str = "haut", hb : str = "droite"):
         """Méthode qui permet d'initialiser tout l'objet lobbyUser
@@ -255,26 +260,23 @@ class lobbyUser(Frame):
         self.activeclavier = boolean
         if boolean == True:
             self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
-            x = threading.Thread(target=self.whileOff)
-            x.start()
-        else:
-            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
-
-    def whileOff(self):
-        import time 
-        while self.activeclavier == True:
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
-            print(width, "2222")
             if width > 300:
                 self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[2]))
             else:
                 self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[0]))
-
-        if width > 300:
-            self.parent.itemconfigure(self.text, text=self.joueur.getName()+"‎ ", font=('Lilita One', config.Config.taillePolice[2]))
+            # x = threading.Thread(target=self.whileOff)
+            # x.start()
         else:
-            self.parent.itemconfigure(self.text, text=self.joueur.getName()+"‎ ", font=('Lilita One', config.Config.taillePolice[0]))
+            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
+            tailles = self.parent.bbox(self.text)
+            width = tailles[2] - tailles[0]
+            if width > 300:
+                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[2]))
+            else:
+                self.parent.itemconfigure(self.text, text=self.joueur.getName(), font=('Lilita One', config.Config.taillePolice[0]))
+
 
     def touches(self,event):
         """Méthode qui actualise le pseudo du joueur à chaque touche appuyé de l'ordinateur
@@ -286,10 +288,13 @@ class lobbyUser(Frame):
         self.touche = str(event.keysym)
         if self.activeclavier == True:
             if len(self.touche) == 1:
-                if len(self.joueur.getName()) < 10:
+                if len(self.joueur.getName()) < 9:
                     self.joueur.setName(str(self.joueur.getName()+self.touche))
             elif self.touche == "space":
-                if len(self.joueur.getName()) < 10:
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+" ")
+            elif self.touche == "shift" or self.touche == "Shift_L" or self.touche == "Shift_R":
+                if len(self.joueur.getName()) < 9:
                     self.joueur.setName(str(self.joueur.getName())+" ")
             else:
                 if len(self.joueur.getName()) > 0:
@@ -298,14 +303,14 @@ class lobbyUser(Frame):
             tailles = self.parent.bbox(self.text)
             width = tailles[2] - tailles[0]
             if width > 300:
-                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎', font=('Lilita One', config.Config.taillePolice[2]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'|', font=('Lilita One', config.Config.taillePolice[2]))
 
             else:
-                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎ ', font=('Lilita One', config.Config.taillePolice[0]))
+                self.parent.itemconfigure(self.text, text=self.joueur.getName()+'|', font=('Lilita One', config.Config.taillePolice[0]))
                 tailles = self.parent.bbox(self.text)
                 width = tailles[2] - tailles[0]
                 if width > 300:
-                    self.parent.itemconfigure(self.text, text=self.joueur.getName()+'‎', font=('Lilita One', config.Config.taillePolice[2]))
+                    self.parent.itemconfigure(self.text, text=self.joueur.getName()+'|', font=('Lilita One', config.Config.taillePolice[2]))
 
             config.Config.controller.changePlayer(self.joueur)
 

@@ -22,6 +22,7 @@ class Accueil(Frame):
     def initialize(self):
         """ Fonction qui initialise la page d'accueil
         """
+        config.Config.controller.changeState("Nope")
         for widgets in self.winfo_children():
             widgets.destroy()
         
@@ -83,6 +84,7 @@ class Accueil(Frame):
             image=config.Config.image[3],
             anchor=tkinter.NW
         )
+        self.canvas.tag_bind(BoutonScore, "<Button-1>", self.ScoreBouton)
         self.canvas.tag_bind(BoutonScore, "<Enter>",lambda *_: self.hoverBouton("entre","leader",BoutonScore))
         self.canvas.tag_bind(BoutonScore, "<Leave>",lambda *_: self.hoverBouton("sort","leader",BoutonScore))
 
@@ -229,6 +231,13 @@ class Accueil(Frame):
         """
         import Vues.connexion as connexion
         config.Config.controller.changePage("connexion")
+    
+    def ScoreBouton(self, event):
+        """Fonction de callback du bouton "Score"
+        """
+        
+        import Vues.LeaderboardInterface as LeaderboardInteface
+        config.Config.controller.changePage("LeaderboardInterface")
         
         
         
