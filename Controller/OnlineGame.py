@@ -8,6 +8,12 @@ class OnlineGame:
         self.winners = False
         self.surrendered = False
         self.myTurn = False
+        self.ip = "localhost"
+        self.port = 5005
+        
+    def setIPAndPort(self,ip,port):
+        self.ip = ip
+        self.port = port
         
     def isPlaying(self):
         return self.board and len(self.players) != 0 and self.myTurn

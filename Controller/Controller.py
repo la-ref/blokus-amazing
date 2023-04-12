@@ -25,7 +25,6 @@ class Controller(tk.Tk):
     def __init__(self: Controller, NB_CPU) -> None:
         tk.Tk.__init__(self)
         config.initialisation(self, NB_CPU)
-        self.protocol()
         self.pool = mp.Pool(NB_CPU)
         self.frames = { "Accueil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self)}
         self.game : Game
@@ -74,7 +73,11 @@ class Controller(tk.Tk):
         self.currentPage = nomFrame
             
     def changeUserName(self,name):
-        self.onlineGame = OnlineGame(userName=name)      
+        self.onlineGame = OnlineGame(userName=name)   
+    
+    def setIPAndPort(self,ip,port):
+        print("ip port",ip,port)
+        self.onlineGame.setIPAndPort(ip,port)   
             
     
     def changePlayer(self : Controller, players : list[Player]) -> None:

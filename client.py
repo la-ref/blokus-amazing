@@ -14,10 +14,9 @@ class Client:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.nom = nom
         self.id = 0
-        now = str(datetime.now())[:-7]
         self.error = False
         try:
-            self.s.connect(("localhost", Client.PORT))
+            self.s.connect((config.Config.controller.onlineGame.ip, config.Config.controller.onlineGame.port))
         except ConnectionRefusedError:
             self.error = True
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")

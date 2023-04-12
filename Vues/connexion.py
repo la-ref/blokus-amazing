@@ -170,6 +170,7 @@ class Connexion(Frame):
                 self.Entrerport()
             else:
                 self.desactiverAll()
+            
 
     def desactiverAll(self):
         """Méthode qui permet de réinitialiser la saisie du clavier (plus rien n'est sélectionné)
@@ -253,12 +254,12 @@ class Connexion(Frame):
         """
         if self.actuel_touche == "ip":
             if self.ip == "":
-                self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', config.Config.taillePolice[0]))
+                self.canvas.itemconfigure(self.text_ip, text="Adresse", font=('Lilita One', int(config.Config.taillePolice[0]//(((len(self.ip)//3)+4)*0.2))))
             self.activeclavier = False
             self.actuel_touche = ""
             self.canvas.itemconfigure(self.entrerip_image, image=config.Config.image[60])
         else:
-            self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+            self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', int(config.Config.taillePolice[0]//(((len(self.ip)//3)+4)*0.2))))
             if self.pseudo == "":
                 self.canvas.itemconfigure(self.text_pseudo, text="Entrez votre pseudo", font=('Lilita One', config.Config.taillePolice[0]))
             self.canvas.itemconfigure(self.entrerPseudo_image, image=config.Config.image[61])
@@ -302,6 +303,8 @@ class Connexion(Frame):
             event: évènement du clique
         """
         config.Config.controller.changeUserName(self.pseudo)
+        if self.modal_active:
+            config.Config.controller.setIPAndPort(self.ip,self.port)
         config.Config.controller.changePage("lobbyOnline")
     
     def touches(self,event):
@@ -311,75 +314,37 @@ class Connexion(Frame):
             self: l'utilisateur tout entier
             event: évènement du clique
         """
-        self.touche = str(event.keysym)
+        self.touche = str(event.char)
+        self.touchedetails = str(event.keysym)
         if self.activeclavier == True:
             if self.actuel_touche == "ip":
-                if len(self.touche) == 1:
-                    if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
-                        if (len(self.ip) < 3):
-                            self.ip = self.ip + "" + self.touche 
-                        elif (len(self.ip) == 1):
-                            if self.ip != ".":
-                                self.ip = self.ip + "" + self.touche 
-                        elif (self.ip[-1] == "."):
-                            self.ip = self.ip + "" + self.touche 
-                        elif ((self.ip[-1] == ".") or (self.ip[-2] == ".") or (self.ip[-3] == ".")):
-                            self.ip = self.ip + "" + self.touche
-                elif "shift" in self.touche.lower():
-                    pass
-                elif "period" in self.touche:
-                    if (self.ip[-1] != "."):
-                        if self.ip.count(".") < 3:
-                            if len(self.ip) >= 3:
-                                if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
-                                    if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
-                                        self.ip = self.ip + "."
-                                    elif int(self.ip[-3]) < 2:
-                                        self.ip = self.ip + "."
-                                    elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
-                                        self.ip = self.ip + "."
-                                    else:
-                                        self.ip = self.ip[:-3]
-                                else:
-                                    self.ip = self.ip + "."
-                            else:
-                                self.ip = self.ip + "."
-                else:
-                    if len(self.ip) > 0:
-                        self.ip = self.ip[:-1]
-                self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
-                if len(self.ip) >= 3:
-                    if ((self.ip[-1] != ".") and (self.ip[-2] != ".") and (self.ip[-3] != ".")):
-                        if ((int(self.ip[-3]) > 1) and (int(self.ip[-3]) < 3) and (int(self.ip[-2]) < 6) and (int(self.ip[-1]) < 6)):
-                            pass
-                        elif int(self.ip[-3]) < 2:
-                            pass
-                        elif int(self.ip[-3]) < 1 and int(self.ip[-2]) < 5:
-                            pass
-                        else:
-                            self.ip = self.ip[:-3]
-                            self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
-                    if len(self.ip) > 0:
-                        if (self.ip[-1] == "0"):
-                            if (self.ip[-2] == "."):
-                                self.ip = self.ip[:-1]
-                                self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', config.Config.taillePolice[0]))
+                if len(self.touche) >=1:
+                    if len(self.ip) < 32:
+                        self.ip = self.ip + "" +self.touche
+                if self.touche == "space":
+                    if len(self.ip) < 32:
+                        self.ip = self.ip + " "
+                if self.touchedetails.lower() == "backspace":
+                    self.ip = self.ip[:-1]
+                if len(self.ip) < 32:
+                    self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', int(config.Config.taillePolice[0]//(((len(self.ip)//3)+4)*0.2))))
             if self.actuel_touche == "port":
                 if len(self.touche) == 1:
-                    if ((int(self.touche) >= 0) and (int(self.touche) < 10)):
+                    if ((str.isdigit(self.touche) and int(self.touche) >= 0) and (int(self.touche) < 10)):
                         if len(self.port) < 5:
                             self.port = self.port + "" + self.touche
-                            self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
+                if self.touchedetails.lower() == "backspace":
+                    self.port = self.port[:-1]
+                self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
             if self.actuel_touche == "pseudo":
-                if len(self.touche) == 1:
+                if len(self.touche) >=1 and self.touche != "-" and self.touche != "_":
                     if len(self.pseudo) < 10:
                         self.pseudo = self.pseudo + "" +self.touche
-                elif self.touche == "space":
+                if self.touche == "space":
                     if len(self.pseudo) < 10:
                         self.pseudo = self.pseudo + " "
-                else:
-                    if len(self.pseudo) > 0:
-                        self.pseudo = self.pseudo[:-1]
+                if self.touchedetails.lower() == "backspace":
+                    self.pseudo = self.pseudo[:-1]
                 self.canvas.itemconfigure(self.text_pseudo, text=self.pseudo, font=('Lilita One', config.Config.taillePolice[0]))
 
 
