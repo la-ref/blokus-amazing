@@ -17,7 +17,7 @@ class Client:
         self.error = False
         try:
             self.s.connect((config.Config.controller.onlineGame.ip, config.Config.controller.onlineGame.port))
-        except ConnectionRefusedError:
+        except:
             self.error = True
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Aucun serveur trouvé")
             

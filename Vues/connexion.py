@@ -19,6 +19,7 @@ class Connexion(Frame):
         self.actuel_touche = ""
         self.activeclavier = False
         self.modal_active = False
+        self.avancee = False
         self.ip = ""
         self.port = ""
         self.pseudo = ""
@@ -196,6 +197,10 @@ class Connexion(Frame):
         Args:
             self: l'utilisateur tout entier
         """
+        if self.avancee:
+            self.avancee = False
+        else:
+            self.avancee = True
         self.canvas.itemconfigure(self.Param_simplifie_img, state=tkinter.NORMAL)
         self.canvas.itemconfigure(self.Param_avance, state=tkinter.HIDDEN)
 
@@ -302,10 +307,12 @@ class Connexion(Frame):
             self: l'utilisateur tout entier
             event: évènement du clique
         """
-        config.Config.controller.changeUserName(self.pseudo)
-        if self.modal_active:
-            config.Config.controller.setIPAndPort(self.ip,self.port)
-        config.Config.controller.changePage("lobbyOnline")
+        if self.pseudo != "":
+            config.Config.controller.changeUserName(self.pseudo)
+            if self.avancee:
+                config.Config.controller.setIPAndPort(str(self.ip),self.port)
+            config.Config.controller.changePage("lobbyOnline")
+            self.avancee = False
     
     def touches(self,event):
         """Méthode qui actualise le pseudo, l'ip ou le port à chaque touche appuyé de l'ordinateur
