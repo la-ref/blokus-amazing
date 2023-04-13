@@ -299,8 +299,6 @@ class lobbyUser(Frame):
             self.parent.itemconfigure(self.text_facile,state=tk.HIDDEN)
             self.parent.itemconfigure(self.Noir_IA_2,state=tk.HIDDEN)
             self.parent.itemconfigure(self.text_moyen,state=tk.HIDDEN)
-            self.parent.itemconfigure(self.Noir_IA_3,state=tk.HIDDEN)
-            self.parent.itemconfigure(self.text_expert,state=tk.HIDDEN)
             self.parent.itemconfigure(self.Bouton_Robot,state=tk.HIDDEN)
         
 
@@ -312,8 +310,8 @@ class lobbyUser(Frame):
             event: évènement du clique
         """
         if self.stateactuel == 0:
-            self.parent.itemconfigure(self.text_expert, state=tk.NORMAL)
-            self.parent.itemconfigure(self.Noir_IA_3, state=tk.NORMAL)
+            # self.parent.itemconfigure(self.text_expert, state=tk.NORMAL)
+            # self.parent.itemconfigure(self.Noir_IA_3, state=tk.NORMAL)
             self.parent.itemconfigure(self.text_moyen, state=tk.NORMAL)
             self.parent.itemconfigure(self.Noir_IA_2, state=tk.NORMAL)
             self.parent.itemconfigure(self.text_facile, state=tk.NORMAL)
