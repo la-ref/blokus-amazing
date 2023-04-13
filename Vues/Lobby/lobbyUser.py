@@ -57,10 +57,10 @@ class lobbyUser(Frame):
         self.nameZone = self.parent.create_image(15,10,image=images[nb_player])
         self.parent.tag_bind(self.nameZone, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
         self.parent.tag_bind(self.nameZone, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
-        self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
+        # self.parent.tag_bind(self.nameZone, "<Button-1>", self.boutonChangerText)
 
         self.text = self.parent.create_text((width-220)/2,3,fill="white",font=('Lilita One', config.Config.taillePolice[0]),text=self.joueur.getName(),anchor=tk.CENTER)
-        self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
+        # self.parent.tag_bind(self.text, "<Button-1>", self.boutonChangerText)
         self.parent.tag_bind(self.text, "<Enter>",lambda *_: self.hoverBouton("entre","namezone",self.nameZone))
         self.parent.tag_bind(self.text, "<Leave>",lambda *_: self.hoverBouton("sort","namezone",self.nameZone))
 
@@ -208,21 +208,19 @@ class lobbyUser(Frame):
         """
         self.parent.tag_bind(self.text,event_tag,call)
 
-    def boutonChangerText(self,event):
-        """Méthode qui est relié au bouton et qui permet d'activer ou non la saisie pour cette utilisateur
+    # def boutonChangerText(self,event):
+    #     """Méthode qui est relié au bouton et qui permet d'activer ou non la saisie pour cette utilisateur
 
-        Args:
-            self: l'utilisateur tout entier
-        """
-        if self.activeclavier == True:
-            self.activeclavier = False
-            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
-        else:
-            self.activeclavier = True  
-            self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
-            x = threading.Thread(target=self.whileOff)
-            x.start()
-
+    #     Args:
+    #         self: l'utilisateur tout entier
+    #     """
+    #     if self.activeclavier == True:
+    #         self.activeclavier = False
+    #         self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
+    #     else:
+    #         self.activeclavier = True  
+    #         self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player_hover])
+       
     def getActiveClavier(self):
         """Fonction qui permet de savoir si le clavier est activé ou non
 
@@ -266,8 +264,7 @@ class lobbyUser(Frame):
                 self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[2]))
             else:
                 self.parent.itemconfigure(self.text, text=self.joueur.getName()+"|", font=('Lilita One', config.Config.taillePolice[0]))
-            # x = threading.Thread(target=self.whileOff)
-            # x.start()
+       
         else:
             self.parent.itemconfigure(self.nameZone, image=config.Config.image[self.nb_player])
             tailles = self.parent.bbox(self.text)

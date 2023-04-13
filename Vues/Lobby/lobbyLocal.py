@@ -175,20 +175,21 @@ class lobbyLocal(Frame):
             event (x,y): Les coordonnées en X et Y du clic du joueur
         """
         if self.modal_active == False:
+            print(event.widget.find_withtag('current')[0])
             if len(event.widget.find_withtag('current')) > 0:
                 actuelwidget = event.widget.find_withtag('current')[0]
+                print(actuelwidget)
             if self.bouton_jaune.getActiveClavier() == True:
                 if (actuelwidget != 5) and (actuelwidget != 4):
                     self.bouton_jaune.setActiveClavier(False)
             if self.bouton_vert.getActiveClavier() == True:
-                if (actuelwidget != 15) and (actuelwidget != 14):
                     self.bouton_vert.setActiveClavier(False)
-            if self.bouton_rouge.getActiveClavier() == True:
-                if (actuelwidget != 25) and (actuelwidget != 24):
-                    self.bouton_rouge.setActiveClavier(False)
             if self.bouton_bleu.getActiveClavier() == True:
-                if (actuelwidget != 35) and (actuelwidget != 34):
+                if (actuelwidget != 25) and (actuelwidget != 24):
                     self.bouton_bleu.setActiveClavier(False)
+            if self.bouton_rouge.getActiveClavier() == True:
+                if (actuelwidget != 35) and (actuelwidget != 34):
+                    self.bouton_rouge.setActiveClavier(False)
         
         
     def touches(self,event):
