@@ -475,7 +475,6 @@ class lobbyUser(Frame):
         self.boutonUser = "noir"
         self.joueurType = "joueur"
         self.joueur.setIA(None)
-            # print("Lobbyuser switch ia :", self.joueur.getAI())
         self.moverobot(self.x,self.y)
         self.parent.tag_bind(self.Bouton_User, "<Button-1>", self.BoutonIA)
         self.parent.tag_bind(self.Bouton_Robot, "<Button-1>", self.boutonSwitchIA)

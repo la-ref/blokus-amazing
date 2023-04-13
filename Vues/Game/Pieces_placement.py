@@ -27,6 +27,7 @@ class Pieces_placement(tk.Frame):
 
         # Variable global de la pièce
         self.window = window
+        self.mon_state = 0
         self.window.bind("<Motion>", self.on_drag, add='+')
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
@@ -43,7 +44,7 @@ class Pieces_placement(tk.Frame):
         self.state = 0
         self.tableau_piece = [[]]
         self.tableau_piece_forme = []
-        self.mon_state = 0
+        
 
         self.tableau_piece_copy=copy.copy(PD.LISTEPIECES[la_piece])
 
@@ -119,8 +120,8 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
             
-            self.pieces = copy.deepcopy(PD.LISTEPIECES)
-            self.piece = self.pieces[self.la_piece]
+            # self.pieces = copy.deepcopy(PD.LISTEPIECES)
+            self.piece = self.tableau_piece_copy
             self.piece.flip()
 
             # Re-création de la pièce
@@ -142,7 +143,7 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
 
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece = self.tableau_piece_copy
             self.piece.rotate90()
 
             # Re-création de la pièce

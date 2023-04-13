@@ -65,12 +65,11 @@ class PiecesListGUI(tk.Frame):
                 decalageX= 2
                 decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
                 maxheight = 0
-        print("INIT CORRECT")
+       
 
 
     def deletePieceOnline(self,pieceId,player):
         if pieceId >= 0 and pieceId <= len(self.tableau_piece_forme): 
-            print(pieceId,"piece =")
             self.tableau_piece_forme[pieceId-1].deletePieceOnline()
             
         

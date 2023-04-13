@@ -45,8 +45,12 @@ class GameInterfaceOnline(tk.Frame):
             12:"#0045CC",
             13:"#BC0000"
         }
+        
             
         self.border = tk.Canvas()
+        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
+
+        
         self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
 
         self.border.config(bg="white")
@@ -68,8 +72,7 @@ class GameInterfaceOnline(tk.Frame):
         self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getOnlinePlayerName(3),3)
         self.List4.move(x=70,y=524) #bleu
 
-        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
-
+        
 
         self.giveUp = self.border.create_image(
             411, 
@@ -120,8 +123,6 @@ class GameInterfaceOnline(tk.Frame):
         self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
         
     def deletePieceOnline(self,pieceId,player):
-        print("i played with the player : ",player)
-              #player = player-1
         if player >= 0 and player <=3:
             if player == 0:
                 self.List1.deletePieceOnline(pieceId,player)

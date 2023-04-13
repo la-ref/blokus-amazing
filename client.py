@@ -40,7 +40,6 @@ class Client:
             if not newbuf: return None
             buf += newbuf
             count -= len(newbuf)
-        print(buf)
         return buf
     
     def convertJson(self,msg):
@@ -59,7 +58,6 @@ class Client:
                     break
                 else:
                     val = str(data.decode())
-                    print(val,"§§§§§§§§§§§§§§§")
                     if "errormsg." in val:
                         val = val.replace("errormsg.", '')
                         config.Config.controller.leaveOnline(send=False,error=val)
@@ -79,7 +77,6 @@ class Client:
                             config.Config.controller.placement(self.convertJson(val))
             except:
                 self.error = True
-                print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
                 config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
                 break
             
@@ -92,7 +89,6 @@ class Client:
             data = self.recvall(self.s, length)
             
             self.s.settimeout(None)
-            print("MY DATA ", data)
             if len(data) == 0:
                 self.error = True
                 config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
@@ -100,7 +96,6 @@ class Client:
                 return data.decode()
         except:
             self.error = True
-            print(("error receive", "({}) : Server has been disconnected.\n".format("rip")))
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
             return None
                 
@@ -110,10 +105,8 @@ class Client:
         try:
             self.s.sendall(struct.pack("!I",len(bytes(msg, "utf-8"))))
             self.s.sendall(bytes(msg, 'utf-8'))
-            print("Moi - {}".format(msg))
             sended = True
         except:
             self.error = True
-            print(("error send", "({}) : Server has been disconnected.\n".format(now)))
             config.Config.controller.leaveOnline(send=False,error="Erreur fatale : Serveur déconnecté")
         return sended

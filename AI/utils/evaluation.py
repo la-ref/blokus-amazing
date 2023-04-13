@@ -88,7 +88,7 @@ def workAlphaBeta(game, profondeur : int, joueurId : int, listJoueur: list, alph
     for i in range(len(plateaux)):
         
         if not game.enCours():
-            print("termine !!!")
+            print("Aucune partie en cours !!!")
             raise KeyboardInterrupt()
         listVal.append(alphaBeta(game,profondeur,joueurId,listJoueur,alpha,beta,plateaux[i]))
     return listVal
@@ -168,7 +168,6 @@ def joueDifficileOnline(joueurId : int, listPoss, pool,game,profond : int = 1) -
         # pool = mp.Pool(len(listTab))
         
     # try:
-    print(pool)
     res = pool.map(partial(workAlphaBeta, game , depth , nextId , listJoueur, -10000, 10000), div_list)
     return listPoss[np.argmax(res)]
 

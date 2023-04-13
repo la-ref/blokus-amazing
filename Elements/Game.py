@@ -181,7 +181,7 @@ class Game:
             config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
             if len(self.__joueursAbandon) != len(self.__joueurs):
                 config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
-                print(self.getCurrentPlayerId())
+                
                 if self.getCurrentPlayer().getAI():
                     self.getCurrentPlayer().getAI().play()
                     # except:

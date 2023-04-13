@@ -48,7 +48,6 @@ class PiecesListGUI(tk.Frame):
 
         i1 = 0
         maxheight = 0
-        
         for valeur in (copy.deepcopy(PD.LISTEPIECES) if config.Config.controller.onlineGame else config.Config.controller.getGame().getPlayers()[nb_player].getPieces()):
             
             self.tableau_piece_forme.append(PP.Pieces_placement(window,self.parent,nb_player,valeur,self))
@@ -67,7 +66,6 @@ class PiecesListGUI(tk.Frame):
 
     def deletePieceOnline(self,pieceId,player):
         if pieceId >= 0 and pieceId <= len(self.tableau_piece_forme): 
-            print(pieceId,"piece =")
             self.tableau_piece_forme[pieceId-1].deletePieceOnline()
             
 

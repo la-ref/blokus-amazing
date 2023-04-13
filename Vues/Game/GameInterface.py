@@ -46,8 +46,12 @@ class GameInterface(tk.Frame):
             12:"#0045CC",
             13:"#BC0000"
         }
+        
             
         self.border = tk.Canvas()
+        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
+        
+        
         self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
 
         self.border.config(bg="white")
@@ -68,7 +72,6 @@ class GameInterface(tk.Frame):
         self.Lists[3].move(x=70,y=524) # bleu
 
 
-        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
         
 
         self.giveUp = self.border.create_image(

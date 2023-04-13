@@ -265,7 +265,4 @@ class Board:
                             if (i+v >= 0 and i+v <= self.__size-1) and (y-v >= 0 and y-v <= self.__size-1) and tab[i+v][y-v]==0:
                                 tab[i+v][y-v]=1
                             
-                            
-                    
-        # print(np.argwhere(tab==1)) test
         return np.argwhere(tab==1)

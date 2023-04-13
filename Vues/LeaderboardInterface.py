@@ -1,68 +1,73 @@
 from __future__ import annotations
-from tkinter import PhotoImage
 import tkinter as tk
 import Elements.Pieces.PiecesListGUI as PG
-from PIL import ImageTk
 from config import config
 from Elements.Board import Board
-import Vues.accueil as accueil 
 from HighScore.fonctionJson import fonctionJson
 from Vues.Game.GridInterface import GridInterface
 from HighScore.Leaderboard import *
-import Elements.Pieces.PiecesDeclaration as PD
-from tkinter import PhotoImage
-import Elements.Pieces.Pieces as p
-import numpy as np
-import Vues.Game.Block as b
 from config import config
-import platform
-import copy
-import Vues.Game.Pieces_placement as PP
-from Elements.Pieces.Pieces import Pieces
 from Elements.Pieces.PiecesDeclaration import LISTEPIECES
 from Elements.Game import Game
 
 class LeaderboardInterface(tk.Frame):
     """ 
     """
-    def __init__(self : LeaderboardInterface, window : tk.Misc):
-        """
+    def __init__(self,window):
+        """ 
 
 
         """
-        super(LeaderboardInterface,self).__init__(window)
+        super(LeaderboardInterface,self).__init__()
         self.window = window
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None
-
+        
+        
+        
     def initialize(self, nbgame = 1):
         """ Initialisation de la partie
         """
-        
-        
-        self.border = tk.Canvas()
-        self.json = fonctionJson()
-        self.nbgame = nbgame
-        self.joueurs = self.json.getPlayers("Game"+str(self.nbgame))
+
+        self.border = tk.Canvas(
+            self.window,
+            bg = "#FFFFFF",
+            height = 1024,
+            width = 1440,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+
+        self.changePrecSuiv(nbgame)
+    
+    def changePrecSuiv(self, nbgame = 1):
+        children = self.border.find_all()  # Obtenir les ID de tous les objets enfants
+        for child in children:
+            self.border.delete(child)
         self.retour = self.border.create_image(719.0, 875.0,image= config.Config.image[74])
         self.border.tag_bind(self.retour, "<Button-1>",lambda *_: self.create_modal())
-        self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton("entre","retour",self.retour))
-        self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton("sort","retour",self.retour))
+        self.border.tag_bind(self.retour, "<Enter>",lambda *_: self.hoverBouton2("entre","retour",self.retour))
+        self.border.tag_bind(self.retour, "<Leave>",lambda *_: self.hoverBouton2("sort","retour",self.retour))
         
         self.fleche_droite = self.border.create_image(935.0, 875.0,image= config.Config.image[75])
         self.border.tag_bind(self.fleche_droite, "<Button-1>",lambda *_: self.suivant())
-        self.border.tag_bind(self.fleche_droite, "<Enter>",lambda *_: self.hoverBouton("entre","droite",self.fleche_droite))
-        self.border.tag_bind(self.fleche_droite, "<Leave>",lambda *_: self.hoverBouton("sort","droite",self.fleche_droite))
+        self.border.tag_bind(self.fleche_droite, "<Enter>",lambda *_: self.hoverBouton2("entre","droite",self.fleche_droite))
+        self.border.tag_bind(self.fleche_droite, "<Leave>",lambda *_: self.hoverBouton2("sort","droite",self.fleche_droite))
 
         self.fleche_gauche = self.border.create_image(500.0, 875.0,image= config.Config.image[76])
         self.border.tag_bind(self.fleche_gauche, "<Button-1>",lambda *_: self.precedent())
-        self.border.tag_bind(self.fleche_gauche, "<Enter>",lambda *_: self.hoverBouton("entre","gauche",self.fleche_gauche))
-        self.border.tag_bind(self.fleche_gauche, "<Leave>",lambda *_: self.hoverBouton("sort","gauche",self.fleche_gauche))
+        self.border.tag_bind(self.fleche_gauche, "<Enter>",lambda *_: self.hoverBouton2("entre","gauche",self.fleche_gauche))
+        self.border.tag_bind(self.fleche_gauche, "<Leave>",lambda *_: self.hoverBouton2("sort","gauche",self.fleche_gauche))
+        self.nbgame = nbgame
+        self.json = fonctionJson()
+        self.joueurs = self.json.getPlayers("Game"+str(self.nbgame))
         self.createPieces(self.joueurs)
         self.border.tkraise(self.fleche_droite)
         self.border.tkraise(self.fleche_gauche)
         self.border.tkraise(self.retour)
+
 
         
         
@@ -207,7 +212,7 @@ class LeaderboardInterface(tk.Frame):
             self.nbgame = 1
         else:
             self.nbgame += 1
-        self.initialize(self.nbgame)
+        self.changePrecSuiv(self.nbgame)
         
 
     def precedent(self):
@@ -218,7 +223,7 @@ class LeaderboardInterface(tk.Frame):
             self.nbgame = self.json.getNbGames()
         else:
             self.nbgame -= 1
-        self.initialize(self.nbgame)
+        self.changePrecSuiv(self.nbgame)
 
     """ Fonction permettant de détruire le modal actif """
    
@@ -239,7 +244,7 @@ class LeaderboardInterface(tk.Frame):
         self.remove_modal()
         self.modal_active = False
 
-    def hoverBouton(self,typ : str,typ2 : str,idButton : int):
+    def hoverBouton2(self,typ : str,typ2 : str,idButton : int):
         """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
 
         Args:
@@ -247,26 +252,27 @@ class LeaderboardInterface(tk.Frame):
             typ2 (str): "jouer" ou "quitter"
             idButton (int): l'identifiant du bouton cliqué
         """
-        # if typ == "entre":
-        #     if typ2 == "retour":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[77])
-        #         self.border.config(cursor="hand2")     
-        #     elif typ2 == "droite":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[78])
-        #         self.border.config(cursor="hand2")       
-        #     elif typ2 == "gauche":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[79])
-        #         self.border.config(cursor="hand2")     
-        # elif typ == "sort":
-        #     if typ2 == "retour":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[74])
-        #         self.border.config(cursor="")
-        #     elif typ2 == "gauche":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[76])
-        #         self.border.config(cursor="")
-        #     elif typ2 == "droite":
-        #         self.border.itemconfigure(idButton, image=config.Config.image[75])
-        #         self.border.config(cursor="")
+        if typ == "entre":
+            if typ2 == "retour":
+                self.border.itemconfigure(idButton, image=config.Config.image[77])
+                self.border.config(cursor="hand2")
+            elif typ2 == "droite":
+                self.border.itemconfigure(idButton, image=config.Config.image[78])
+                self.border.config(cursor="hand2")
+            elif typ2 == "gauche":
+                self.border.itemconfigure(idButton, image=config.Config.image[79])
+                self.border.config(cursor="hand2")
+        elif typ == "sort":
+            if typ2 == "retour":
+                self.border.itemconfigure(idButton, image=config.Config.image[74])
+                self.border.config(cursor="")
+            elif typ2 == "droite":
+                self.border.itemconfigure(idButton, image=config.Config.image[75])
+                self.border.config(cursor="")
+            elif typ2 == "gauche":
+                self.border.itemconfigure(idButton, image=config.Config.image[76])
+                self.border.config(cursor="")
+    
         pass
 
         

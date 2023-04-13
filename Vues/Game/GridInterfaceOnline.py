@@ -75,7 +75,6 @@ class GridInterfaceOnline(tk.Frame):
             playerColor (int): couleur du joueur courant
             affiche (bool): vrai s'il faut l'afficher sinon faux, en cas de victoire pour ne plus l'afficher
         """
-        print("refresh2",playerColor,affiche)
         for bord in self.bordure:
             if not affiche:
                 if playerColor >= 0 and playerColor <= 4:

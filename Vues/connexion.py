@@ -11,8 +11,6 @@ class Connexion(Frame):
     def __init__(self,window):
         super(Connexion, self).__init__()
         self.window = window
-        self.window.title("Blokus")
-        self.window.wm_iconphoto(True, config.Config.image[47])
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None

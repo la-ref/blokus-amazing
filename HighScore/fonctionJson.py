@@ -22,7 +22,6 @@ class fonctionJson:
         Args:
             donne (_type_): _description_
         """
-        print("AJOUT")
         with open(self.chemin, mode = "r") as mon_fichier:
             data = json.load(mon_fichier)
             val_test = "Game1"

@@ -30,7 +30,6 @@ class ai():
                     return (i,y)
                 
     def callPlacePiece(self):
-        print("je callback piece")
         self.cbPlacePiece(None,self.lobby,None)
 
     def play(self,game):

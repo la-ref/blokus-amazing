@@ -12,7 +12,6 @@ class Accueil(Frame):
         super(Accueil, self).__init__()
         self.window = window
         self.window.title("Blokus")
-        self.window.wm_iconphoto(True, config.Config.image[47])
         self.hidden = True
         self.errorPopUp = None
         self.scrollable_frame = None
@@ -192,7 +191,6 @@ class Accueil(Frame):
             self.scrollable_frame.destroye()
             self.scrollable_frame.destroy()
             self.canvas.delete(self.windowRegle)
-        print(self.errorPopUp, self.pop_up_text)
 
     def BoutonScore(self,event):
         """ Fonction qui permet le callback du bouton "Score"

@@ -27,12 +27,15 @@ class Controller(tk.Tk):
         tk.Tk.__init__(self)
         config.initialisation(self, NB_CPU)
         self.pool = mp.Pool(NB_CPU)
+        self.onlineGame = None
+        self.title("Blokus")
+        self.wm_iconphoto(True, config.Config.image[47])
         self.frames = { "Accueil" : Accueil(self), "lobbyLocal" : lobbyLocal(self), "GameInterface" : GameInterface(self), "GameInterfaceOnline" : GameInterfaceOnline(self),"connexion" : Connexion(self),"lobbyOnline" : lobbyOnline(self), "LeaderboardInterface" : LeaderboardInterface(self)}
         self.game : Game
         self.geometry(str(config.Config.largueur)+"x"+str(config.Config.hauteur))
         self.connection = None
         self.currentPage = ""
-        self.onlineGame = None
+        
         self.leaving = False
         self.json = []
         self.termine = True
@@ -78,7 +81,6 @@ class Controller(tk.Tk):
         self.onlineGame = OnlineGame(userName=name)   
     
     def setIPAndPort(self,ip,port):
-        print("ip port",ip,port)
         self.onlineGame.setIPAndPort(ip,port)   
             
     
@@ -112,7 +114,6 @@ class Controller(tk.Tk):
             self.frames["lobbyOnline"].changeCurrentPlayer(int(nb))
         
     def changeUserNames(self,players):
-        print("hey! ", players)
         if self.currentPage == "lobbyOnline":
             self.setAdmin(int(players["admin"]))
             players.pop("admin")
@@ -121,7 +122,6 @@ class Controller(tk.Tk):
     def setAdmin(self,id):
         if self.currentPage == "lobbyOnline":
             if self.onlineGame.id == id:
-                print("VAL = ",id)
                 self.frames["lobbyOnline"].giveAdmin(id)
     
     def launchOnlineGame(self):
@@ -246,7 +246,6 @@ class Controller(tk.Tk):
         if info["playing"] == "Nope":
             return
         else:
-            print("je passe ???")
             self.onlineGame.refreshInfo(info)
             self.refreshGame(info,info["piece"])
             
@@ -327,38 +326,6 @@ class Controller(tk.Tk):
         """
         return self.etat
         
-
-        # if joueur == self.game.getCurrentPlayerId():
-        #     list_joueur = self.game.getPlayers()
-        #     list_nomjoueurs = []
-        #     for i in list_joueur :
-        #         nom = i.getName()
-        #         list_nomjoueurs.append(nom)
-        #     play = self.game.playTurn(piece, colonne, ligne, dc, dl)
-        #     win = self.game.getWinners()
-        #     tab = []
-        #     rota = piece.getRotation()
-        #     flip = piece.getFlip()
-        #     self.__json.append({"num_tour" : self.__tour,
-        #         "joueur" : joueur,
-        #         "num_piece" : piece.getIdentifiant(),
-        #         "position_plateau" : [int(colonne),int(ligne)],
-        #         "rotation" : rota,
-        #         "flip" : flip})
-        #     self.__tour += 1 
-            
-        #     if (win):
-        #         print("TEST")
-        #         for k in win:
-        #             tab.append(k.getName())
-        #         self.__json[0].update({"joueurs" : list_nomjoueurs})
-        #         self.__json[0].update({"winners" : tab})
-        #         fonctionJson().JsonAjout(self.__json)
-        #         self.vueJeu.partieTermine(win)
-        #     return play
-        # else:
-        #     return False
-
 if __name__ == "__main__":
     global CT
     CT = Controller()
