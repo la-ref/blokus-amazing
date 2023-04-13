@@ -292,7 +292,39 @@ class lobbyUser(Frame):
                     self.joueur.setName(str(self.joueur.getName())+" ")
             elif self.touche == "shift" or self.touche == "Shift_L" or self.touche == "Shift_R":
                 if len(self.joueur.getName()) < 9:
-                    self.joueur.setName(str(self.joueur.getName())+" ")
+                    self.joueur.setName(str(self.joueur.getName()))
+            elif self.touche == "minus":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"-")
+            elif self.touche == "apostrophe":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"'")
+            elif self.touche == "underscore":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"_")
+            elif self.touche == "colon":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+":")
+            elif self.touche == "parenleft":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"(")
+            elif self.touche == "parenright":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+")")
+            elif self.touche == "eacute":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"é")
+            elif self.touche == "agrave":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"à")
+            elif self.touche == "period":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+".")
+            elif self.touche == "quotedbl":
+                pass
+            elif self.touche == "egrave":
+                if len(self.joueur.getName()) < 9:
+                    self.joueur.setName(str(self.joueur.getName())+"è")
             else:
                 if len(self.joueur.getName()) > 0:
                     self.joueur.setName(str(self.joueur.getName())[:-1])

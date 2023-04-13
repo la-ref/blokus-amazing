@@ -175,10 +175,8 @@ class lobbyLocal(Frame):
             event (x,y): Les coordonnées en X et Y du clic du joueur
         """
         if self.modal_active == False:
-            print(event.widget.find_withtag('current')[0])
             if len(event.widget.find_withtag('current')) > 0:
                 actuelwidget = event.widget.find_withtag('current')[0]
-                print(actuelwidget)
             if self.bouton_jaune.getActiveClavier() == True:
                 if (actuelwidget != 5) and (actuelwidget != 4):
                     self.bouton_jaune.setActiveClavier(False)

@@ -331,7 +331,8 @@ class Connexion(Frame):
                 elif self.touche == "space":
                     if len(self.ip) < 32:
                         self.ip = self.ip + " "
-                
+                elif self.touche == "quotedbl":
+                    pass
                 if len(self.ip) < 32:
                     self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', int(config.Config.taillePolice[0]//(((len(self.ip)//3)+4)*0.2))))
             if self.actuel_touche == "port":
