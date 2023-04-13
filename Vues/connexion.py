@@ -323,14 +323,15 @@ class Connexion(Frame):
         self.touchedetails = str(event.keysym)
         if self.activeclavier == True:
             if self.actuel_touche == "ip":
-                if len(self.touche) >=1:
-                    if len(self.ip) < 32:
-                        self.ip = self.ip + "" +self.touche
-                if self.touche == "space":
-                    if len(self.ip) < 32:
-                        self.ip = self.ip + " "
                 if self.touchedetails.lower() == "backspace":
                     self.ip = self.ip[:-1]
+                elif len(self.touche) >=1:
+                    if len(self.ip) < 32:
+                        self.ip = self.ip + "" +self.touche
+                elif self.touche == "space":
+                    if len(self.ip) < 32:
+                        self.ip = self.ip + " "
+                
                 if len(self.ip) < 32:
                     self.canvas.itemconfigure(self.text_ip, text=self.ip, font=('Lilita One', int(config.Config.taillePolice[0]//(((len(self.ip)//3)+4)*0.2))))
             if self.actuel_touche == "port":
@@ -342,14 +343,15 @@ class Connexion(Frame):
                     self.port = self.port[:-1]
                 self.canvas.itemconfigure(self.text_port, text=self.port, font=('Lilita One', config.Config.taillePolice[0]))
             if self.actuel_touche == "pseudo":
-                if len(self.touche) >=1 and self.touche != "-" and self.touche != "_":
-                    if len(self.pseudo) < 10:
-                        self.pseudo = self.pseudo + "" +self.touche
-                if self.touche == "space":
-                    if len(self.pseudo) < 10:
-                        self.pseudo = self.pseudo + " "
                 if self.touchedetails.lower() == "backspace":
                     self.pseudo = self.pseudo[:-1]
+                elif len(self.touche) >=1 and self.touche != "-" and self.touche != "_":
+                    if len(self.pseudo) < 10:
+                        self.pseudo = self.pseudo + "" +self.touche
+                elif self.touche == "space":
+                    if len(self.pseudo) < 10:
+                        self.pseudo = self.pseudo + " "
+                
                 self.canvas.itemconfigure(self.text_pseudo, text=self.pseudo, font=('Lilita One', config.Config.taillePolice[0]))
 
 
