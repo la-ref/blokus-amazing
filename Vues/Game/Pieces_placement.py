@@ -112,6 +112,7 @@ class Pieces_placement(tk.Frame):
         # Si la pièce est sélectionnée
         if self.mon_state:
             self.x,self.y=self.getPieceCoord()
+            self.ancienx,self.ancieny=self.getPieceCoord()
 
             # Suppression de la pièce
             for piece in self.tableau_piece_forme:
@@ -119,10 +120,8 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
             
-            if config.Config.controller.onlineGame:
-                self.pieces = copy.deepcopy(PD.LISTEPIECES)
-            else:
-                self.piece = self.tableau_piece_copy
+            # self.pieces = copy.deepcopy(PD.LISTEPIECES)
+            self.piece = self.tableau_piece_copy
             self.piece.flip()
 
             # Re-création de la pièce
@@ -136,6 +135,7 @@ class Pieces_placement(tk.Frame):
         # Si la pièce est sélectionnée
         if self.mon_state:
             self.x,self.y=self.getPieceCoord()
+            self.ancienx,self.ancieny=self.getPieceCoord()
 
             # Suppression de la pièce
             for piece in self.tableau_piece_forme:
@@ -192,6 +192,7 @@ class Pieces_placement(tk.Frame):
         
         # Sélection des coordonnées du premier bloc
         piece = self.tableau_piece_forme[0]
+        self.oy2,self.ox2=self.parent.coords(piece.bl)
         differenceX = self.le_x+piece.base_xoff
         differenceY = self.le_y+piece.base_yoff
         self.le_x = self.le_x-differenceX
@@ -322,6 +323,7 @@ class Pieces_placement(tk.Frame):
 
                 # Change les coordonnés de téléportation au premier bloc de la pièce
                 piece = self.tableau_piece_forme[0]
+                self.oy2,self.ox2=self.parent.coords(piece.bl)
                 differenceX = self.le_x+piece.base_xoff
                 differenceY = self.le_y+piece.base_yoff
                 self.le_x = self.le_x-differenceX
