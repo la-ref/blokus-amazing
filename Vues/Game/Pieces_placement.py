@@ -121,7 +121,10 @@ class Pieces_placement(tk.Frame):
                 self.parent.delete(ma_piece)
             
             # self.pieces = copy.deepcopy(PD.LISTEPIECES)
-            self.piece = self.tableau_piece_copy
+            if config.Config.controller.onlineGame:
+                 self.pieces = copy.deepcopy(PD.LISTEPIECES)
+             else:
+                 self.piece = self.tableau_piece_copy
             self.piece.flip()
 
             # Re-création de la pièce
