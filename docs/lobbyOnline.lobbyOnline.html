@@ -1,0 +1,1417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>lobbyOnline.lobbyOnline</title>
+    <meta name="generator" content="pydoctor 22.9.1"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+
+  <body>
+
+    
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          ScrollableFrame/main/Block/lobbyLocal/PiecesDeclaration/Game/GameInterface/PiecesListGUI/Controller/GridInterface/Pieces_placement/accueil/lobbyUser/Board/config/Player/Pieces/Leaderboard/fonctionJson/lobbyOnline <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="lobbyOnline.lobbyOnline.html" class="internal-link" title="This class">lobby<wbr></wbr>Online</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Methods</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#__init__" class="internal-link" title="lobbyOnline.lobbyOnline.__init__">__init__</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#Boutonselect" class="internal-link" title="lobbyOnline.lobbyOnline.Boutonselect"><wbr></wbr>Boutonselect</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#clique" class="internal-link" title="lobbyOnline.lobbyOnline.clique">clique</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#hoverBouton" class="internal-link" title="lobbyOnline.lobbyOnline.hoverBouton">hover<wbr></wbr>Bouton</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#initialize" class="internal-link" title="lobbyOnline.lobbyOnline.initialize">initialize</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#jouer" class="internal-link" title="lobbyOnline.lobbyOnline.jouer">jouer</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#QuitterBouton" class="internal-link" title="lobbyOnline.lobbyOnline.QuitterBouton"><wbr></wbr>Quitter<wbr></wbr>Bouton</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#touches" class="internal-link" title="lobbyOnline.lobbyOnline.touches">touches</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#activeclavier" class="internal-link" title="lobbyOnline.lobbyOnline.activeclavier">activeclavier</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#Arriere_plan" class="internal-link" title="lobbyOnline.lobbyOnline.Arriere_plan"><wbr></wbr>Arriere_plan</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#bouton_bleu" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_bleu">bouton<wbr></wbr>_bleu</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#bouton_jaune" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_jaune">bouton<wbr></wbr>_jaune</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#Bouton_Jouer" class="internal-link" title="lobbyOnline.lobbyOnline.Bouton_Jouer"><wbr></wbr>Bouton_<wbr></wbr>Jouer</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#Bouton_Quitter" class="internal-link" title="lobbyOnline.lobbyOnline.Bouton_Quitter"><wbr></wbr>Bouton_<wbr></wbr>Quitter</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#bouton_rouge" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_rouge">bouton<wbr></wbr>_rouge</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#bouton_vert" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_vert">bouton<wbr></wbr>_vert</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#boutonUser" class="internal-link" title="lobbyOnline.lobbyOnline.boutonUser">bouton<wbr></wbr>User</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#canvas" class="internal-link" title="lobbyOnline.lobbyOnline.canvas">canvas</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#joueurs" class="internal-link" title="lobbyOnline.lobbyOnline.joueurs">joueurs</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_bleu" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_bleu">namezone<wbr></wbr>_bleu</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_bleu_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_bleu_text">namezone<wbr></wbr>_bleu<wbr></wbr>_text</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_jaune" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_jaune">namezone<wbr></wbr>_jaune</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_jaune_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_jaune_text">namezone<wbr></wbr>_jaune<wbr></wbr>_text</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_rouge" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_rouge">namezone<wbr></wbr>_rouge</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_rouge_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_rouge_text">namezone<wbr></wbr>_rouge<wbr></wbr>_text</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_vert" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_vert">namezone<wbr></wbr>_vert</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#namezone_vert_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_vert_text">namezone<wbr></wbr>_vert<wbr></wbr>_text</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#touche" class="internal-link" title="lobbyOnline.lobbyOnline.touche">touche</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#window" class="internal-link" title="lobbyOnline.lobbyOnline.window">window</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="lobbyOnline.html" class="internal-link" title="The parent of this class">lobby<wbr></wbr>Online</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="lobbyOnline.lobbyOnline.html" class="internal-link" title="lobbyOnline.lobbyOnline">lobby<wbr></wbr>Online</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        
+         
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="lobbyOnline.html" class="internal-link">lobbyOnline</a></code><wbr></wbr>.<code><a href="lobbyOnline.lobbyOnline.html" class="internal-link" title="lobbyOnline.lobbyOnline">lobbyOnline</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">lobbyOnline</span>(Frame):</code></p>
+          <p><a href="classIndex.html#lobbyOnline.lobbyOnline">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p class="undocumented">Undocumented</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id31">
+  
+  
+  <tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#__init__" class="internal-link" title="lobbyOnline.lobbyOnline.__init__">__init__</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#Boutonselect" class="internal-link" title="lobbyOnline.lobbyOnline.Boutonselect"><wbr></wbr>Boutonselect</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#clique" class="internal-link" title="lobbyOnline.lobbyOnline.clique">clique</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#hoverBouton" class="internal-link" title="lobbyOnline.lobbyOnline.hoverBouton">hover<wbr></wbr>Bouton</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#initialize" class="internal-link" title="lobbyOnline.lobbyOnline.initialize">initialize</a></code></td>
+    <td>Fonction qui initialise le lobby Online</td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#jouer" class="internal-link" title="lobbyOnline.lobbyOnline.jouer">jouer</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#QuitterBouton" class="internal-link" title="lobbyOnline.lobbyOnline.QuitterBouton"><wbr></wbr>Quitter<wbr></wbr>Bouton</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="method">
+    
+    <td>Method</td>
+    <td><code><a href="#touches" class="internal-link" title="lobbyOnline.lobbyOnline.touches">touches</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#activeclavier" class="internal-link" title="lobbyOnline.lobbyOnline.activeclavier">activeclavier</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#Arriere_plan" class="internal-link" title="lobbyOnline.lobbyOnline.Arriere_plan"><wbr></wbr>Arriere_plan</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#bouton_bleu" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_bleu">bouton<wbr></wbr>_bleu</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#bouton_jaune" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_jaune">bouton<wbr></wbr>_jaune</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#Bouton_Jouer" class="internal-link" title="lobbyOnline.lobbyOnline.Bouton_Jouer"><wbr></wbr>Bouton_<wbr></wbr>Jouer</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#Bouton_Quitter" class="internal-link" title="lobbyOnline.lobbyOnline.Bouton_Quitter"><wbr></wbr>Bouton_<wbr></wbr>Quitter</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#bouton_rouge" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_rouge">bouton<wbr></wbr>_rouge</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#bouton_vert" class="internal-link" title="lobbyOnline.lobbyOnline.bouton_vert">bouton<wbr></wbr>_vert</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#boutonUser" class="internal-link" title="lobbyOnline.lobbyOnline.boutonUser">bouton<wbr></wbr>User</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#canvas" class="internal-link" title="lobbyOnline.lobbyOnline.canvas">canvas</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#joueurs" class="internal-link" title="lobbyOnline.lobbyOnline.joueurs">joueurs</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_bleu" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_bleu">namezone<wbr></wbr>_bleu</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_bleu_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_bleu_text">namezone<wbr></wbr>_bleu<wbr></wbr>_text</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_jaune" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_jaune">namezone<wbr></wbr>_jaune</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_jaune_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_jaune_text">namezone<wbr></wbr>_jaune<wbr></wbr>_text</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_rouge" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_rouge">namezone<wbr></wbr>_rouge</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_rouge_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_rouge_text">namezone<wbr></wbr>_rouge<wbr></wbr>_text</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_vert" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_vert">namezone<wbr></wbr>_vert</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#namezone_vert_text" class="internal-link" title="lobbyOnline.lobbyOnline.namezone_vert_text">namezone<wbr></wbr>_vert<wbr></wbr>_text</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#touche" class="internal-link" title="lobbyOnline.lobbyOnline.touche">touche</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="instancevariable">
+    
+    <td>Instance Variable</td>
+    <td><code><a href="#window" class="internal-link" title="lobbyOnline.lobbyOnline.window">window</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.__init__">
+    
+  </a>
+  <a name="__init__">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">__init__</span>(self, window):
+    
+    <a class="headerLink" href="#__init__" title="lobbyOnline.lobbyOnline.__init__">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.Boutonselect">
+    
+  </a>
+  <a name="Boutonselect">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">Boutonselect</span>(self, typ):
+    
+    <a class="headerLink" href="#Boutonselect" title="lobbyOnline.lobbyOnline.Boutonselect">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.clique">
+    
+  </a>
+  <a name="clique">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">clique</span>(self, event):
+    
+    <a class="headerLink" href="#clique" title="lobbyOnline.lobbyOnline.clique">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.hoverBouton">
+    
+  </a>
+  <a name="hoverBouton">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">hoverBouton</span>(self, typ, typ2, idButton):
+    
+    <a class="headerLink" href="#hoverBouton" title="lobbyOnline.lobbyOnline.hoverBouton">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">typ:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">typ2:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>Button:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.initialize">
+    
+  </a>
+  <a name="initialize">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">initialize</span>(self):
+    
+    <a class="headerLink" href="#initialize" title="lobbyOnline.lobbyOnline.initialize">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Fonction qui initialise le lobby Online</p>
+</div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.jouer">
+    
+  </a>
+  <a name="jouer">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">jouer</span>(self, event):
+    
+    <a class="headerLink" href="#jouer" title="lobbyOnline.lobbyOnline.jouer">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.QuitterBouton">
+    
+  </a>
+  <a name="QuitterBouton">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">QuitterBouton</span>(self, event):
+    
+    <a class="headerLink" href="#QuitterBouton" title="lobbyOnline.lobbyOnline.QuitterBouton">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="basemethod">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.touches">
+    
+  </a>
+  <a name="touches">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">touches</span>(self, event):
+    
+    <a class="headerLink" href="#touches" title="lobbyOnline.lobbyOnline.touches">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.activeclavier">
+    
+  </a>
+  <a name="activeclavier">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">activeclavier</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#activeclavier" title="lobbyOnline.lobbyOnline.activeclavier">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.Arriere_plan">
+    
+  </a>
+  <a name="Arriere_plan">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">Arriere_plan</span> =
+    
+    <a class="headerLink" href="#Arriere_plan" title="lobbyOnline.lobbyOnline.Arriere_plan">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.bouton_bleu">
+    
+  </a>
+  <a name="bouton_bleu">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">bouton_bleu</span> =
+    
+    <a class="headerLink" href="#bouton_bleu" title="lobbyOnline.lobbyOnline.bouton_bleu">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.bouton_jaune">
+    
+  </a>
+  <a name="bouton_jaune">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">bouton_jaune</span> =
+    
+    <a class="headerLink" href="#bouton_jaune" title="lobbyOnline.lobbyOnline.bouton_jaune">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.Bouton_Jouer">
+    
+  </a>
+  <a name="Bouton_Jouer">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">Bouton_Jouer</span> =
+    
+    <a class="headerLink" href="#Bouton_Jouer" title="lobbyOnline.lobbyOnline.Bouton_Jouer">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.Bouton_Quitter">
+    
+  </a>
+  <a name="Bouton_Quitter">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">Bouton_Quitter</span> =
+    
+    <a class="headerLink" href="#Bouton_Quitter" title="lobbyOnline.lobbyOnline.Bouton_Quitter">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.bouton_rouge">
+    
+  </a>
+  <a name="bouton_rouge">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">bouton_rouge</span> =
+    
+    <a class="headerLink" href="#bouton_rouge" title="lobbyOnline.lobbyOnline.bouton_rouge">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.bouton_vert">
+    
+  </a>
+  <a name="bouton_vert">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">bouton_vert</span> =
+    
+    <a class="headerLink" href="#bouton_vert" title="lobbyOnline.lobbyOnline.bouton_vert">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.boutonUser">
+    
+  </a>
+  <a name="boutonUser">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">boutonUser</span>: <code>list</code> =
+    
+    <a class="headerLink" href="#boutonUser" title="lobbyOnline.lobbyOnline.boutonUser">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.canvas">
+    
+  </a>
+  <a name="canvas">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">canvas</span> =
+    
+    <a class="headerLink" href="#canvas" title="lobbyOnline.lobbyOnline.canvas">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.joueurs">
+    
+  </a>
+  <a name="joueurs">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">joueurs</span> =
+    
+    <a class="headerLink" href="#joueurs" title="lobbyOnline.lobbyOnline.joueurs">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_bleu">
+    
+  </a>
+  <a name="namezone_bleu">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_bleu</span> =
+    
+    <a class="headerLink" href="#namezone_bleu" title="lobbyOnline.lobbyOnline.namezone_bleu">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_bleu_text">
+    
+  </a>
+  <a name="namezone_bleu_text">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_bleu_text</span> =
+    
+    <a class="headerLink" href="#namezone_bleu_text" title="lobbyOnline.lobbyOnline.namezone_bleu_text">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_jaune">
+    
+  </a>
+  <a name="namezone_jaune">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_jaune</span> =
+    
+    <a class="headerLink" href="#namezone_jaune" title="lobbyOnline.lobbyOnline.namezone_jaune">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_jaune_text">
+    
+  </a>
+  <a name="namezone_jaune_text">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_jaune_text</span> =
+    
+    <a class="headerLink" href="#namezone_jaune_text" title="lobbyOnline.lobbyOnline.namezone_jaune_text">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_rouge">
+    
+  </a>
+  <a name="namezone_rouge">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_rouge</span> =
+    
+    <a class="headerLink" href="#namezone_rouge" title="lobbyOnline.lobbyOnline.namezone_rouge">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_rouge_text">
+    
+  </a>
+  <a name="namezone_rouge_text">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_rouge_text</span> =
+    
+    <a class="headerLink" href="#namezone_rouge_text" title="lobbyOnline.lobbyOnline.namezone_rouge_text">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_vert">
+    
+  </a>
+  <a name="namezone_vert">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_vert</span> =
+    
+    <a class="headerLink" href="#namezone_vert" title="lobbyOnline.lobbyOnline.namezone_vert">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.namezone_vert_text">
+    
+  </a>
+  <a name="namezone_vert_text">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">namezone_vert_text</span> =
+    
+    <a class="headerLink" href="#namezone_vert_text" title="lobbyOnline.lobbyOnline.namezone_vert_text">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.touche">
+    
+  </a>
+  <a name="touche">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">touche</span> =
+    
+    <a class="headerLink" href="#touche" title="lobbyOnline.lobbyOnline.touche">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div><div class="baseinstancevariable">
+  
+  
+  <a name="lobbyOnline.lobbyOnline.window">
+    
+  </a>
+  <a name="window">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">window</span> =
+    
+    <a class="headerLink" href="#window" title="lobbyOnline.lobbyOnline.window">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container">
+    <a href="index.html">API Documentation</a> for ScrollableFrame/main/Block/lobbyLocal/PiecesDeclaration/Game/GameInterface/PiecesListGUI/Controller/GridInterface/Pieces_placement/accueil/lobbyUser/Board/config/Player/Pieces/Leaderboard/fonctionJson/lobbyOnline,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    22.9.1 at 2023-01-20 14:35:35.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
