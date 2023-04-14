@@ -8,6 +8,7 @@ from config import config
 from Elements.Board import Board
 import Vues.accueil as accueil 
 from Vues.ScrollableFrame import ScrollableFrame
+import threading
 
 
 class GameInterface(tk.Frame):
@@ -25,6 +26,7 @@ class GameInterface(tk.Frame):
         self.hidden = True
         self.scrollable_frame = None
         self.windowRegle = None
+
         
         
     def initialize(self : GameInterface) -> None:
@@ -37,29 +39,44 @@ class GameInterface(tk.Frame):
         """
         for widgets in self.winfo_children():
             widgets.destroy()
+
+        self.couleur : dict = {
+            10:"#FFC700",
+            11:"#32BF00",
+            12:"#0045CC",
+            13:"#BC0000"
+        }
+        
             
         self.border = tk.Canvas()
+        self.information = self.border.create_text((config.Config.largueur/2),140,fill="black",font=('Lilita One', config.Config.taillePolice[0]),text="Initialisation de la partie en cours...",anchor=tk.CENTER)
+        
+        
         self.border.create_image(0,0,image=config.Config.image[26],anchor=tk.NW)
 
         self.border.config(bg="white")
         self.border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
         self.board = GridInterface(self.border,config.Config.controller.getBoard())
         self.board.move(x=720-270,y=512-270)
-        self.List1 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0)
-        self.List1.move(x=70,y=80) # jaune
+        self.Lists=[]
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[0].getName(),0))
+        self.Lists[0].move(x=70,y=80) # jaune
 
-        self.List2 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1)
-        self.List2.move(x=1047,y=80) # vert
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[1].getName(),1))
+        self.Lists[1].move(x=1047,y=80) # vert
 
-        self.List3 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2)
-        self.List3.move(x=1047,y=524) #  rouge
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[2].getName(),2))
+        self.Lists[2].move(x=1047,y=524) # rouge
 
-        self.List4 = PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3)
-        self.List4.move(x=70,y=524) #bleu
+        self.Lists.append(PG.PiecesListGUI(self.window,self.border,config.Config.controller.getGame().getPlayers()[3].getName(),3))
+        self.Lists[3].move(x=70,y=524) # bleu
+
+
+        
 
         self.giveUp = self.border.create_image(
-            (1440//2)-(config.Config.image[6].width()//2), 
-            120, 
+            411, 
+            845, 
             image=config.Config.image[6],
             anchor=tk.NW
         )
@@ -69,8 +86,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.giveUp, "<Leave>",lambda *_: self.hoverSurrender("leave"))
 
         self.quitter = self.border.create_image(
-            577, 
-            820, 
+            800, 
+            845, 
             image=config.Config.image[7],
             anchor=tk.NW
         )
@@ -79,8 +96,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(self.quitter, "<Leave>",lambda *_: self.hoverLeave("leave"))
 
         BoutonInfo = self.border.create_image(
-            815, 
-            826, 
+            690,
+            854,
             image=config.Config.image[59],
             anchor=tk.NW
         )
@@ -104,6 +121,8 @@ class GameInterface(tk.Frame):
         self.border.tag_bind(BoutonInfo, "<Button-1>", self.infoBouton)
         self.border.itemconfigure(self.RegleBlokus,state=tk.HIDDEN)
         self.border.itemconfigure(self.RegleFondBlokus,state=tk.HIDDEN)
+        
+        threading.Timer(0.5,updateGraphic)
 
     def fermerRegle(self,event):
         """ Fonction qui permet le callback du bouton "Info" permettant de fermer les règles
@@ -157,6 +176,15 @@ class GameInterface(tk.Frame):
             self.border.itemconfigure(self.giveUp, image=config.Config.image[6])
             self.border.config(cursor="")
 
+    def changeTextPartie(self, message : str, couleur : int) -> None:
+        """ Méthode permettant de modifier le text affiché à l'écran. 
+
+        Args:
+            self (GameInterface) : GameInterface
+            message (str) : Le message affiché 
+        """
+        self.border.itemconfig(self.information, text=message, fill=self.couleur[10+couleur])
+
     def hoverLeave(self : GameInterface,typ : str) -> None:
         """Méthode permettant de modifier le bouton quitter bouton en fonction du hover de celui ci en quitter et entrer
 
@@ -182,12 +210,12 @@ class GameInterface(tk.Frame):
         if typ == "entre":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[58])
-                self.border.moveto(idButton,806,818)
+                self.border.moveto(idButton,680,847)
                 self.border.config(cursor="hand2")
         elif typ == "sort":
             if typ2 == "info":
                 self.border.itemconfigure(idButton, image=config.Config.image[59])
-                self.border.moveto(idButton,815,826)
+                self.border.moveto(idButton,690,854)
                 self.border.config(cursor="")
             
     def surrender(self : GameInterface,player : int) -> None:
@@ -200,13 +228,13 @@ class GameInterface(tk.Frame):
         """
         match player:
             case 0:
-                self.List1.surrender()
+                self.Lists[0].surrender()
             case 1:
-                self.List2.surrender()
+                self.Lists[1].surrender()
             case 2:
-                self.List3.surrender()
+                self.Lists[2].surrender()
             case 3:
-                self.List4.surrender()
+                self.Lists[3].surrender()
 
     def leave(self : GameInterface) -> None:
         """Méthode callback qui permet quand on click sur le bouton de leave de quitter la page de jeu en informant le controlleur
@@ -215,11 +243,8 @@ class GameInterface(tk.Frame):
         Args:
             self (GameInterface): GameInterface
         """
-        self.List1.remettrePiece_copy()
-        self.List2.remettrePiece_copy()
-        self.List3.remettrePiece_copy()
-        self.List4.remettrePiece_copy()
-        config.Config.controller.changePage("Acceuil")
+        
+        config.Config.controller.changePage("Accueil")
 
     def refreshBoard(self : GameInterface,plateau : Board) -> None:
         """Méthode callback pour GridInterface qui le met à jour permettant 
@@ -261,7 +286,9 @@ class GameInterface(tk.Frame):
         
         self.border.tag_raise(self.quitter)
 
-
+    def removePiece(self,nbPlayer,nbPiece):
+        self.Lists[nbPlayer].removePiece(nbPiece)
+    
     """ Fonction permettant de créer un modal en fonction du paramètre reçu :
         paramètres valables : abandon, quitter.
     """
@@ -317,6 +344,10 @@ class GameInterface(tk.Frame):
     def no(self,event):
         self.remove_modal()
         
+def updateGraphic():
+    while config.Config.controller.game.enCours():
+        config.Config.controller.updateBoard()
+
 
 
 

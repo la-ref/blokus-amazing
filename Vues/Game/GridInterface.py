@@ -31,8 +31,8 @@ class GridInterface(tk.Frame):
         self.couleur : dict = {
             11:"#FFC700",
             12:"#32BF00",
-            13:"#BC0000",
-            14:"#0045CC"
+            13:"#0045CC",
+            14:"#BC0000"
         }
         self.bordure : list = [self.parent.create_rectangle(439, 241, 1000, 231,outline=self.couleur[11], fill=self.couleur[11]),
                         self.parent.create_rectangle(440, 792, 999, 782,outline=self.couleur[11], fill=self.couleur[11]),

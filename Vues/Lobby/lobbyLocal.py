@@ -1,13 +1,11 @@
-from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, Frame
+
+from tkinter import Tk, Canvas, Frame
 import tkinter
-import sys
 from config import *
 import tkinter as tk
 import Elements.Player as Player
 import Vues.Lobby.lobbyUser as lobbyUser
 from Vues.accueil import *
-from Vues.Game.GameInterface import GameInterface
 
 class lobbyLocal(Frame):
     def __init__(self,window):
@@ -74,20 +72,20 @@ class lobbyLocal(Frame):
         self.canvas.tag_bind(self.namezone_vert_text, "<Button-1>",lambda *_: self.Boutonselect("vert"))
 
 
-        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],22,hb="bas",droiteg="gauche")
+        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[2],15,hb="bas",droiteg="droite")
+        self.bouton_bleu.move(1156,883)
+        self.namezone_bleu = self.bouton_bleu.getNameZone()
+        self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()
+        self.canvas.tag_bind(self.namezone_bleu, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
+        self.canvas.tag_bind(self.namezone_bleu_text, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
+
+        self.bouton_rouge = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],22,hb="bas",droiteg="gauche")
         self.bouton_rouge.move(279,883)
         self.namezone_rouge = self.bouton_rouge.getNameZone()
         self.namezone_rouge_text = self.bouton_rouge.getNameZone_Text()
         self.canvas.tag_bind(self.namezone_rouge, "<Button-1>",lambda *_: self.Boutonselect("rouge"))
         self.canvas.tag_bind(self.namezone_rouge_text, "<Button-1>",lambda *_: self.Boutonselect("rouge"))
 
-
-        self.bouton_bleu = lobbyUser.lobbyUser(self.window,self.canvas,config.Config.image,self.joueurs[3],15,hb="bas",droiteg="droite")
-        self.bouton_bleu.move(1156,883)
-        self.namezone_bleu = self.bouton_bleu.getNameZone()
-        self.namezone_bleu_text = self.bouton_bleu.getNameZone_Text()
-        self.canvas.tag_bind(self.namezone_bleu, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
-        self.canvas.tag_bind(self.namezone_bleu_text, "<Button-1>",lambda *_: self.Boutonselect("bleu"))
 
         BoutonInfo = self.canvas.create_image(
             (config.Config.largueur/2)-(config.Config.image[4].width()/2), 
@@ -183,14 +181,13 @@ class lobbyLocal(Frame):
                 if (actuelwidget != 5) and (actuelwidget != 4):
                     self.bouton_jaune.setActiveClavier(False)
             if self.bouton_vert.getActiveClavier() == True:
-                if (actuelwidget != 15) and (actuelwidget != 14):
                     self.bouton_vert.setActiveClavier(False)
-            if self.bouton_rouge.getActiveClavier() == True:
-                if (actuelwidget != 25) and (actuelwidget != 24):
-                    self.bouton_rouge.setActiveClavier(False)
             if self.bouton_bleu.getActiveClavier() == True:
-                if (actuelwidget != 35) and (actuelwidget != 34):
+                if (actuelwidget != 25) and (actuelwidget != 24):
                     self.bouton_bleu.setActiveClavier(False)
+            if self.bouton_rouge.getActiveClavier() == True:
+                if (actuelwidget != 35) and (actuelwidget != 34):
+                    self.bouton_rouge.setActiveClavier(False)
         
         
     def touches(self,event):
@@ -205,13 +202,15 @@ class lobbyLocal(Frame):
         """ Méthode permettant de lancer la partie au clic du bouton "joueur"
         """
         from Elements.Game import Game
+        
         config.Config.controller.game = Game(self.joueurs,None,20)
         config.Config.controller.changePage("GameInterface")
+        config.Config.controller.game.start()
     
     def QuitterBouton(self):
         """ Méthode permettant re venir à la page d'Accueil (initialisation de la page d'accueil)
         """
-        config.Config.controller.changePage("Acceuil")
+        config.Config.controller.changePage("Accueil")
 
     def hoverBouton(self,typ : str,typ2 : str,idButton : int):
         """ Méthode permettant de modifier l'image au survol de la souris sur l'objet
@@ -296,15 +295,3 @@ class lobbyLocal(Frame):
         self.modal_active = False
 
 
-if __name__ == "__main__":
-    window = Tk()
-
-    window.geometry("1440x1024")
-    window.configure(bg = "#FFFFFF")
-
-    image = config.tableauImage()
-
-    MonAccueil = lobbyLocal(window,image)
-    # MonAccueil.pack()
-    window.resizable(False, False)
-    window.mainloop()

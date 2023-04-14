@@ -1,9 +1,6 @@
 import tkinter as tk
 
 class Block(tk.Frame):
-    
-    
-    
     #   Créé l'élément de gui pour la liste des pieces
     #
     #
@@ -28,14 +25,8 @@ class Block(tk.Frame):
 
         self.piece = piece
 
-
-
-        
         self.base_xoff = base_x
         self.base_yoff = base_y
-
-        self.base_xoff2 = base_x
-        self.base_yoff2 = base_y
 
         self.base_xoff3 = base_x
         self.base_yoff3 = base_y
@@ -101,24 +92,3 @@ class Block(tk.Frame):
         """
         self.parent.delete(self.bl)
         self.destroy()
-
-if __name__=="__main__":
-    from tkinter import PhotoImage
-
-            
-    window = tk.Tk()
-
-    window.geometry("1440x1024")
-    border = tk.Canvas()
-    border.config(bg="white")
-    border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-    
-    images = []
-    images.append(PhotoImage(file="build/assets/frame0/empty_list.png"))
-    images.append(PhotoImage(file="build/assets/frame0/blue_1.png"))
-    
-    accueil=Block(border,images,1,0,0)
-
-
-
-    window.mainloop()

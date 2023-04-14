@@ -1,19 +1,20 @@
 from __future__ import annotations
 from tkinter import PhotoImage
-
+import random
 
 class config():
     """ Classe de configuration de l'application
     """
     Config : config
     
-    def __init__(self, controller):
+    def __init__(self, controller, NB_CPU):
         """ Constructeur qui permet d'initialiser les émléments principaux du jeu
 
         Args:
             Controller: Controller qui gère le jeu
         """
-        
+        random.seed()
+        self.NB_CPU= NB_CPU
         self.largueur : int = 1440
         self.hauteur : int = 1024
         self.image : list[PhotoImage] = []
@@ -23,8 +24,13 @@ class config():
         import platform
         if platform.system() == "Darwin":
             self.taillePolice=[40,32,30,22]
-        elif platform.system() == "Windows" or platform.system() == "Linux":
+            self.jsonPath = "/HighScore/highscore.json"
+        elif platform.system() == "Windows":
             self.taillePolice=[30,25,22,15]
+            self.jsonPath = "\\HighScore\\highscore.json"
+        elif platform.system() == "Linux":
+            self.taillePolice=[30,25,22,15]
+            self.jsonPath = "/HighScore/highscore.json"
 
 
         # vérifie si la police est installée
@@ -64,8 +70,8 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/empty_list.png")) #9
         self.image.append(PhotoImage(file="Images/Plateau/player_yellow.png")) #10
         self.image.append(PhotoImage(file="Images/Plateau/player_green.png")) #11
-        self.image.append(PhotoImage(file="Images/Plateau/player_red.png")) #12
-        self.image.append(PhotoImage(file="Images/Plateau/player_blue.png")) #13
+        self.image.append(PhotoImage(file="Images/Plateau/player_blue.png")) #12
+        self.image.append(PhotoImage(file="Images/Plateau/player_red.png")) #13
 
         # Lobby local
         self.image.append(PhotoImage(file="Images/LobbyLocal/arriere_plan.png")) #14
@@ -120,8 +126,9 @@ class config():
         #Piece
         self.image.append(PhotoImage(file="Images/Plateau/yellow.png")) #48
         self.image.append(PhotoImage(file="Images/Plateau/green.png")) #49
-        self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 50
-        self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 51
+        self.image.append(PhotoImage(file="Images/Plateau/blue.png")) # 50
+        self.image.append(PhotoImage(file="Images/Plateau/red.png")) # 51
+
 
         #Accueil
         self.image.append(PhotoImage(file="Images/Accueil/regle_fond.png")) # 52
@@ -139,16 +146,42 @@ class config():
         self.image.append(PhotoImage(file="Images/Plateau/button_info_hover.png")) # 58
         self.image.append(PhotoImage(file="Images/Plateau/button_info.png")) # 59
 
+        # Connexion
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/adresse_ip.png")) # 60
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/entrer_pseudo.png")) # 61
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/port.png")) # 62
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter.png")) # 63
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance.png")) # 64
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie.png")) # 65
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/adresse_ip_hover.png")) # 66
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/entrer_pseudo_hover.png")) # 67
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/port_hover.png")) # 68
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/se_connecter_hover.png")) # 69
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_avance_hover.png")) # 70
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/param_simplifie_hover.png")) # 71
+        self.image.append(PhotoImage(file="Images/LobbyEnLigne/quitter_hover.png")) # 72
+        
+        # Accueil erreur
+        self.image.append(PhotoImage(file="Images/Accueil/error.png")) # 73
 
-         
+        # Scoreboard
+        self.image.append(PhotoImage(file="Images/Leaderboard/button.png")) # 74
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite.png")) #75
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche.png")) # 76
+        self.image.append(PhotoImage(file="Images/Leaderboard/button_blanc.png")) # 77
+
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_droite_hover.png")) # 78
+        self.image.append(PhotoImage(file="Images/Leaderboard/fleche_gauche_hover.png")) # 79
+        
+
 
         
     @staticmethod
-    def initialisation(controller):
+    def initialisation(controller, NB_CPU):
         """
         Initialisation de la configuration. L'accès à la configuration ce fait via config.Config 
         """
-        config.Config = config(controller)
+        config.Config = config(controller, NB_CPU)
     
 
     def tableauImage(self):

@@ -1,3 +1,4 @@
+import copy
 import tkinter as tk
 from PIL import ImageTk,Image
 import Elements.Pieces.PiecesDeclaration as PD
@@ -14,7 +15,6 @@ class PiecesListGUI(tk.Frame):
         avec notamment l'arrière plan de sa zone, le pseudo du joueur et ses pièces.
 
         Args:
-            self (Game): game
             window: La fenêtre de jeu
             parent (tk.Canvas): La fauille de dessin de la pièce
             playerName (str): Nom du joueur
@@ -44,28 +44,30 @@ class PiecesListGUI(tk.Frame):
         
         decalageX = 2
         decalageY = 100
-        self.tableau_piece = []
         self.tableau_piece_forme = []
 
         i1 = 0
         maxheight = 0
-        for valeur in PD.LISTEPIECES:
-            self.tableau_piece_forme.append([])
-            self.tableau_piece_forme[i1] = PP.Pieces_placement(window,self.parent,nb_player,valeur)
-
+        for valeur in (copy.deepcopy(PD.LISTEPIECES) if config.Config.controller.onlineGame else config.Config.controller.getGame().getPlayers()[nb_player].getPieces()):
+            
+            self.tableau_piece_forme.append(PP.Pieces_placement(window,self.parent,nb_player,valeur,self))
             self.tableau_piece_forme[i1].move_init(decalageX,decalageY)
             decalageX+=self.tableau_piece_forme[i1].getWidth_Petit()*self.tableau_piece_forme[i1].getImage().width() + 10
             if self.tableau_piece_forme[i1].getHeight_Petit() > maxheight:
                 maxheight = self.tableau_piece_forme[i1].getHeight_Petit()
-
             i1+=1
 
             if (decalageX) >= 317-(20*3):
                 decalageX= 2
                 decalageY+= (maxheight*self.tableau_piece_forme[i1-1].getImage().height())+10
                 maxheight = 0
+            self.nb_player=nb_player
 
 
+    def deletePieceOnline(self,pieceId,player):
+        if pieceId >= 0 and pieceId <= len(self.tableau_piece_forme): 
+            self.tableau_piece_forme[pieceId-1].deletePieceOnline()
+            
 
         
     def changeName(self, newName : str):
@@ -81,7 +83,7 @@ class PiecesListGUI(tk.Frame):
         """
         self.parent.itemconfig(self.nameZone,image=config.Config.image[32])
         
-    def remettrePiece_copy(self):
+    def remettrePiece_copy(self):  #! inutilisée
         """ Fonction qui permet de remettre les pièces par défaut
         """
         for piece in self.tableau_piece_forme:
@@ -100,17 +102,12 @@ class PiecesListGUI(tk.Frame):
         for piece in self.tableau_piece_forme:
             piece.move_init2(x,y)
 
+    def removePiece_placement(self,piece : int):
+        config.Config.controller.game.getPlayers()[self.nb_player].removePiece(piece)
 
+    def removePiece(self,piece : int):
+        self.tableau_piece_forme[piece-1].enlever_piece()
 
-    def on_click(self,event):
-        """ Gestion du clic d'un joueur
-
-        Args:
-            event (Tkinter): Coordonnées X et Y du clic
-        """
-        x,y=self.parent.coords(self.list)
-        self.delta=event.x-x,event.y-y
-        
     def bind(self,event_tag,call):
         """ Gestion des paramètres de liaison au bloc 
 
@@ -121,18 +118,6 @@ class PiecesListGUI(tk.Frame):
         self.parent.tag_bind(self.list,event_tag,call)
         self.parent.tag_bind(self.nameZone,event_tag,call)
         self.parent.tag_bind(self.text,event_tag,call)
-
-if __name__=="__main__":
-    from tkinter import PhotoImage
-    window = tk.Tk()
-    window.geometry("1440x1024")
-    
-    border = tk.Canvas()
-    border.config(bg="white")
-    border.place(x=0,y=0,height=1024,width=1440,anchor=tk.NW)
-    
-    accueil=PiecesListGUI(window, border,"Caaka",1)
-    accueil.changeName("Joueur 1")
+        
 
 
-    window.mainloop()

@@ -1,15 +1,15 @@
 from __future__ import annotations
-from typing import Callable
 from Elements.Pieces.Pieces import Pieces
 from Elements.Player import Player
 from Elements.Board import Board
-from Vues.Game.GridInterface import GridInterface
 from config import config
+import threading
+
 class Game:
 
     """Classe de gestion des parties de jeu blokus
     """
-    def __init__(self : Game, joueurs : list[Player]|None,plateau : Board|None,taille : int) -> None:
+    def __init__(self : Game, joueurs : list[Player]|None,plateau : Board|None,taille : int,online : bool = False) -> None:
         """Constructeur créant une partie avec des joueurs et un plateau de taille n
 
         Args:
@@ -20,9 +20,45 @@ class Game:
         """
         self.__joueurs : list[Player] = joueurs or [Player(11,"matthieu"),Player(12,"aurelian"),Player(13,"gauthier"),Player(14,"inconnu")]
         self.__joueursAbandon : list[Player] = []
-        self.__currentPlayerPos : int = 0
+        self.__online : bool = online
+        self.__currentPlayerPos : int = -1
+        if self.__online:
+            self.__currentPlayerPos : int = 0
         self.__plateau : Board = plateau or Board(taille)
+        self.__enCours = True
+
+        for pj in self.__joueurs:
+            pj.resetPiece()
     
+    def enCours(self) -> bool:
+        return self.__enCours
+    
+    def end(self):
+        self.__enCours=False
+        
+    def start(self):
+        threading.Timer(0.5,self.__nextPlayer).start()
+
+
+    def getNextPlayer(self : Game, nbPlayer : int) -> int:
+        """Méthode qui permet de récuperer l'id du joueur suivant
+
+        Args:
+            self (Game): Game
+            nbPlayer : id du joueur current
+            
+        Returns:
+            int: id du joueur suivant
+        """
+        pos = (nbPlayer+1)%len(self.__joueurs)
+        while  self.__joueurs[pos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
+            pos = (pos+1)%len(self.__joueurs)
+        if len(self.__joueursAbandon) != len(self.__joueurs):
+            return pos
+        else:
+            return -1
+        
+
     def getPlayers(self : Game) -> list[Player]:
         """Méthode getter permettant d'avoir la liste contenant les joueurs dans le jeu
 
@@ -69,6 +105,22 @@ class Game:
             int: l'id du joueur courant
         """
         return self.__currentPlayerPos
+    
+    def getCurrentPlayers(self : Game) -> list[Player]:
+        """Méthode getter petmettant d'obtenir la liste des joueurs
+        encore actuellement dans la partie.
+
+        Args:
+            self (Game): Game
+
+        Returns:
+            list: La liste des joueurs encore dans la partie
+        """
+        tableau = []
+        for joueur in self.getPlayers():
+            if joueur not in self.__joueursAbandon:
+                tableau.append(joueur)
+        return tableau
 
     def addSurrenderedPlayer(self : Game) -> bool|list[Player]:
         """Méthode qui permet d'ajouter un joueur dans la liste des joueurs qui ont abandonné et de donne le status de la partie
@@ -82,10 +134,24 @@ class Game:
         """
         self.__joueursAbandon.append(self.__joueurs[self.__currentPlayerPos])
         self.__nextPlayer()
-        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+        if not self.__online:
+            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
         if self.getWinners():
-            config.Config.controller.vueJeu.partieTermine
+            if not self.__online:
+                config.Config.controller.vueJeu.changeTextPartie(" ",0)
+                config.Config.controller.vueJeu.partieTermine
         return self.getWinners()
+    
+    def addSurrenderedPlayerOnline(self: Game, player) -> bool|list[Player]:
+        if not self.__online:
+            return False
+        if player not in self.__joueursAbandon:
+            if self.getCurrentPlayer() == player:
+                self.addSurrenderedPlayer()
+            else:
+                self.__joueursAbandon.append(player)
+        return self.getWinners()
+            
 
     def isPlayerSurrendered(self : Game) -> bool:
         """Méthode permettant de savoir si le joueur courant a abandonné
@@ -97,8 +163,11 @@ class Game:
             bool: vrai s'il a abandonné sinon faux
         """
         return self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon
+    
+    def getSurrenderedPlayer(self):
+        return self.__joueursAbandon
 
-    def __nextPlayer(self : Game) -> None:
+    def __nextPlayer(self : Game) :
         """Méthode qui permet de sélectionné le prochain joueur pour être le joueur courant
 
         Args:
@@ -107,7 +176,27 @@ class Game:
         self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
         while self.__joueurs[self.__currentPlayerPos] in self.__joueursAbandon and len(self.__joueursAbandon) != len(self.__joueurs):
             self.__currentPlayerPos = (self.__currentPlayerPos+1)%len(self.__joueurs)
-        config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+
+        if not self.__online:
+            config.Config.controller.updateBoard() #actualise le plateau avec le joueur courant
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                config.Config.controller.vueJeu.changeTextPartie("C'est à " + self.__joueurs[self.__currentPlayerPos].getName() + " de jouer",self.__currentPlayerPos)
+                
+                if self.getCurrentPlayer().getAI():
+                    self.getCurrentPlayer().getAI().play()
+                    # except:
+                    #     try:
+                    #         if config.Config.controller:
+                    #             print("controller ici mais partie quitter")
+                    #             pass
+                    #     except:
+                    #         print("plus de controller")
+                    #         exit(1)
+                return True
+            else:
+                return False
+
+####################################################################################################################
 
     def isGameFinished(self : Game) -> bool:
         """Méthode getter qui indique si la partie est terminée ou non en regardant si tout les joueurs sont dans le tableau
@@ -158,7 +247,17 @@ class Game:
             return winners
         return []
     
-    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int) -> bool:
+    def getWinnersName(self : Game) -> list[str]:
+        winners = self.getWinners()
+        new = []
+        if winners:
+            for player in winners:
+                new.append(player.getName())
+            return new
+        return False
+                
+    
+    def playTurn(self : Game, piece : Pieces , colonne : int, ligne : int, dc : int, dl : int, rotation = None,flip = None) -> bool:
         """Méthode qui permet de jouer le tour du joueur courant
         
         Args:
@@ -172,27 +271,63 @@ class Game:
         Returns: 
             - bool: vrai si la pièce est ajouter sur le plateau,sinon faux
         """
-        if len(self.__joueursAbandon) != len(self.__joueurs):
-            
-            ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
-            if ajout: # si une pièce peut être ajouter
-                self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
-                self.getCurrentPlayer().ajoutTour()
+        if self.__online:
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                if(rotation or flip):
+                    piece = piece.ajoutRotationFlip(rotation,flip)
+                ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+                if ajout: # si une pièce peut être ajouter
+                    self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                    self.getCurrentPlayer().ajoutTour()
 
 
-            
-                if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
-                    self.addSurrenderedPlayer()
-                else:
-                    self.__nextPlayer()
-                config.Config.controller.updateBoard()
-                # prep tour suivant
                 
-                # config.Config.controller.updatePlayers(self.getCurrentPlayer())
-                
-                return True
-            return False
+                    if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
+                        self.addSurrenderedPlayer()
+                    else:
+                        self.__nextPlayer()
+                    # prep tour suivant
+                    
+                    # config.Config.controller.updatePlayers(self.getCurrentPlayer())
+                    
+                    return True
+                return False
 
+            else:
+                # call fonction winner
+                return False
         else:
-            # call fonction winner
-            return False
+            
+            if len(self.__joueursAbandon) != len(self.__joueurs):
+                
+                ajout= self.__plateau.ajouterPiece(piece,int(colonne),int(ligne),self.getCurrentPlayer(),int(dc),int(dl))
+                if ajout: # si une pièce peut être ajouter
+                    self.getCurrentPlayer().removePiece(str(piece.getIdentifiant()))
+                    config.Config.controller.vueJeu.removePiece(self.__currentPlayerPos,piece.getIdentifiant())
+                    self.getCurrentPlayer().ajoutTour()
+
+
+                    rota = piece.getRotation()
+                    flip = piece.getFlip()
+                    config.Config.controller.json.append({"num_tour" : config.Config.controller.tour,
+                        "joueur" : self.getCurrentPlayerId(),
+                        "num_piece" : piece.getIdentifiant(),
+                        "position_plateau" : [int(colonne),int(ligne)],
+                        "rotation" : rota,
+                        "flip" : flip,
+                        "decalage" : [int(dc),int(dl)]})
+                    config.Config.controller.tour += 1 
+                    
+                
+                    if (len(self.getCurrentPlayer().getPieces()) == 0): # si un joueur a fini
+                        self.addSurrenderedPlayer()
+                    else:
+                        self.__nextPlayer()
+                    config.Config.controller.updateBoard()
+                    
+                    return True
+                return False
+
+            else:
+                # call fonction winner
+                return False

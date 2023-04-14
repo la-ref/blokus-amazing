@@ -13,7 +13,7 @@ class Pieces_placement(tk.Frame):
 
     """Classe de gestion de la pièce
     """
-    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str):
+    def __init__(self, window, parent : tk.Canvas, nb_player : int, la_piece: str, list):
         """Constructeur créant une pièce du joueur
         Args:
             self (Game): game
@@ -27,9 +27,11 @@ class Pieces_placement(tk.Frame):
 
         # Variable global de la pièce
         self.window = window
+        self.mon_state = 0
         self.window.bind("<Motion>", self.on_drag, add='+')
         self.window.bind("<MouseWheel>", self.on_rotate, add='+')
         self.parent = parent
+        self.list = list
         self.nb_player = nb_player
         self.x = 0
         self.y = 0
@@ -42,12 +44,12 @@ class Pieces_placement(tk.Frame):
         self.state = 0
         self.tableau_piece = [[]]
         self.tableau_piece_forme = []
-        self.mon_state = 0
+        
 
         self.tableau_piece_copy=copy.copy(PD.LISTEPIECES[la_piece])
 
         # Initialisation de la pièce
-        self.piece=PD.LISTEPIECES[la_piece]
+        self.piece=copy.deepcopy(PD.LISTEPIECES[la_piece])
 
         # Tableau des délimitations de la pièce
         self.tableau_piece=self.piece.getDelimitation()
@@ -64,17 +66,20 @@ class Pieces_placement(tk.Frame):
                 self.x+=self.image.width()
                 if (self.tableau_piece[v][i] == 3):
                     test = b.Block(self.parent,self.image,self.nb_player,self.x,self.y,self)
-                    self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
+                    
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        if config.Config.controller.getState() == None:
+                            self.parent.tag_bind(test.bl, "<ButtonPress-1>", self.on_click)
+                            if platform.system() == "Windows":
+                                self.parent.tag_bind(test.bl, "<ButtonPress-3>", self.on_flip)
+                            else:
+                                self.parent.tag_bind(test.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(test)
 
     def remettrePiece_copy(self):
         """ Fonction qui permet de remettre les pièces par défaut
         """
-        PD.LISTEPIECES[self.la_piece] = self.tableau_piece_copy
+        self.piece = copy.deepcopy(self.tableau_piece_copy)
 
     def getPieceBoardCoord(self):
         """Fonction pour obtenir les coords du coin gauche de la piece sur le tableau 
@@ -88,7 +93,7 @@ class Pieces_placement(tk.Frame):
         x,y=self.parent.coords(self.tableau_piece_forme[0].bl)
         dy,dx=np.argwhere(self.tableau_piece==3)[0]
         x,y=x-27*(dx-1),y-27*(dy-1) # calcul les coordonnées du coin haut gauche
-        return (x-450)//27+dx-1,(y-242)//27+dy-1,dx,dy
+        return (x-450+2)//27+dx-1,(y-242+2)//27+dy-1,dx,dy
 
     def getPieceCoord(self):
         """
@@ -105,8 +110,9 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
-        if self.mon_state == True:
+        if self.mon_state:
             self.x,self.y=self.getPieceCoord()
+            self.ancienx,self.ancieny=self.getPieceCoord()
 
             # Suppression de la pièce
             for piece in self.tableau_piece_forme:
@@ -114,7 +120,8 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
             
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            # self.pieces = copy.deepcopy(PD.LISTEPIECES)
+            self.piece = self.tableau_piece_copy
             self.piece.flip()
 
             # Re-création de la pièce
@@ -126,8 +133,9 @@ class Pieces_placement(tk.Frame):
             event : évènement
         """
         # Si la pièce est sélectionnée
-        if self.mon_state == True:
+        if self.mon_state:
             self.x,self.y=self.getPieceCoord()
+            self.ancienx,self.ancieny=self.getPieceCoord()
 
             # Suppression de la pièce
             for piece in self.tableau_piece_forme:
@@ -135,7 +143,7 @@ class Pieces_placement(tk.Frame):
                 ma_piece = objet[0]
                 self.parent.delete(ma_piece)
 
-            self.piece = PD.LISTEPIECES[self.la_piece]
+            self.piece = self.tableau_piece_copy
             self.piece.rotate90()
 
             # Re-création de la pièce
@@ -167,11 +175,12 @@ class Pieces_placement(tk.Frame):
                 self.y+=self.image.width()
                 if (self.tableau_piece[i][v] == 3):
                     le_block = b.Block(self.parent,self.image,self.nb_player,0+self.y,0+self.x,self)
-                    self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(le_block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(le_block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(le_block.bl, "<ButtonPress-2>", self.on_flip)
                     self.tableau_piece_forme.append(le_block)
                     le_block.move(self.back_x-self.x,self.back_y-self.y)
                     le_block.state = 1
@@ -183,6 +192,7 @@ class Pieces_placement(tk.Frame):
         
         # Sélection des coordonnées du premier bloc
         piece = self.tableau_piece_forme[0]
+        self.oy2,self.ox2=self.parent.coords(piece.bl)
         differenceX = self.le_x+piece.base_xoff
         differenceY = self.le_y+piece.base_yoff
         self.le_x = self.le_x-differenceX
@@ -296,8 +306,9 @@ class Pieces_placement(tk.Frame):
         self.le_x = self.base_xoff3
         self.le_y = self.base_yoff3
 
+
         # Condition si la pièce est sur le plateau
-        if (event.x<450 or event.x>990 or event.y<242 or event.y>782):
+        if (event.x<450-2 or event.x>990-2 or event.y<242-2 or event.y>782-2):
             self.image = config.Config.image[self.nb_player+48]
 
             # Changement de la taille de l'image
@@ -312,6 +323,7 @@ class Pieces_placement(tk.Frame):
 
                 # Change les coordonnés de téléportation au premier bloc de la pièce
                 piece = self.tableau_piece_forme[0]
+                self.oy2,self.ox2=self.parent.coords(piece.bl)
                 differenceX = self.le_x+piece.base_xoff
                 differenceY = self.le_y+piece.base_yoff
                 self.le_x = self.le_x-differenceX
@@ -344,21 +356,24 @@ class Pieces_placement(tk.Frame):
                 # Re-création de la pièce à l'endroit d'initialisation
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
         
         else:
             ## teste si peut placer
             col,lig,dc,dl = self.getPieceBoardCoord()
-            if config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl):
+            if (((not config.Config.controller.onlineGame) or (config.Config.controller.onlineGame and config.Config.controller.currentlyPlaying())) and config.Config.controller.placePiece(self.piece,self.nb_player,col,lig,dc,dl)):
                 # supprime si oui
                 for piece in self.tableau_piece_forme:
                     piece.delete()
                 self.tableau_piece_forme = []
+                # self.list.removePiece_placement(self) 
+                # self.destroy()
             else:
                 # remet la piece à la position si non
                 for piece in self.tableau_piece_forme:
@@ -376,16 +391,23 @@ class Pieces_placement(tk.Frame):
                 # Re-création de la pièce à l'endroit d'initialisation
                 for block in self.tableau_piece_forme:
                     block.recreate(block.save_x,block.save_y,self.image)
-                    self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
-                    if platform.system() == "Windows":
-                        self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
-                    else:
-                        self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
+                    if not config.Config.controller.onlineGame or (config.Config.controller.onlineGame and self.nb_player == config.Config.controller.getOnlineId()):
+                        self.parent.tag_bind(block.bl, "<ButtonPress-1>", self.on_click)
+                        if platform.system() == "Windows":
+                            self.parent.tag_bind(block.bl, "<ButtonPress-3>", self.on_flip)
+                        else:
+                            self.parent.tag_bind(block.bl, "<ButtonPress-2>", self.on_flip)
                     block.state = 0
 
         
         # Changement de l'état 0 ou 1
         self.mon_state=(self.mon_state+1)%2
+        
+    
+    def deletePieceOnline(self):
+        for piece in self.tableau_piece_forme:
+            piece.delete()
+        self.tableau_piece_forme = []
 
 
     def on_drag(self, event):
@@ -399,12 +421,18 @@ class Pieces_placement(tk.Frame):
         self.premier2 = 0
 
         # Téléportation de la pièce à l'endroit de la souris
-        if self.mon_state == True:
+        if self.mon_state:
             for piece in self.tableau_piece_forme:
                 x2,y2=self.parent.coords(piece.bl)
                 piece.move(event.x-x2+piece.base_xoff+self.le_x,event.y-y2+piece.base_yoff+self.le_y) 
         self.premier2 = 0
         
+    def enlever_piece(self):
+            # supprime si oui
+            for piece in self.tableau_piece_forme:
+                piece.delete()
+            self.tableau_piece_forme = []
+            self.list.removePiece_placement(self.la_piece)
 
 if __name__=="__main__":
     from tkinter import PhotoImage
